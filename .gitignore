@@ -1,0 +1,24 @@
+# OS / エディタ固有
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# 一時ファイル・バックアップ
+*.tmp
+*.bak
+*.swp
+*~
+
+# 機密情報（誤コミット防止）
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+credentials.json
+secrets.json
+
+# ログ
+*.log
