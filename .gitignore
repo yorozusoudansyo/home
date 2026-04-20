@@ -4,6 +4,7 @@ Desktop.ini
 .DS_Store
 .vscode/
 .idea/
+.claude/
 
 # 一時ファイル・バックアップ
 *.tmp
