@@ -815,6 +815,176 @@
     transition: background .15s ease;
   }
   .lb-close:hover { background: rgba(255,255,255,0.25); }
+
+  /* --- PUBLICATIONS (X / note) ----------------------------- */
+  .publications {
+    padding: 96px 32px;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .publications-inner { max-width: 1200px; margin: 0 auto; }
+  .pub-platforms {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin: 32px 0 56px;
+  }
+  .pub-platform-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 20px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-background);
+    color: var(--color-text-high);
+    text-decoration: none;
+    font-size: 14px; font-weight: 500;
+    transition: border-color .15s ease, background .15s ease, color .15s ease;
+  }
+  .pub-platform-btn:hover {
+    border-color: var(--color-primary-base);
+    background: var(--color-primary-light);
+    color: var(--color-primary-base);
+  }
+  .pub-platform-btn .icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .pub-platform-btn .ext  { font-size: 12px; opacity: 0.7; }
+  .pub-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 1100px) { .pub-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px)  { .pub-grid { grid-template-columns: 1fr; } }
+  .pub-card {
+    display: flex; flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+    box-shadow: var(--shadow-card);
+  }
+  .pub-card:hover {
+    border-color: var(--color-text-medium);
+    box-shadow: var(--shadow-overlay);
+    transform: translateY(-2px);
+  }
+  .pub-thumb {
+    aspect-ratio: 16/9;
+    background: var(--color-background);
+    overflow: hidden;
+  }
+  .pub-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+  .pub-body {
+    padding: 20px;
+    display: flex; flex-direction: column;
+    flex: 1; gap: 10px;
+  }
+  .pub-meta {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px;
+    color: var(--color-text-medium);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .pub-source {
+    color: var(--color-primary-base);
+    font-weight: 700;
+  }
+  .pub-title {
+    font-size: 15px; font-weight: 700;
+    line-height: 1.55;
+    color: var(--color-text-high);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .pub-cta {
+    margin-top: auto;
+    font-size: 12px; font-weight: 600;
+    color: var(--color-primary-base);
+    letter-spacing: 0.05em;
+  }
+
+  /* --- CONTACT --------------------------------------------- */
+  .contact {
+    padding: 96px 32px;
+    background: var(--color-background);
+  }
+  .contact-inner { max-width: 1200px; margin: 0 auto; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-card {
+    display: flex; flex-direction: column; gap: 12px;
+    padding: 32px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+  }
+  .contact-card:hover {
+    border-color: var(--color-primary-base);
+    box-shadow: var(--shadow-overlay);
+    transform: translateY(-2px);
+  }
+  .contact-card .icon-circle {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--color-primary-light);
+    color: var(--color-primary-base);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 8px;
+  }
+  .contact-card .icon-circle svg { width: 22px; height: 22px; }
+  .contact-card h4 {
+    font-size: 18px; font-weight: 700;
+    margin: 0;
+    color: var(--color-text-high);
+  }
+  .contact-card p {
+    font-size: 13px;
+    color: var(--color-text-medium);
+    line-height: 1.7;
+    margin: 0;
+    flex: 1;
+  }
+  .contact-card .arrow-link {
+    font-size: 13px; font-weight: 600;
+    color: var(--color-primary-base);
+  }
+
+  /* --- SOCIAL ICONS (footer) ------------------------------- */
+  .social-icons {
+    display: flex; gap: 14px; align-items: center;
+  }
+  .social-icons a {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-text-medium);
+    text-decoration: none;
+    transition: color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .social-icons a:hover {
+    color: var(--color-primary-base);
+    border-color: var(--color-primary-base);
+    background: var(--color-primary-light);
+  }
+  .social-icons svg { width: 14px; height: 14px; }
 </style>
 </head>
 <body>
@@ -830,6 +1000,8 @@
     <a href="#features">特徴</a>
     <a href="#process">流れ</a>
     <a href="#pricing">料金</a>
+    <a href="#publications">発信</a>
+    <a href="#contact">連絡先</a>
     <a class="nav-cta" href="https://meetbook-booking.web.app/" target="_blank" rel="noopener noreferrer">無料で相談する</a>
   </div>
 </nav>
@@ -1196,6 +1368,83 @@
   </div>
 </section>
 
+<!-- PUBLICATIONS -->
+<section class="publications" id="publications">
+  <div class="publications-inner">
+    <div class="section-label reveal">06 — 発信</div>
+    <h2 class="section-title reveal">
+      現場の知見を、<br/>
+      こちらでも発信中。
+    </h2>
+    <p class="section-intro reveal">
+      AI・IT 活用のリアルな Tips、相談現場で出会った課題と解決策を、note と X で日々お届けしています。気になるテーマがあればぜひフォローを。
+    </p>
+
+    <div class="pub-platforms reveal">
+      <a class="pub-platform-btn" href="https://x.com/Yorozu0519" target="_blank" rel="noopener noreferrer" aria-label="X (旧Twitter) で見る">
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+        <span>X (旧Twitter) で見る</span>
+        <span class="ext">↗</span>
+      </a>
+      <a class="pub-platform-btn" href="https://note.com/yukisa0814" target="_blank" rel="noopener noreferrer" aria-label="note で見る">
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M5.32 4C3.49 4 2 5.49 2 7.32v9.36C2 18.51 3.49 20 5.32 20h13.36C20.51 20 22 18.51 22 16.68V9.5L16.5 4zm0 2h10.18v3.5H19V18.68c0 .73-.59 1.32-1.32 1.32H5.32A1.32 1.32 0 0 1 4 18.68V7.32c0-.73.59-1.32 1.32-1.32m1.18 4v8h2v-5.5l4 5.5h2v-8h-2v5.5l-4-5.5z"/>
+        </svg>
+        <span>note で見る</span>
+        <span class="ext">↗</span>
+      </a>
+    </div>
+
+    <div class="pub-grid reveal-stagger">
+      <a class="pub-card" href="https://note.com/yukisa0814/n/ncf59d2678127" target="_blank" rel="noopener noreferrer">
+        <div class="pub-thumb">
+          <img src="https://assets.st-note.com/production/uploads/images/271130120/rectangle_large_type_2_57f80185d8ea73c7d8409685c75d88e0.png?width=800" alt="" loading="lazy" />
+        </div>
+        <div class="pub-body">
+          <div class="pub-meta"><span class="pub-source">NOTE</span><span>2026.04.27</span></div>
+          <h3 class="pub-title">デザインを習わなかった私が、なぜブランドイメージを定義できたのか(前編)</h3>
+          <span class="pub-cta">続きを読む →</span>
+        </div>
+      </a>
+
+      <a class="pub-card" href="https://note.com/yukisa0814/n/na86e3c5d042d" target="_blank" rel="noopener noreferrer">
+        <div class="pub-thumb">
+          <img src="https://assets.st-note.com/production/uploads/images/269722796/rectangle_large_type_2_14ef918ee5f717808b62be97f82ad492.jpeg?width=800" alt="" loading="lazy" />
+        </div>
+        <div class="pub-body">
+          <div class="pub-meta"><span class="pub-source">NOTE</span><span>2026.04.23</span></div>
+          <h3 class="pub-title">「画像をきれいにして」——4つのAIに同じお願いをしたら、全員が違う答えを返してきた</h3>
+          <span class="pub-cta">続きを読む →</span>
+        </div>
+      </a>
+
+      <a class="pub-card" href="https://note.com/yukisa0814/n/n24c9907e18cf" target="_blank" rel="noopener noreferrer">
+        <div class="pub-thumb">
+          <img src="https://assets.st-note.com/production/uploads/images/267374256/rectangle_large_type_2_5cca3ddef279978d552cea11cf0c71b8.png?width=800" alt="" loading="lazy" />
+        </div>
+        <div class="pub-body">
+          <div class="pub-meta"><span class="pub-source">NOTE</span><span>2026.04.14</span></div>
+          <h3 class="pub-title">究極のビジネスプロンプト大全〜階層別・部署別 120選〜 ここからダウンロード！！</h3>
+          <span class="pub-cta">続きを読む →</span>
+        </div>
+      </a>
+
+      <a class="pub-card" href="https://note.com/yukisa0814/n/n2bbf5322d43b" target="_blank" rel="noopener noreferrer">
+        <div class="pub-thumb">
+          <img src="https://assets.st-note.com/production/uploads/images/266609707/rectangle_large_type_2_9858b77e8359f858f01e3cd86f74d493.png?width=800" alt="" loading="lazy" />
+        </div>
+        <div class="pub-body">
+          <div class="pub-meta"><span class="pub-source">NOTE</span><span>2026.04.11</span></div>
+          <h3 class="pub-title">昭和の「紙の単価表」2000項目を、AIで一瞬にしてExcel化する最強の仕事術</h3>
+          <span class="pub-cta">続きを読む →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- CTA FINAL -->
 <section class="cta-final veil" id="cta">
   <h2 class="reveal">
@@ -1214,9 +1463,71 @@
   </div>
 </section>
 
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="section-label reveal">07 — お問い合わせ</div>
+    <h2 class="section-title reveal">
+      お気軽に、<br/>
+      連絡できる方法を選んでください。
+    </h2>
+    <p class="section-intro reveal">
+      まずは予約フォームから無料相談、SNS で気軽に DM、note で記事をご覧いただくなど、ご都合に合う方法でご連絡ください。
+    </p>
+
+    <div class="contact-grid reveal-stagger">
+      <a class="contact-card" href="https://meetbook-booking.web.app/" target="_blank" rel="noopener noreferrer">
+        <div class="icon-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <path d="M16 2v4M8 2v4M3 10h18"/>
+          </svg>
+        </div>
+        <h4>無料相談を予約</h4>
+        <p>30分のオンライン面談を予約。画面共有しながらお話をうかがいます。</p>
+        <span class="arrow-link">予約フォームへ →</span>
+      </a>
+
+      <a class="contact-card" href="https://x.com/Yorozu0519" target="_blank" rel="noopener noreferrer">
+        <div class="icon-circle">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </div>
+        <h4>X (旧Twitter) でフォロー</h4>
+        <p>日々の AI・IT 活用 Tips を発信中。DM でも気軽にご連絡ください。</p>
+        <span class="arrow-link">@Yorozu0519 →</span>
+      </a>
+
+      <a class="contact-card" href="https://note.com/yukisa0814" target="_blank" rel="noopener noreferrer">
+        <div class="icon-circle">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M5.32 4C3.49 4 2 5.49 2 7.32v9.36C2 18.51 3.49 20 5.32 20h13.36C20.51 20 22 18.51 22 16.68V9.5L16.5 4zm0 2h10.18v3.5H19V18.68c0 .73-.59 1.32-1.32 1.32H5.32A1.32 1.32 0 0 1 4 18.68V7.32c0-.73.59-1.32 1.32-1.32m1.18 4v8h2v-5.5l4 5.5h2v-8h-2v5.5l-4-5.5z"/>
+          </svg>
+        </div>
+        <h4>note の記事を読む</h4>
+        <p>AI 活用の現場ノウハウを記事として公開。すべて無料で読めます。</p>
+        <span class="arrow-link">プロフィールへ →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div>© 2026 AI・IT YOROZU CONSULTING</div>
+  <div class="social-icons">
+    <a href="https://x.com/Yorozu0519" target="_blank" rel="noopener noreferrer" aria-label="X (旧Twitter)">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      </svg>
+    </a>
+    <a href="https://note.com/yukisa0814" target="_blank" rel="noopener noreferrer" aria-label="note">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M5.32 4C3.49 4 2 5.49 2 7.32v9.36C2 18.51 3.49 20 5.32 20h13.36C20.51 20 22 18.51 22 16.68V9.5L16.5 4zm0 2h10.18v3.5H19V18.68c0 .73-.59 1.32-1.32 1.32H5.32A1.32 1.32 0 0 1 4 18.68V7.32c0-.73.59-1.32 1.32-1.32m1.18 4v8h2v-5.5l4 5.5h2v-8h-2v5.5l-4-5.5z"/>
+      </svg>
+    </a>
+  </div>
   <div>LAST UPDATED — 2026.04</div>
 </footer>
 
