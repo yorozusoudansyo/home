@@ -1,0 +1,33 @@
+{
+  "$schema": "Each article: { source: 'NOTE'|'X', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
+  "articles": [
+    {
+      "source": "NOTE",
+      "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(前編)",
+      "url": "https://note.com/yukisa0814/n/ncf59d2678127",
+      "date": "2026.04.27",
+      "thumbnail": "https://assets.st-note.com/production/uploads/images/271130120/rectangle_large_type_2_57f80185d8ea73c7d8409685c75d88e0.png?width=800"
+    },
+    {
+      "source": "NOTE",
+      "title": "「画像をきれいにして」——4つのAIに同じお願いをしたら、全員が違う答えを返してきた",
+      "url": "https://note.com/yukisa0814/n/na86e3c5d042d",
+      "date": "2026.04.23",
+      "thumbnail": "https://assets.st-note.com/production/uploads/images/269722796/rectangle_large_type_2_14ef918ee5f717808b62be97f82ad492.jpeg?width=800"
+    },
+    {
+      "source": "NOTE",
+      "title": "究極のビジネスプロンプト大全〜階層別・部署別 120選〜 ここからダウンロード！！",
+      "url": "https://note.com/yukisa0814/n/n24c9907e18cf",
+      "date": "2026.04.14",
+      "thumbnail": "https://assets.st-note.com/production/uploads/images/267374256/rectangle_large_type_2_5cca3ddef279978d552cea11cf0c71b8.png?width=800"
+    },
+    {
+      "source": "NOTE",
+      "title": "昭和の「紙の単価表」2000項目を、AIで一瞬にしてExcel化する最強の仕事術",
+      "url": "https://note.com/yukisa0814/n/n2bbf5322d43b",
+      "date": "2026.04.11",
+      "thumbnail": "https://assets.st-note.com/production/uploads/images/266609707/rectangle_large_type_2_9858b77e8359f858f01e3cd86f74d493.png?width=800"
+    }
+  ]
+}

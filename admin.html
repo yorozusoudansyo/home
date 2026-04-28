@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>記事カード管理 — AI・ITよろず相談所</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --color-primary-base:   #D32F2F;
+    --color-primary-hover:  #B71C1C;
+    --color-primary-light:  #FFEBEE;
+    --color-text-high:      #1F2937;
+    --color-text-medium:    #4B5563;
+    --color-text-low:       #9CA3AF;
+    --color-border:         #E5E7EB;
+    --color-background:     #F9FAFB;
+    --color-surface:        #FFFFFF;
+    --color-success:        #0F6E56;
+    --color-success-light:  #E1F5EE;
+    --font-sans: "Inter", "Noto Sans JP", system-ui, sans-serif;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --shadow-card: 0 4px 6px rgba(0,0,0,0.05);
+    --shadow-overlay: 0 10px 15px rgba(0,0,0,0.1);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-background);
+    color: var(--color-text-high);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  a { color: var(--color-primary-base); }
+
+  header.admin-header {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  header.admin-header .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 14px;
+  }
+  header.admin-header .brand img { width: 28px; height: 28px; border-radius: 50%; }
+  header.admin-header nav { display: flex; gap: 16px; font-size: 13px; }
+  header.admin-header nav a { text-decoration: none; color: var(--color-text-medium); }
+  header.admin-header nav a:hover { color: var(--color-primary-base); }
+
+  main {
+    max-width: 1280px; margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+
+  h1 {
+    font-size: 24px; font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .lead {
+    color: var(--color-text-medium);
+    font-size: 14px; margin: 0 0 24px;
+    max-width: 60ch;
+  }
+
+  /* Steps panel */
+  .steps {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+  }
+  .steps h2 {
+    font-size: 14px; font-weight: 700;
+    margin: 0 0 12px;
+    color: var(--color-text-high);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .steps ol {
+    margin: 0; padding-left: 20px;
+    font-size: 13px;
+    color: var(--color-text-medium);
+    line-height: 1.85;
+  }
+  .steps code {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+
+  /* Layout grid */
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 24px;
+  }
+  @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+
+  /* Card / panel */
+  .panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: 20px;
+  }
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 8px;
+  }
+  .panel-header h2 {
+    font-size: 14px; font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .badge {
+    display: inline-flex; align-items: center;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 11px; font-weight: 600;
+    color: var(--color-text-medium);
+  }
+
+  /* Article list */
+  ul.article-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .article-row {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .article-row[data-editing="true"] {
+    border-color: var(--color-primary-base);
+    background: var(--color-primary-light);
+  }
+  .article-row .row-thumb {
+    width: 80px; height: 45px;
+    background: var(--color-background);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-low);
+    font-size: 10px;
+  }
+  .article-row .row-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .article-row .row-info { min-width: 0; }
+  .article-row .row-meta {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11px;
+    color: var(--color-text-medium);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .src-badge {
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: #fff;
+  }
+  .src-badge.src-NOTE { background: var(--color-primary-base); }
+  .src-badge.src-X    { background: var(--color-text-high); }
+  .article-row .row-title {
+    font-size: 14px; font-weight: 600;
+    color: var(--color-text-high);
+    line-height: 1.4;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .article-row .row-actions { display: flex; gap: 4px; }
+  .icon-btn {
+    width: 32px; height: 32px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-medium);
+    font-size: 14px;
+    transition: background .15s, color .15s, border-color .15s;
+    line-height: 1;
+  }
+  .icon-btn:hover {
+    background: var(--color-primary-light);
+    color: var(--color-primary-base);
+    border-color: var(--color-primary-base);
+  }
+  .icon-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .icon-btn[data-action="delete"]:hover {
+    background: #FEE2E2;
+    color: #991B1B;
+    border-color: #991B1B;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--color-text-medium);
+    font-size: 14px;
+  }
+
+  /* Form */
+  form.article-form { display: flex; flex-direction: column; gap: 14px; }
+  label { font-size: 12px; font-weight: 600; color: var(--color-text-high); display: block; margin-bottom: 6px; }
+  .label-hint { font-weight: 400; color: var(--color-text-medium); margin-left: 6px; font-size: 11px; }
+  input[type="text"], input[type="url"], input[type="date"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--color-text-high);
+    background: var(--color-surface);
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--color-primary-base);
+    box-shadow: 0 0 0 3px rgba(211,47,47,0.12);
+  }
+  .source-toggle {
+    display: flex; gap: 8px;
+  }
+  .source-toggle label {
+    flex: 1;
+    cursor: pointer;
+    margin: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--color-text-medium);
+    background: var(--color-surface);
+    transition: all .15s ease;
+  }
+  .source-toggle label:has(input:checked) {
+    border-color: var(--color-primary-base);
+    background: var(--color-primary-light);
+    color: var(--color-primary-base);
+  }
+  .source-toggle input { display: none; }
+  .form-actions { display: flex; gap: 8px; margin-top: 4px; }
+  button.btn {
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+    font-family: inherit;
+  }
+  button.btn-primary {
+    background: var(--color-primary-base); color: #fff;
+    border-color: var(--color-primary-base);
+  }
+  button.btn-primary:hover { background: var(--color-primary-hover); border-color: var(--color-primary-hover); }
+  button.btn-ghost {
+    background: var(--color-surface);
+    color: var(--color-text-high);
+    border-color: var(--color-border);
+  }
+  button.btn-ghost:hover { border-color: var(--color-text-medium); }
+  button.btn-danger {
+    background: #fff;
+    color: #991B1B;
+    border-color: #fecaca;
+  }
+  button.btn-danger:hover { background: #FEE2E2; border-color: #991B1B; }
+
+  /* Preview */
+  .preview-section { margin-top: 32px; }
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .pv-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+  }
+  .pv-thumb { aspect-ratio: 16/9; background: var(--color-background); }
+  .pv-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pv-body { padding: 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .pv-meta { font-size: 10px; color: var(--color-text-medium); font-weight: 600; display: flex; gap: 8px; align-items: center; }
+  .pv-source.src-NOTE { color: var(--color-primary-base); }
+  .pv-source.src-X    { color: var(--color-text-high); }
+  .pv-title { font-size: 13px; font-weight: 700; line-height: 1.45; margin: 0; }
+
+  /* Bottom actions */
+  .bottom-actions {
+    margin-top: 32px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+  }
+  .bottom-actions h2 {
+    font-size: 14px; font-weight: 700;
+    margin: 0 0 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .bottom-actions p {
+    color: var(--color-text-medium);
+    font-size: 13px;
+    margin: 0 0 16px;
+  }
+  .bottom-actions .button-row {
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--color-text-high); color: #fff;
+    padding: 14px 24px;
+    border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 600;
+    box-shadow: var(--shadow-overlay);
+    transition: transform .25s ease;
+    z-index: 200;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { background: var(--color-success); }
+  .toast.error   { background: #991B1B; }
+
+  /* Form validation message */
+  .form-error {
+    color: #991B1B;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header class="admin-header">
+  <div class="brand">
+    <img src="assets/favicon-48x48.png" alt="" />
+    <span>記事カード管理</span>
+  </div>
+  <nav>
+    <a href="index.html">← LP に戻る</a>
+    <a href="https://github.com/yorozusoudansyo/home/edit/main/data/articles.json" target="_blank" rel="noopener noreferrer">GitHub で直接編集</a>
+    <a href="https://x.com/compose/articles" target="_blank" rel="noopener noreferrer">X で記事を書く</a>
+    <a href="https://note.com/yukisa0814" target="_blank" rel="noopener noreferrer">note を開く</a>
+  </nav>
+</header>
+
+<main>
+  <h1>記事カード管理</h1>
+  <p class="lead">
+    LP の「発信」セクションに表示する記事カードを編集します。<br/>
+    変更内容は <code>data/articles.json</code> に書き出して、GitHub にコミットすることで本番に反映されます。
+  </p>
+
+  <div class="steps">
+    <h2>使い方</h2>
+    <ol>
+      <li>右側のフォームから新しい記事を追加するか、左側の一覧から既存記事を編集 / 並び替え / 削除します。</li>
+      <li>「プレビュー」で実際の表示を確認します。変更内容は自動的にこのブラウザに保存されます。</li>
+      <li>すべて整ったら、ページ下部の <strong>「JSON をダウンロード」</strong> をクリック。</li>
+      <li>ダウンロードした <code>articles.json</code> を <code>data/articles.json</code> に上書きしてコミット → push（または「GitHub で直接編集」から Web で貼り付けて Commit）</li>
+    </ol>
+  </div>
+
+  <div class="layout">
+
+    <!-- LEFT: Article list -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2>現在の記事一覧</h2>
+        <span class="badge" id="count-badge">0件</span>
+      </div>
+      <ul class="article-list" id="article-list"></ul>
+      <div class="empty-state" id="empty-state" hidden>
+        まだ記事が登録されていません。右のフォームから追加してください。
+      </div>
+    </section>
+
+    <!-- RIGHT: Form -->
+    <aside class="panel">
+      <div class="panel-header">
+        <h2 id="form-title">新しい記事を追加</h2>
+      </div>
+      <form class="article-form" id="article-form" autocomplete="off">
+        <input type="hidden" name="id" />
+
+        <div>
+          <label>ソース</label>
+          <div class="source-toggle">
+            <label>
+              <input type="radio" name="source" value="NOTE" checked />
+              note
+            </label>
+            <label>
+              <input type="radio" name="source" value="X" />
+              X (旧Twitter)
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label for="f-title">記事タイトル</label>
+          <input type="text" id="f-title" name="title" required maxlength="200" placeholder="例：AI活用の最初の一歩" />
+        </div>
+
+        <div>
+          <label for="f-url">記事 URL</label>
+          <input type="url" id="f-url" name="url" required placeholder="https://note.com/yukisa0814/n/xxxx" />
+        </div>
+
+        <div>
+          <label for="f-date">公開日 <span class="label-hint">YYYY.MM.DD</span></label>
+          <input type="text" id="f-date" name="date" required pattern="\d{4}\.\d{2}\.\d{2}" placeholder="2026.04.28" />
+          <div id="date-error" class="form-error" hidden>YYYY.MM.DD 形式で入力してください（例: 2026.04.28）</div>
+        </div>
+
+        <div>
+          <label for="f-thumb">サムネイル画像 URL <span class="label-hint">任意</span></label>
+          <input type="url" id="f-thumb" name="thumbnail" placeholder="https://assets.st-note.com/.../xxx.png" />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="form-submit">追加する</button>
+          <button type="button" class="btn btn-ghost" id="form-cancel" hidden>キャンセル</button>
+        </div>
+      </form>
+    </aside>
+
+  </div>
+
+  <!-- Preview -->
+  <section class="preview-section">
+    <div class="panel">
+      <div class="panel-header">
+        <h2>LP プレビュー（発信セクション）</h2>
+        <span class="badge">本番表示の縮小版</span>
+      </div>
+      <div class="preview-grid" id="preview-grid"></div>
+    </div>
+  </section>
+
+  <!-- Bottom actions -->
+  <div class="bottom-actions">
+    <h2>変更を本番に反映</h2>
+    <p>
+      編集が終わったら下のボタンから <code>articles.json</code> をダウンロードし、リポジトリの <code>data/articles.json</code> を上書きしてコミット → push してください。
+      もしくは「GitHub で直接編集」を開いて、ダウンロードした内容を貼り付けて Commit changes します。
+    </p>
+    <div class="button-row">
+      <button class="btn btn-primary" id="btn-download">JSON をダウンロード</button>
+      <button class="btn btn-ghost" id="btn-copy">JSON をコピー</button>
+      <a class="btn btn-ghost" href="https://github.com/yorozusoudansyo/home/edit/main/data/articles.json" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">GitHub で直接編集 ↗</a>
+      <button class="btn btn-danger" id="btn-reset">サーバの内容を再読み込み</button>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const STORAGE_KEY = 'lp-home-articles-draft';
+  const JSON_URL = 'data/articles.json';
+
+  // -------------- State --------------
+  let articles = [];
+  let editIndex = null;
+
+  // -------------- DOM refs --------------
+  const $list   = document.getElementById('article-list');
+  const $empty  = document.getElementById('empty-state');
+  const $count  = document.getElementById('count-badge');
+  const $form   = document.getElementById('article-form');
+  const $title  = document.getElementById('f-title');
+  const $url    = document.getElementById('f-url');
+  const $date   = document.getElementById('f-date');
+  const $thumb  = document.getElementById('f-thumb');
+  const $submit = document.getElementById('form-submit');
+  const $cancel = document.getElementById('form-cancel');
+  const $formTitle = document.getElementById('form-title');
+  const $dateError = document.getElementById('date-error');
+  const $preview = document.getElementById('preview-grid');
+  const $toast   = document.getElementById('toast');
+
+  // -------------- Utilities --------------
+  const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[c]);
+
+  const fallbackThumb = (source) => {
+    const bg = source === 'X' ? '#1F2937' : '#FFEBEE';
+    const fg = source === 'X' ? '#FFFFFF' : '#D32F2F';
+    const label = source === 'X' ? 'X' : 'note';
+    return `data:image/svg+xml;utf8,${encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180"><rect width="320" height="180" fill="${bg}"/><text x="50%" y="55%" font-family="Inter,sans-serif" font-size="48" font-weight="700" fill="${fg}" text-anchor="middle">${label}</text></svg>`
+    )}`;
+  };
+
+  const showToast = (msg, type = '') => {
+    $toast.textContent = msg;
+    $toast.className = 'toast show ' + type;
+    setTimeout(() => $toast.classList.remove('show'), 2400);
+  };
+
+  const validateDate = (s) => /^\d{4}\.\d{2}\.\d{2}$/.test(s);
+
+  const todayJa = () => {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}.${m}.${day}`;
+  };
+
+  const persist = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ articles }));
+    } catch (e) { /* quota exceeded? ignore */ }
+  };
+
+  // -------------- Render --------------
+  const render = () => {
+    // List
+    if (articles.length === 0) {
+      $list.innerHTML = '';
+      $empty.hidden = false;
+    } else {
+      $empty.hidden = true;
+      $list.innerHTML = articles.map((a, i) => `
+        <li class="article-row" data-index="${i}" ${i === editIndex ? 'data-editing="true"' : ''}>
+          <div class="row-thumb">
+            ${a.thumbnail ? `<img src="${escapeHtml(a.thumbnail)}" alt="" />` : `<span>${escapeHtml(a.source || 'NOTE')}</span>`}
+          </div>
+          <div class="row-info">
+            <div class="row-meta">
+              <span class="src-badge src-${escapeHtml(a.source || 'NOTE')}">${escapeHtml(a.source || 'NOTE')}</span>
+              <span>${escapeHtml(a.date || '')}</span>
+            </div>
+            <div class="row-title" title="${escapeHtml(a.title || '')}">${escapeHtml(a.title || '')}</div>
+          </div>
+          <div class="row-actions">
+            <button class="icon-btn" data-action="up"     ${i === 0 ? 'disabled' : ''}        title="上へ">▲</button>
+            <button class="icon-btn" data-action="down"   ${i === articles.length - 1 ? 'disabled' : ''} title="下へ">▼</button>
+            <button class="icon-btn" data-action="edit"   title="編集">✎</button>
+            <button class="icon-btn" data-action="delete" title="削除">🗑</button>
+          </div>
+        </li>
+      `).join('');
+    }
+    $count.textContent = `${articles.length}件`;
+
+    // Preview
+    if (articles.length === 0) {
+      $preview.innerHTML = '<div class="empty-state">プレビューする記事がありません。</div>';
+    } else {
+      $preview.innerHTML = articles.map(a => {
+        const thumb = a.thumbnail || fallbackThumb(a.source || 'NOTE');
+        return `
+          <a class="pv-card" href="${escapeHtml(a.url)}" target="_blank" rel="noopener noreferrer">
+            <div class="pv-thumb"><img src="${escapeHtml(thumb)}" alt="" loading="lazy" /></div>
+            <div class="pv-body">
+              <div class="pv-meta">
+                <span class="pv-source src-${escapeHtml(a.source || 'NOTE')}">${escapeHtml(a.source || 'NOTE')}</span>
+                <span>${escapeHtml(a.date || '')}</span>
+              </div>
+              <h3 class="pv-title">${escapeHtml(a.title || '')}</h3>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+  };
+
+  // -------------- Form ops --------------
+  const resetForm = () => {
+    $form.reset();
+    $form.querySelector('input[name="source"][value="NOTE"]').checked = true;
+    $date.value = todayJa();
+    editIndex = null;
+    $formTitle.textContent = '新しい記事を追加';
+    $submit.textContent = '追加する';
+    $cancel.hidden = true;
+    $dateError.hidden = true;
+  };
+
+  const fillForm = (a, idx) => {
+    editIndex = idx;
+    $formTitle.textContent = `編集中: 記事 #${idx + 1}`;
+    $submit.textContent = '更新する';
+    $cancel.hidden = false;
+    const src = a.source || 'NOTE';
+    $form.querySelector(`input[name="source"][value="${src}"]`).checked = true;
+    $title.value = a.title || '';
+    $url.value   = a.url || '';
+    $date.value  = a.date || '';
+    $thumb.value = a.thumbnail || '';
+    $title.focus();
+    render();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const fd = new FormData($form);
+    const data = {
+      source: fd.get('source') || 'NOTE',
+      title:  fd.get('title').trim(),
+      url:    fd.get('url').trim(),
+      date:   fd.get('date').trim(),
+      thumbnail: fd.get('thumbnail').trim()
+    };
+    if (!validateDate(data.date)) {
+      $dateError.hidden = false;
+      $date.focus();
+      return;
+    }
+    $dateError.hidden = true;
+    if (!data.thumbnail) delete data.thumbnail;
+
+    if (editIndex !== null) {
+      articles[editIndex] = data;
+      showToast(`#${editIndex + 1} を更新しました`, 'success');
+    } else {
+      articles.unshift(data);  // newest at top
+      showToast('記事を追加しました', 'success');
+    }
+    persist();
+    resetForm();
+    render();
+  };
+
+  // -------------- List actions --------------
+  $list.addEventListener('click', (e) => {
+    const btn = e.target.closest('.icon-btn');
+    if (!btn) return;
+    const row = btn.closest('.article-row');
+    const i = Number(row.dataset.index);
+    const action = btn.dataset.action;
+    if (action === 'up' && i > 0) {
+      [articles[i - 1], articles[i]] = [articles[i], articles[i - 1]];
+      persist(); render();
+    } else if (action === 'down' && i < articles.length - 1) {
+      [articles[i], articles[i + 1]] = [articles[i + 1], articles[i]];
+      persist(); render();
+    } else if (action === 'edit') {
+      fillForm(articles[i], i);
+    } else if (action === 'delete') {
+      if (confirm(`「${articles[i].title}」を削除します。よろしいですか？`)) {
+        articles.splice(i, 1);
+        if (editIndex === i) resetForm();
+        else if (editIndex !== null && editIndex > i) editIndex -= 1;
+        persist(); render();
+        showToast('削除しました', 'success');
+      }
+    }
+  });
+
+  // -------------- Output: download / copy --------------
+  const buildJson = () => {
+    const out = {
+      "$schema": "Each article: { source: 'NOTE'|'X', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
+      articles
+    };
+    return JSON.stringify(out, null, 2) + '\n';
+  };
+
+  document.getElementById('btn-download').addEventListener('click', () => {
+    const blob = new Blob([buildJson()], { type: 'application/json;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'articles.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('articles.json をダウンロードしました', 'success');
+  });
+
+  document.getElementById('btn-copy').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(buildJson());
+      showToast('JSON をクリップボードにコピーしました', 'success');
+    } catch (e) {
+      showToast('コピーに失敗しました', 'error');
+    }
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', async () => {
+    if (!confirm('編集中の内容を破棄して、サーバ上の articles.json を再読み込みします。よろしいですか？')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    await loadFromServer();
+    showToast('サーバの内容を読み込みました', 'success');
+  });
+
+  $cancel.addEventListener('click', resetForm);
+  $form.addEventListener('submit', handleSubmit);
+
+  // -------------- Initial load --------------
+  const loadFromServer = async () => {
+    try {
+      const r = await fetch(JSON_URL + '?t=' + Date.now());
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json();
+      articles = Array.isArray(data.articles) ? data.articles : [];
+    } catch (e) {
+      console.warn('Failed to load articles.json from server:', e);
+      articles = [];
+    }
+    persist();
+    render();
+  };
+
+  const init = async () => {
+    // Try localStorage first (so users don't lose drafts)
+    try {
+      const cached = localStorage.getItem(STORAGE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed.articles)) {
+          articles = parsed.articles;
+          render();
+          resetForm();
+          return;
+        }
+      }
+    } catch (e) { /* ignore */ }
+
+    await loadFromServer();
+    resetForm();
+  };
+
+  init();
+})();
+</script>
+</body>
+</html>
