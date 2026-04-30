@@ -105,16 +105,10 @@
   nav.top .nav-cta:hover { background: var(--color-primary-hover); }
   .brand { display: flex; align-items: center; gap: 10px; }
   .brand-mark {
-    width: 28px; height: 28px; border-radius: var(--radius-pill);
-    background: var(--color-primary-base);
-    position: relative;
-  }
-  .brand-mark::after {
-    content: ""; position: absolute;
-    right: -4px; bottom: -4px;
-    width: 16px; height: 16px; border-radius: var(--radius-pill);
-    background: var(--color-text-high);
-    border: 2px solid var(--color-surface);
+    width: 32px; height: 32px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
   }
   .brand-name { font-family: var(--font-sans); font-weight: 700; font-size: 15px; letter-spacing: 0.02em; }
   .brand-name .jp { color: inherit; }
@@ -1033,7 +1027,7 @@
 <!-- NAV -->
 <nav class="top" id="nav">
   <div class="brand">
-    <div class="brand-mark"></div>
+    <img class="brand-mark" src="assets/brand-mark.png" alt="AI・ITよろず相談所" />
     <div class="brand-name"><span class="jp">AI・ITよろず相談所</span></div>
   </div>
   <div class="nav-links">
