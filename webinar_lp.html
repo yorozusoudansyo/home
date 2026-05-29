@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIと話すだけで仕事が変わる｜3回シリーズ無料Webセミナー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Brand colors */
+      --color-primary-base:   #D32F2F;
+      --color-primary-hover:  #B71C1C;
+      --color-primary-light:  #FFEBEE;
+      --color-text-high:      #1F2937;
+      --color-text-medium:    #4B5563;
+      --color-border:         #E5E7EB;
+      --color-background:     #F9FAFB;
+      --color-surface:        #FFFFFF;
+
+      /* Typography */
+      --font: "Inter", "Noto Sans JP", sans-serif;
+
+      /* Radius — 3 kinds only */
+      --radius-sm:   4px;
+      --radius-md:   8px;
+      --radius-pill: 999px;
+
+      /* Shadow */
+      --shadow-card:    0 4px 6px rgba(0,0,0,0.05);
+      --shadow-overlay: 0 10px 15px rgba(0,0,0,0.1);
+
+      /* Spacing */
+      --space-xxs: 4px;
+      --space-xs:  8px;
+      --space-s:   16px;
+      --space-m:   24px;
+      --space-l:   32px;
+      --space-xl:  64px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--color-text-high);
+      background: var(--color-background);
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== LAYOUT ===== */
+    .container { max-width: 760px; margin: 0 auto; padding: 0 var(--space-m); }
+    section { padding: var(--space-xl) var(--space-m); }
+
+    /* ===== SECTION LABELS ===== */
+    .sec-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-primary-base);
+      margin-bottom: var(--space-xs);
+    }
+    .sec-title {
+      font-size: clamp(20px, 4vw, 24px);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.5;
+      margin-bottom: var(--space-xs);
+      color: var(--color-text-high);
+    }
+    .sec-desc {
+      font-size: 16px;
+      color: var(--color-text-medium);
+      max-width: 600px;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: var(--color-text-high);
+      color: var(--color-surface);
+      padding: 80px var(--space-m);
+      text-align: center;
+    }
+
+    /* Logo */
+    .hero-logo {
+      display: block;
+      width: 200px;
+      margin: 0 auto var(--space-l);
+    }
+    .hero-logo text, .hero-logo polygon, .hero-logo circle {
+      /* Keep SVG colors as-is */
+    }
+    /* Override logo text to white for dark bg */
+    .hero-logo-text { fill: var(--color-surface) !important; }
+    .hero-logo-bubble-dark { fill: rgba(255,255,255,0.15) !important; }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--color-primary-base);
+      color: var(--color-surface);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px var(--space-s);
+      border-radius: var(--radius-pill);
+      margin-bottom: var(--space-m);
+    }
+    .hero-catch {
+      font-size: clamp(22px, 5vw, 32px);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.5;
+      margin-bottom: var(--space-s);
+    }
+    .hero-catch .accent {
+      color: #93c5fd; /* light blue tint — readable on dark bg, not a brand color per se */
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.7);
+      max-width: 540px;
+      margin: 0 auto var(--space-xl);
+      line-height: 1.8;
+    }
+
+    /* Session pills */
+    .session-pills {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      max-width: 480px;
+      margin: 0 auto var(--space-xl);
+    }
+    .pill {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: var(--radius-md);
+      padding: var(--space-s) var(--space-m);
+      display: flex;
+      align-items: center;
+      gap: var(--space-m);
+      text-align: left;
+    }
+    .pill-num {
+      background: var(--color-primary-base);
+      color: var(--color-surface);
+      font-size: 11px;
+      font-weight: 700;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 1.2;
+      text-align: center;
+    }
+    .pill-date { font-size: 13px; font-weight: 700; color: #93c5fd; }
+    .pill-title { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 4px; line-height: 1.5; }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: var(--space-m);
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: var(--space-l);
+    }
+    .hero-meta span::before { content: '✓ '; color: #93c5fd; font-weight: 700; }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--color-primary-base);
+      color: var(--color-surface);
+      font-family: var(--font);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 16px 48px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(211,47,47,0.4);
+      transition: background 0.15s, transform 0.15s;
+    }
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+      transform: translateY(-2px);
+    }
+    .btn-note {
+      display: block;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-top: var(--space-xs);
+    }
+
+    /* ===== EMPATHY ===== */
+    .empathy { background: var(--color-surface); }
+    .pain-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-s);
+      margin-top: var(--space-l);
+    }
+    @media (max-width: 520px) { .pain-grid { grid-template-columns: 1fr; } }
+    .pain-card {
+      background: var(--color-background);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-m);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--color-text-medium);
+      box-shadow: var(--shadow-card);
+    }
+    .pain-card .emoji { font-size: 24px; margin-bottom: var(--space-xs); display: block; }
+
+    /* ===== RESOLVE BANNER ===== */
+    .resolve-banner {
+      background: var(--color-primary-light);
+      border-top: 3px solid var(--color-primary-base);
+      border-bottom: 3px solid var(--color-primary-base);
+      padding: 40px var(--space-m);
+      text-align: center;
+    }
+    .resolve-banner p {
+      font-size: clamp(16px, 3vw, 20px);
+      font-weight: 700;
+      line-height: 1.7;
+      color: var(--color-text-high);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .resolve-banner .hl { color: var(--color-primary-base); }
+
+    /* ===== SESSIONS ===== */
+    .sessions { background: var(--color-background); }
+    .session-list { margin-top: var(--space-l); display: flex; flex-direction: column; gap: var(--space-s); }
+    .session-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .session-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-s);
+      padding: var(--space-m) var(--space-m);
+      background: var(--color-background);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .s-num-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-pill);
+      background: var(--color-text-high);
+      color: var(--color-surface);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .session-header-text { flex: 1; }
+    .s-date { font-size: 12px; font-weight: 700; color: var(--color-text-medium); }
+    .s-title-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text-high);
+      margin-top: var(--space-xxs);
+      line-height: 1.5;
+    }
+    .s-dur {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--color-primary-light);
+      color: var(--color-primary-base);
+      flex-shrink: 0;
+    }
+    .session-body { padding: var(--space-m); }
+    .s-tagline {
+      font-size: 14px;
+      color: var(--color-text-medium);
+      margin-bottom: var(--space-s);
+      line-height: 1.7;
+    }
+    .s-points { display: flex; flex-direction: column; gap: var(--space-xs); }
+    .s-point {
+      font-size: 14px;
+      color: var(--color-text-high);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-xs);
+      line-height: 1.6;
+    }
+    .s-point::before {
+      content: '▶';
+      color: var(--color-primary-base);
+      font-size: 10px;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    /* ===== BEFORE / AFTER ===== */
+    .ba { background: var(--color-surface); }
+    .ba-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: var(--space-s);
+      align-items: center;
+      margin-top: var(--space-l);
+    }
+    @media (max-width: 560px) {
+      .ba-grid { grid-template-columns: 1fr; }
+      .ba-arrow { transform: rotate(90deg); }
+    }
+    .ba-col { display: flex; flex-direction: column; gap: var(--space-xs); }
+    .ba-col-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: var(--space-xxs);
+    }
+    .ba-before-label { color: var(--color-text-medium); }
+    .ba-after-label  { color: var(--color-primary-base); }
+    .ba-card {
+      border-radius: var(--radius-md);
+      padding: var(--space-s);
+      font-size: 14px;
+      line-height: 1.6;
+      box-shadow: var(--shadow-card);
+    }
+    .ba-before {
+      background: var(--color-background);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-medium);
+    }
+    .ba-after {
+      background: var(--color-primary-light);
+      border-left: 4px solid var(--color-primary-base);
+      color: var(--color-text-high);
+    }
+    .ba-arrow { text-align: center; font-size: 28px; color: var(--color-primary-base); }
+
+    /* ===== OVERVIEW ===== */
+    .overview { background: var(--color-background); }
+    .overview-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: var(--space-l);
+      font-size: 15px;
+    }
+    .overview-table tr { border-bottom: 1px solid var(--color-border); }
+    .overview-table tr:last-child { border-bottom: none; }
+    .overview-table th {
+      padding: var(--space-s) var(--space-m) var(--space-s) 0;
+      text-align: left;
+      color: var(--color-text-medium);
+      font-weight: 600;
+      font-size: 13px;
+      width: 120px;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+    .overview-table td {
+      padding: var(--space-s) var(--space-m) var(--space-s) var(--space-s);
+      color: var(--color-text-high);
+      font-weight: 500;
+    }
+    .free-badge {
+      display: inline-block;
+      background: var(--color-primary-light);
+      color: var(--color-primary-base);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 2px 12px;
+      border-radius: var(--radius-pill);
+    }
+    @media (max-width: 480px) {
+      .overview-table th { width: 88px; font-size: 12px; }
+      .overview-table td { font-size: 14px; }
+    }
+
+    /* ===== SPEAKER ===== */
+    .speaker { background: var(--color-surface); }
+    .speaker-card {
+      background: var(--color-background);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-l);
+      display: flex;
+      gap: var(--space-l);
+      align-items: flex-start;
+      margin-top: var(--space-l);
+      box-shadow: var(--shadow-card);
+    }
+    @media (max-width: 560px) { .speaker-card { flex-direction: column; gap: var(--space-m); } }
+    .speaker-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-pill);
+      background: var(--color-text-high);
+      color: var(--color-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .speaker-name { font-size: 20px; font-weight: 700; color: var(--color-text-high); margin-bottom: var(--space-xxs); }
+    .speaker-title { font-size: 13px; color: var(--color-primary-base); font-weight: 600; margin-bottom: var(--space-s); }
+    .speaker-bio { font-size: 14px; color: var(--color-text-medium); line-height: 1.8; }
+    .speaker-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-s); }
+    .speaker-tag {
+      font-size: 12px;
+      padding: 4px var(--space-s);
+      border-radius: var(--radius-pill);
+      background: var(--color-surface);
+      color: var(--color-text-medium);
+      border: 1px solid var(--color-border);
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      background: var(--color-text-high);
+      color: var(--color-surface);
+      text-align: center;
+      padding: 80px var(--space-m);
+    }
+    .cta-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      color: #93c5fd;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px var(--space-m);
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: var(--space-m);
+    }
+    .cta-title { font-size: clamp(20px, 4vw, 28px); font-weight: 700; letter-spacing: 0.05em; line-height: 1.5; margin-bottom: var(--space-xs); }
+    .cta-sub { font-size: 15px; color: rgba(255,255,255,0.65); margin-bottom: var(--space-l); line-height: 1.8; }
+
+    /* ===== FAQ ===== */
+    .faq { background: var(--color-background); }
+    .faq-list { margin-top: var(--space-l); }
+    .faq-item { border-bottom: 1px solid var(--color-border); }
+    .faq-q {
+      padding: var(--space-m) 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-high);
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-s);
+      user-select: none;
+    }
+    .faq-q-label {
+      color: var(--color-primary-base);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .faq-a {
+      padding: 0 0 var(--space-m) 32px;
+      font-size: 14px;
+      color: var(--color-text-medium);
+      line-height: 1.8;
+      display: none;
+    }
+    .faq-a.open { display: block; }
+    .faq-item.open .faq-q { color: var(--color-primary-base); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--color-text-high);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: var(--space-l) var(--space-m);
+      font-size: 12px;
+    }
+    footer a { color: rgba(255,255,255,0.4); }
+    footer a:hover { color: rgba(255,255,255,0.7); }
+
+    /* ===== STICKY CTA (SP) ===== */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--color-primary-base);
+      padding: 16px var(--space-m);
+      text-align: center;
+      z-index: 999;
+      display: none;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+    }
+    .sticky-cta a {
+      color: var(--color-surface);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    @media (max-width: 640px) { .sticky-cta { display: block; } }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+
+    <!-- Logo (inline SVG with overrides for dark background) -->
+    <svg class="hero-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="AI・ITよろず相談所">
+      <g fill="rgba(255,255,255,0.2)">
+        <polygon points="330,200 290,250 350,220"></polygon>
+        <circle cx="360" cy="150" r="75"></circle>
+      </g>
+      <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+        <line x1="320" y1="120" x2="380" y2="100"></line>
+        <line x1="320" y1="120" x2="340" y2="170"></line>
+        <line x1="380" y1="100" x2="390" y2="150"></line>
+      </g>
+      <g fill="#FFFFFF">
+        <circle cx="320" cy="120" r="5"></circle>
+        <circle cx="380" cy="100" r="5"></circle>
+        <circle cx="340" cy="170" r="5"></circle>
+        <circle cx="390" cy="150" r="5"></circle>
+      </g>
+      <g fill="#D32F2F">
+        <polygon points="470,200 510,250 450,220"></polygon>
+        <circle cx="440" cy="150" r="75"></circle>
+      </g>
+      <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+        <line x1="420" y1="130" x2="470" y2="110"></line>
+        <line x1="420" y1="130" x2="450" y2="180"></line>
+        <line x1="470" y1="110" x2="480" y2="160"></line>
+      </g>
+      <g fill="#FFFFFF">
+        <circle cx="420" cy="130" r="5"></circle>
+        <circle cx="470" cy="110" r="5"></circle>
+        <circle cx="450" cy="180" r="5"></circle>
+        <circle cx="480" cy="160" r="5"></circle>
+      </g>
+      <text x="400" y="325" text-anchor="middle" font-family="'Inter','Noto Sans JP',sans-serif" font-weight="700" font-size="56" letter-spacing="2" fill="#FFFFFF">AI・ITよろず相談所</text>
+    </svg>
+
+    <div class="hero-badge">無料 Webセミナー ｜ 3回シリーズ</div>
+
+    <h1 class="hero-catch">
+      うまく使おうとしなくていい。<br>
+      <span class="accent">ただ話しかけるだけで、</span><br>
+      AIは動き出す。
+    </h1>
+    <p class="hero-sub">
+      メール・議事録・資料づくり——毎日の「面倒」をAIに任せる方法を、<br>ライブデモを見ながら30分×3回で体験します。
+    </p>
+
+    <div class="session-pills">
+      <div class="pill">
+        <div class="pill-num">第1回</div>
+        <div>
+          <div class="pill-date">6月8日（日）21:00〜</div>
+          <div class="pill-title">AIは「調べるもの」じゃない——「作らせる」だけで世界が変わる</div>
+        </div>
+      </div>
+      <div class="pill">
+        <div class="pill-num">第2回</div>
+        <div>
+          <div class="pill-date">6月15日（日）21:00〜</div>
+          <div class="pill-title">ルーチン作業をAIに任せる——コピペから「つながる」へ</div>
+        </div>
+      </div>
+      <div class="pill">
+        <div class="pill-num">第3回</div>
+        <div>
+          <div class="pill-date">6月22日（日）21:00〜</div>
+          <div class="pill-title">資料づくりをAIと一緒にやる——8票の悩みに正面から応える</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-meta">
+      <span>参加費 無料</span>
+      <span>各回30分</span>
+      <span>Google Meet開催</span>
+    </div>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfL2aflmratxkSdnjb3gqTkm2S_-q7aVdEM_Vzx5jg0xUKA_g/viewform" class="btn-primary" id="hero-cta">無料で申し込む →</a>
+    <span class="btn-note">※ 申込み後にGoogle MeetのURLをお送りします</span>
+
+  </div>
+</section>
+
+<!-- ===== 共感 ===== -->
+<section class="empathy">
+  <div class="container">
+    <span class="sec-label">こんなこと、ありませんか？</span>
+    <h2 class="sec-title">AIって結局、何に使えばいいの？</h2>
+    <p class="sec-desc">「試したけど続かなかった」「すごいとは聞くが使いこなせていない」——そんな方のためのセミナーです。</p>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <span class="emoji">😓</span>
+        ChatGPTやClaudeを一度は使ったけど、<strong>結局どれを使えばいいか</strong>わからなくなった
+      </div>
+      <div class="pain-card">
+        <span class="emoji">📋</span>
+        メール返信や議事録まとめが面倒。<strong>AIで楽になると聞くが、どうすればいいか</strong>わからない
+      </div>
+      <div class="pain-card">
+        <span class="emoji">📊</span>
+        資料づくりに時間がかかりすぎる。<strong>AIに手伝ってもらえるらしいが、</strong>何をどう頼めばいい？
+      </div>
+      <div class="pain-card">
+        <span class="emoji">🤖</span>
+        毎日のルーチン作業を自動化したいが、<strong>ちゃんと動くのか不安</strong>で踏み出せない
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 解決バナー ===== -->
+<div class="resolve-banner">
+  <p>
+    「うまくプロンプトを書かなきゃ」は間違いです。<br>
+    <span class="hl">普通に話しかけるだけで、AIはちゃんと動きます。</span><br>
+    このセミナーで、その感覚を体験してください。
+  </p>
+</div>
+
+<!-- ===== セッション ===== -->
+<section class="sessions">
+  <div class="container">
+    <span class="sec-label">プログラム</span>
+    <h2 class="sec-title">3回で「知る → 使う → 任せる」を体験する</h2>
+    <p class="sec-desc">毎回ライブデモあり。見ているだけでOKです。宿題は1つだけ。</p>
+
+    <div class="session-list">
+
+      <div class="session-card">
+        <div class="session-header">
+          <div class="s-num-badge">第1回</div>
+          <div class="session-header-text">
+            <div class="s-date">6月8日（日）21:00〜21:30</div>
+            <div class="s-title-text">AIは「調べるもの」じゃない——「作らせる」だけで世界が変わる</div>
+          </div>
+          <div class="s-dur">30分</div>
+        </div>
+        <div class="session-body">
+          <p class="s-tagline">ChatGPT・Copilot・Gemini・Claude、何がどう違うのか？を5分で整理します。</p>
+          <div class="s-points">
+            <div class="s-point">4大AIの使い分け——「今使っているツールの隣にいるAIを使う」原則</div>
+            <div class="s-point">Claudeの3形態（ブラウザ・Cowork・Claude Code）を1枚の図で理解する</div>
+            <div class="s-point">ライブデモ：メール返信をAIに作らせる（無料版で今日からできる）</div>
+            <div class="s-point">次回予告：AIがカレンダーを直接見る「MCP」とは？</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="session-card">
+        <div class="session-header">
+          <div class="s-num-badge">第2回</div>
+          <div class="session-header-text">
+            <div class="s-date">6月15日（日）21:00〜21:30</div>
+            <div class="s-title-text">ルーチン作業をAIに任せる——コピペから「つながる」へ</div>
+          </div>
+          <div class="s-dur">30分</div>
+        </div>
+        <div class="session-body">
+          <p class="s-tagline">議事録まとめが30分→3分に。コピペ不要の「つながるAI」を体験します。</p>
+          <div class="s-points">
+            <div class="s-point">ブラウザ版デモ：議事録メモを貼り付けて要約（全員、今日からできる）</div>
+            <div class="s-point">MCP本番デモ：カレンダーを直接読んで会議前アジェンダを自動生成</div>
+            <div class="s-point">持ち帰り：コピペで使える「議事録プロンプトの最初の一文」</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="session-card">
+        <div class="session-header">
+          <div class="s-num-badge">第3回</div>
+          <div class="session-header-text">
+            <div class="s-date">6月22日（日）21:00〜21:30</div>
+            <div class="s-title-text">資料づくりをAIと一緒にやる——アンケート8票の悩みに正面から応える</div>
+          </div>
+          <div class="s-dur">30分</div>
+        </div>
+        <div class="session-body">
+          <p class="s-tagline">「調べる・整理する」はNotebookLM、「書く・仕上げる」はClaude。2ツール連携が資料づくりの答えです。</p>
+          <div class="s-points">
+            <div class="s-point">NotebookLM＝「あなたの資料専用のAI司書」——AIハルシネーションのリスクを激減させる仕組み</div>
+            <div class="s-point">ライブデモ：過去資料→目次出し→Claudeで肉付け→完成（全工程15分）</div>
+            <div class="s-point">持ち帰り：資料づくりの最初の投げかけ方テンプレート</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== Before / After ===== -->
+<section class="ba">
+  <div class="container">
+    <span class="sec-label">受講後のイメージ</span>
+    <h2 class="sec-title">3回参加すると、こう変わります</h2>
+
+    <div class="ba-grid">
+      <div class="ba-col">
+        <div class="ba-col-label ba-before-label">BEFORE</div>
+        <div class="ba-card ba-before">メールの返信に15分かかる</div>
+        <div class="ba-card ba-before">議事録まとめは会議後30分の作業</div>
+        <div class="ba-card ba-before">資料づくりは気合で半日</div>
+        <div class="ba-card ba-before">「どのAIを使えばいいかわからない」</div>
+      </div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-col">
+        <div class="ba-col-label ba-after-label">AFTER</div>
+        <div class="ba-card ba-after">メールの下書きをAIが出し、確認するだけ</div>
+        <div class="ba-card ba-after">議事録はAIに貼り付けて3分で完成</div>
+        <div class="ba-card ba-after">骨格をAIが出し、仕上げだけ自分でやる</div>
+        <div class="ba-card ba-after">用途別の使い分けが頭に入っている</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 開催概要 ===== -->
+<section class="overview">
+  <div class="container">
+    <span class="sec-label">開催概要</span>
+    <h2 class="sec-title">詳細情報</h2>
+
+    <table class="overview-table">
+      <tr>
+        <th>開催日時</th>
+        <td>
+          第1回：6月8日（日）21:00〜21:30<br>
+          第2回：6月15日（日）21:00〜21:30<br>
+          第3回：6月22日（日）21:00〜21:30
+        </td>
+      </tr>
+      <tr>
+        <th>形式</th>
+        <td>
+          オンライン（Google Meet）<br>
+          <span style="font-size:12px;color:var(--color-text-medium)">※ 申込み後にURLをお送りします。アプリのインストール不要です。</span>
+        </td>
+      </tr>
+      <tr>
+        <th>参加費</th>
+        <td><span class="free-badge">無料</span></td>
+      </tr>
+      <tr>
+        <th>対象</th>
+        <td>
+          AIをたまに使うが「調べる程度」で止まっているビジネスパーソン<br>
+          <span style="font-size:12px;color:var(--color-text-medium)">※ プログラミング・専門知識は一切不要です</span>
+        </td>
+      </tr>
+      <tr>
+        <th>定員</th>
+        <td>なし（何名でも参加可）</td>
+      </tr>
+      <tr>
+        <th>主催</th>
+        <td>AI・ITよろず相談所ビジネス（清水幸久）</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 講師 ===== -->
+<section class="speaker">
+  <div class="container">
+    <span class="sec-label">講師紹介</span>
+    <h2 class="sec-title">セミナー講師</h2>
+
+    <div class="speaker-card">
+      <div class="speaker-avatar">Y</div>
+      <div>
+        <div class="speaker-name">清水 幸久（Yukisa）</div>
+        <div class="speaker-title">AI・ITよろず相談所ビジネス 代表</div>
+        <p class="speaker-bio">
+          「AIを難しく考えなくていい」をテーマに、ビジネスパーソン向けのAI活用サポートを提供。
+          Claude・ChatGPT・NotebookLMなどの最新ツールを実務で活用しながら、
+          初めての方でも「今日からできる」レベルに落とし込んだ解説が好評。
+          CoworkやMCPなど最前線の技術を現場目線でわかりやすく伝えている。
+        </p>
+        <div class="speaker-tags">
+          <span class="speaker-tag">Claude / ChatGPT</span>
+          <span class="speaker-tag">NotebookLM</span>
+          <span class="speaker-tag">MCP活用</span>
+          <span class="speaker-tag">業務自動化</span>
+          <span class="speaker-tag">AI導入サポート</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-badge">参加費 無料</div>
+    <h2 class="cta-title">「ただ話しかけるだけ」を、<br>体験しに来てください。</h2>
+    <p class="cta-sub">申込みはGoogleフォームから1分で完了します。<br>3回すべて参加できなくても大丈夫です。</p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfL2aflmratxkSdnjb3gqTkm2S_-q7aVdEM_Vzx5jg0xUKA_g/viewform" class="btn-primary">無料で申し込む →</a>
+    <p style="font-size:12px;color:rgba(255,255,255,0.45);margin-top:8px;">第1回：6月8日（日）21:00〜 ｜ Google Meet</p>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq">
+  <div class="container">
+    <span class="sec-label">よくある質問</span>
+    <h2 class="sec-title">FAQ</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-label">Q</span>AIを使ったことがありませんが、参加できますか？
+        </div>
+        <div class="faq-a">はい、まったく問題ありません。「名前は知っているが使ったことがない」方も想定してカリキュラムを設計しています。第1回でAIの基本から丁寧に説明します。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-label">Q</span>3回すべて参加しないといけませんか？
+        </div>
+        <div class="faq-a">いいえ。各回独立した内容です。参加できる回だけでも十分な学びが得られます。1回だけの参加も歓迎します。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-label">Q</span>有料プランへの加入は必要ですか？
+        </div>
+        <div class="faq-a">不要です。「全員が今日からできる」部分はすべてClaude・NotebookLMの無料版で再現できます。有料プランのデモは「こんな世界もある」としてお見せします。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-label">Q</span>録画はありますか？
+        </div>
+        <div class="faq-a">現時点では未定です。できるだけリアルタイムでご参加いただくことをおすすめします。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-label">Q</span>セミナー後に何か売り込まれますか？
+        </div>
+        <div class="faq-a">しつこい営業は一切ありません。「もっと詳しく相談したい」という方向けに、AI・ITよろず相談所への導線をご案内しますが、強制・勧誘は行いません。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>© 2026 AI・ITよろず相談所ビジネス（清水幸久）</p>
+  <p style="margin-top:8px;"><a href="mailto:yukisa0814@gmail.com">お問い合わせ：yukisa0814@gmail.com</a></p>
+</footer>
+
+<!-- Sticky CTA (SP) -->
+<div class="sticky-cta">
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfL2aflmratxkSdnjb3gqTkm2S_-q7aVdEM_Vzx5jg0xUKA_g/viewform">無料で申し込む →</a>
+</div>
+
+<script>
+  function toggleFaq(el) {
+    const item = el.closest('.faq-item');
+    const ans  = item.querySelector('.faq-a');
+    const open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-a').classList.remove('open');
+    });
+    if (!open) { item.classList.add('open'); ans.classList.add('open'); }
+  }
+
+  const heroCta  = document.getElementById('hero-cta');
+  const stickyCta = document.querySelector('.sticky-cta');
+  if (heroCta && stickyCta) {
+    new IntersectionObserver(e => {
+      stickyCta.style.display = e[0].isIntersecting ? 'none' : 'block';
+    }).observe(heroCta);
+  }
+</script>
+</body>
+</html>
