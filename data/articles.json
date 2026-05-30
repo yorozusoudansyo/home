@@ -2,6 +2,12 @@
   "$schema": "Each article: { source: 'NOTE'|'X', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
   "articles": [
     {
+      "source": "X",
+      "title": "【無料Webセミナー】AIと話すだけで仕事が変わる",
+      "url": "https://x.com/Yorozu0519/status/2060735390177472891?s=20",
+      "date": "2026.05.30"
+    },
+    {
       "source": "NOTE",
       "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(前編)",
       "url": "https://note.com/yukisa0814/n/ncf59d2678127",
