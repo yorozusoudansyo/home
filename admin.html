@@ -365,6 +365,140 @@
     font-size: 12px;
     margin-top: 4px;
   }
+
+  /* ============================================================
+     PUBLISH UI: status bar / settings modal / publish button
+     ============================================================ */
+
+  .status-bar {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    box-shadow: var(--shadow-card);
+  }
+  .status-bar.ok    { border-color: var(--color-success); background: var(--color-success-light); }
+  .status-bar.warn  { border-color: #FBBF24; background: #FEF3C7; }
+  .status-indicator { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+  .status-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--color-text-low);
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+  }
+  .status-bar.ok   .status-dot { background: var(--color-success); box-shadow: 0 0 0 3px rgba(15,110,86,0.18); }
+  .status-bar.warn .status-dot { background: #D97706;             box-shadow: 0 0 0 3px rgba(217,119,6,0.18); }
+
+  .btn-large {
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+  .publish-card {
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-surface) 100%);
+    border: 2px solid var(--color-primary-base);
+  }
+  .publish-card h2 { color: var(--color-primary-base); }
+
+  .advanced-actions {
+    margin-top: 18px;
+    border-top: 1px dashed var(--color-border);
+    padding-top: 14px;
+  }
+  .advanced-actions summary {
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--color-text-medium);
+    font-weight: 600;
+    user-select: none;
+    padding: 4px 0;
+  }
+  .advanced-actions summary:hover { color: var(--color-primary-base); }
+  .advanced-actions[open] summary { color: var(--color-text-high); }
+  .advanced-actions .button-row { margin-top: 12px; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 300;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay[hidden] { display: none !important; }
+  .modal {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    max-width: 600px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: var(--shadow-overlay);
+  }
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .modal-header h2 { font-size: 16px; font-weight: 700; margin: 0; }
+  .modal-close {
+    background: none; border: none;
+    font-size: 24px; line-height: 1;
+    cursor: pointer;
+    color: var(--color-text-medium);
+    padding: 0 4px;
+  }
+  .modal-close:hover { color: var(--color-text-high); }
+  .modal-body { padding: 20px 24px; }
+  .modal-body h3 {
+    font-size: 14px; font-weight: 700;
+    margin: 18px 0 8px;
+    color: var(--color-text-high);
+  }
+  .modal-body p { font-size: 13px; color: var(--color-text-medium); line-height: 1.7; margin: 0 0 12px; }
+  .modal-body ol { padding-left: 20px; font-size: 13px; color: var(--color-text-medium); line-height: 1.85; }
+  .modal-body ol li { margin-bottom: 4px; }
+  .modal-body code {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-size: 12px;
+  }
+  .modal-body .hint { font-size: 12px; color: var(--color-text-low); margin-top: 6px; }
+  .modal-body input[type="password"], .modal-body input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  .modal-actions {
+    display: flex; gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  /* Publish in-progress overlay */
+  .publish-status {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    display: none;
+  }
+  .publish-status.show { display: block; }
+  .publish-status.success { background: var(--color-success-light); border-color: var(--color-success); color: var(--color-success); }
+  .publish-status.error   { background: #FEE2E2; border-color: #991B1B; color: #991B1B; }
+  .publish-status .step { margin: 4px 0; }
+  .publish-status .step::before { content: "→ "; color: var(--color-text-medium); }
+  .publish-status .step.done::before { content: "✓ "; color: var(--color-success); }
+  .publish-status .step.fail::before { content: "✗ "; color: #991B1B; }
 </style>
 </head>
 <body>
@@ -386,16 +520,25 @@
   <h1>記事カード管理</h1>
   <p class="lead">
     LP の「発信」セクションに表示する記事カードを編集します。<br/>
-    変更内容は <code>data/articles.json</code> に書き出して、GitHub にコミットすることで本番に反映されます。
+    編集後、<strong>「🚀 本番に反映」ボタン</strong>1 つで GitHub に自動コミットされ、1〜2 分で本番ページに反映されます。
   </p>
+
+  <!-- Status bar: token state -->
+  <div class="status-bar" id="status-bar">
+    <div class="status-indicator">
+      <span class="status-dot" id="status-dot"></span>
+      <span class="status-text" id="status-text">状態を確認中...</span>
+    </div>
+    <button class="btn btn-ghost btn-sm" id="open-settings">⚙ 設定</button>
+  </div>
 
   <div class="steps">
     <h2>使い方</h2>
     <ol>
-      <li>右側のフォームから新しい記事を追加するか、左側の一覧から既存記事を編集 / 並び替え / 削除します。</li>
-      <li>「プレビュー」で実際の表示を確認します。変更内容は自動的にこのブラウザに保存されます。</li>
-      <li>すべて整ったら、ページ下部の <strong>「JSON をダウンロード」</strong> をクリック。</li>
-      <li>ダウンロードした <code>articles.json</code> を <code>data/articles.json</code> に上書きしてコミット → push（または「GitHub で直接編集」から Web で貼り付けて Commit）</li>
+      <li><strong>初回のみ</strong>: 上の「⚙ 設定」から GitHub のアクセストークン（PAT）を一度設定してください。以降は自動でブラウザに記憶されます。</li>
+      <li>右側フォームから記事を追加 / 左側一覧で編集・並び替え・削除。変更は自動でこのブラウザに保存されます。</li>
+      <li>「LP プレビュー」で見た目を確認。</li>
+      <li>ページ下部の <strong>🚀「本番に反映」</strong>をクリック → GitHub にコミット → 自動で反映を待機 → 完了通知</li>
     </ol>
   </div>
 
@@ -477,21 +620,67 @@
   </section>
 
   <!-- Bottom actions -->
-  <div class="bottom-actions">
-    <h2>変更を本番に反映</h2>
+  <div class="bottom-actions publish-card">
+    <h2>🚀 変更を本番に反映する</h2>
     <p>
-      編集が終わったら下のボタンから <code>articles.json</code> をダウンロードし、リポジトリの <code>data/articles.json</code> を上書きしてコミット → push してください。
-      もしくは「GitHub で直接編集」を開いて、ダウンロードした内容を貼り付けて Commit changes します。
+      下のボタンを押すと、現在編集中の記事一覧で本番の <code>data/articles.json</code> が自動更新され、1〜2 分でサイトに反映されます。
     </p>
     <div class="button-row">
-      <button class="btn btn-primary" id="btn-download">JSON をダウンロード</button>
-      <button class="btn btn-ghost" id="btn-copy">JSON をコピー</button>
-      <a class="btn btn-ghost" href="https://github.com/yorozusoudansyo/home/edit/main/data/articles.json" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">GitHub で直接編集 ↗</a>
-      <button class="btn btn-danger" id="btn-reset">サーバの内容を再読み込み</button>
+      <button class="btn btn-primary btn-large" id="btn-publish">🚀 本番に反映する</button>
     </div>
+    <div class="publish-status" id="publish-status" role="status" aria-live="polite"></div>
+
+    <details class="advanced-actions">
+      <summary>手動オプション（トラブル時のみ）</summary>
+      <p style="font-size:12px; color:var(--color-text-medium); margin:12px 0;">
+        通常は上のボタンだけで完結します。何か問題があったとき用に、JSON を手動で取り出すこともできます。
+      </p>
+      <div class="button-row">
+        <button class="btn btn-ghost" id="btn-download">JSON をダウンロード</button>
+        <button class="btn btn-ghost" id="btn-copy">JSON をコピー</button>
+        <a class="btn btn-ghost" href="https://github.com/yorozusoudansyo/home/edit/main/data/articles.json" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">GitHub で直接編集 ↗</a>
+        <button class="btn btn-danger" id="btn-reset">サーバの内容を再読み込み</button>
+      </div>
+    </details>
   </div>
 
 </main>
+
+<!-- Settings modal: GitHub PAT setup -->
+<div class="modal-overlay" id="settings-modal" hidden>
+  <div class="modal" role="dialog" aria-labelledby="settings-title">
+    <div class="modal-header">
+      <h2 id="settings-title">本番反映の設定</h2>
+      <button class="modal-close" id="settings-close" aria-label="閉じる">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>「🚀 本番に反映」ボタンを使うには、GitHub の <strong>Personal Access Token (PAT)</strong> が必要です。トークンはこのブラウザの中だけに保存され、外部サーバには送信されません。</p>
+
+      <h3>1. トークンを作る</h3>
+      <ol>
+        <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">GitHub の Fine-grained PAT 発行ページ</a> を開く</li>
+        <li><strong>Token name</strong>: <code>LP_Home admin</code>（何でもOK）</li>
+        <li><strong>Expiration</strong>: お好み（推奨: 90 days 〜 1 year）</li>
+        <li><strong>Repository access</strong>: <strong>Only select repositories</strong> → <code>yorozusoudansyo/home</code> を選択</li>
+        <li><strong>Permissions</strong> &gt; <strong>Repository permissions</strong> &gt; <strong>Contents</strong>: <strong>Read and write</strong></li>
+        <li>下の「Generate token」をクリック → 表示された文字列（<code>github_pat_…</code>）をコピー</li>
+      </ol>
+
+      <h3>2. ここに貼り付け</h3>
+      <div>
+        <label for="f-token" style="font-size:12px; font-weight:600; display:block; margin-bottom:6px;">アクセストークン</label>
+        <input type="password" id="f-token" placeholder="github_pat_xxxxxxxxxxxx..." autocomplete="off" />
+        <p class="hint">⚠ このトークンはあなたのブラウザのみに保存されます。共有 PC では使用しないでください。<br/>使わなくなったら「トークンを削除」または GitHub 側で revoke してください。</p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="settings-save">保存する</button>
+        <button class="btn btn-ghost" id="settings-test">疎通テスト</button>
+        <button class="btn btn-danger" id="settings-clear">トークンを削除</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -499,8 +688,13 @@
 (() => {
   'use strict';
 
-  const STORAGE_KEY = 'lp-home-articles-draft';
-  const JSON_URL = 'data/articles.json';
+  const STORAGE_KEY  = 'lp-home-articles-draft';
+  const TOKEN_KEY    = 'lp-home-gh-token';
+  const JSON_URL     = 'data/articles.json';
+  const REPO         = 'yorozusoudansyo/home';
+  const REPO_PATH    = 'data/articles.json';
+  const REPO_BRANCH  = 'main';
+  const LIVE_URL     = 'https://yorozusoudansyo.github.io/home/data/articles.json';
 
   // -------------- State --------------
   let articles = [];
@@ -734,6 +928,231 @@
 
   $cancel.addEventListener('click', resetForm);
   $form.addEventListener('submit', handleSubmit);
+
+  // ================================================================
+  // PUBLISH FLOW: GitHub API direct commit + deploy polling
+  // ================================================================
+
+  const $statusBar  = document.getElementById('status-bar');
+  const $statusDot  = document.getElementById('status-dot');
+  const $statusText = document.getElementById('status-text');
+  const $openSettings = document.getElementById('open-settings');
+  const $modal       = document.getElementById('settings-modal');
+  const $modalClose  = document.getElementById('settings-close');
+  const $fToken      = document.getElementById('f-token');
+  const $btnSave     = document.getElementById('settings-save');
+  const $btnTest     = document.getElementById('settings-test');
+  const $btnClear    = document.getElementById('settings-clear');
+  const $btnPublish  = document.getElementById('btn-publish');
+  const $publishStatus = document.getElementById('publish-status');
+
+  const getToken = () => {
+    try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; }
+  };
+  const setToken = (t) => {
+    try {
+      if (t) localStorage.setItem(TOKEN_KEY, t);
+      else   localStorage.removeItem(TOKEN_KEY);
+    } catch (e) { /* ignore */ }
+    refreshStatus();
+  };
+
+  const refreshStatus = () => {
+    const t = getToken();
+    if (t) {
+      $statusBar.className = 'status-bar ok';
+      $statusText.textContent = '✓ トークン設定済み — 「本番に反映」が使えます';
+      $btnPublish.disabled = false;
+      $btnPublish.title = '';
+    } else {
+      $statusBar.className = 'status-bar warn';
+      $statusText.textContent = '⚠ トークン未設定 — 「⚙ 設定」から GitHub PAT を登録してください';
+      $btnPublish.disabled = true;
+      $btnPublish.title = '先に「⚙ 設定」でトークンを登録してください';
+    }
+  };
+
+  const openModal = () => {
+    $fToken.value = getToken();
+    $modal.hidden = false;
+    setTimeout(() => $fToken.focus(), 50);
+  };
+  const closeModal = () => { $modal.hidden = true; };
+  $openSettings.addEventListener('click', openModal);
+  $modalClose.addEventListener('click', closeModal);
+  $modal.addEventListener('click', (e) => { if (e.target === $modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$modal.hidden) closeModal(); });
+
+  $btnSave.addEventListener('click', () => {
+    const t = $fToken.value.trim();
+    if (!t) {
+      showToast('トークンが空です', 'error');
+      return;
+    }
+    setToken(t);
+    showToast('トークンを保存しました', 'success');
+    closeModal();
+  });
+
+  $btnClear.addEventListener('click', () => {
+    if (!confirm('保存済みのトークンを削除します。本番反映ができなくなります。よろしいですか？')) return;
+    setToken('');
+    $fToken.value = '';
+    showToast('トークンを削除しました', 'success');
+  });
+
+  $btnTest.addEventListener('click', async () => {
+    const t = $fToken.value.trim();
+    if (!t) { showToast('まずトークンを入力してください', 'error'); return; }
+    $btnTest.disabled = true;
+    $btnTest.textContent = 'テスト中...';
+    try {
+      const r = await fetch(`https://api.github.com/repos/${REPO}`, {
+        headers: { 'Authorization': `Bearer ${t}`, 'Accept': 'application/vnd.github+json' }
+      });
+      if (r.ok) {
+        const repo = await r.json();
+        showToast(`OK — ${repo.full_name} にアクセスできました`, 'success');
+      } else if (r.status === 401) {
+        showToast('認証失敗（401）: トークンが無効か期限切れです', 'error');
+      } else if (r.status === 404) {
+        showToast(`リポジトリが見つかりません（404）。スコープに ${REPO} を含めましたか？`, 'error');
+      } else {
+        showToast(`エラー HTTP ${r.status}`, 'error');
+      }
+    } catch (e) {
+      showToast(`ネットワークエラー: ${e.message}`, 'error');
+    } finally {
+      $btnTest.disabled = false;
+      $btnTest.textContent = '疎通テスト';
+    }
+  });
+
+  // ---- Publish steps UI helpers ----
+  const initStatus = () => {
+    $publishStatus.className = 'publish-status show';
+    $publishStatus.innerHTML = '';
+  };
+  const addStep = (label, state = '') => {
+    const div = document.createElement('div');
+    div.className = 'step' + (state ? ' ' + state : '');
+    div.textContent = label;
+    $publishStatus.appendChild(div);
+    return div;
+  };
+  const setStatusKind = (kind) => {
+    $publishStatus.className = 'publish-status show ' + kind;
+  };
+
+  // Base64-encode UTF-8 safely (handles Japanese)
+  const utf8ToBase64 = (str) => {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    for (const b of bytes) bin += String.fromCharCode(b);
+    return btoa(bin);
+  };
+
+  $btnPublish.addEventListener('click', async () => {
+    const token = getToken();
+    if (!token) {
+      openModal();
+      showToast('先にトークンを設定してください', 'error');
+      return;
+    }
+    if (articles.length === 0) {
+      if (!confirm('記事が 0 件の状態で公開しようとしています。本当に進めますか？')) return;
+    } else {
+      if (!confirm(`現在の ${articles.length} 件の記事で本番を更新します。よろしいですか？`)) return;
+    }
+
+    $btnPublish.disabled = true;
+    const originalLabel = $btnPublish.textContent;
+    $btnPublish.textContent = '⏳ 反映中...';
+    initStatus();
+
+    const json = buildJson();
+
+    try {
+      // Step 1: get current file SHA
+      const step1 = addStep('現在のファイル情報を取得中...');
+      const getResp = await fetch(
+        `https://api.github.com/repos/${REPO}/contents/${REPO_PATH}?ref=${REPO_BRANCH}`,
+        { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' } }
+      );
+      if (!getResp.ok) {
+        const e = await getResp.json().catch(() => ({}));
+        throw new Error(`現在のファイル取得に失敗 (HTTP ${getResp.status}): ${e.message || ''}`);
+      }
+      const current = await getResp.json();
+      step1.classList.add('done');
+      step1.textContent = `現在のファイル取得 OK (sha=${current.sha.slice(0, 7)})`;
+
+      // Step 2: commit new content
+      const step2 = addStep('GitHub にコミット中...');
+      const putResp = await fetch(
+        `https://api.github.com/repos/${REPO}/contents/${REPO_PATH}`,
+        {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' },
+          body: JSON.stringify({
+            message: `Update articles.json via admin panel (${articles.length} entries)`,
+            content: utf8ToBase64(json),
+            sha: current.sha,
+            branch: REPO_BRANCH
+          })
+        }
+      );
+      if (!putResp.ok) {
+        const e = await putResp.json().catch(() => ({}));
+        throw new Error(`コミット失敗 (HTTP ${putResp.status}): ${e.message || ''}`);
+      }
+      const commit = await putResp.json();
+      const sha = commit.commit && commit.commit.sha ? commit.commit.sha.slice(0, 7) : '?';
+      step2.classList.add('done');
+      step2.textContent = `コミット成功 (${sha})`;
+
+      // Step 3: poll live URL until updated
+      const step3 = addStep('本番反映を待機中... (最大 5 分)');
+      const expected = json.trim();
+      let deployed = false;
+      const startedAt = Date.now();
+      for (let i = 0; i < 30; i++) {
+        await new Promise(r => setTimeout(r, 10000));
+        try {
+          const liveResp = await fetch(`${LIVE_URL}?t=${Date.now()}`, { cache: 'no-cache' });
+          if (liveResp.ok) {
+            const liveText = (await liveResp.text()).trim();
+            if (liveText === expected) { deployed = true; break; }
+          }
+        } catch (_) { /* keep trying */ }
+        const elapsed = Math.round((Date.now() - startedAt) / 1000);
+        step3.textContent = `本番反映を待機中... (${elapsed} 秒経過 / 最大 300 秒)`;
+      }
+
+      if (deployed) {
+        step3.classList.add('done');
+        step3.textContent = '本番反映 OK';
+        setStatusKind('success');
+        addStep('🎉 完了しました', 'done').classList.add('done');
+        showToast('🎉 本番に反映されました', 'success');
+      } else {
+        step3.classList.add('fail');
+        step3.textContent = '本番反映の確認がタイムアウト（コミットは成功）';
+        setStatusKind('error');
+        addStep('数分後に本番ページを再読み込みしてご確認ください').classList.add('fail');
+        showToast('コミット OK / 反映確認は時間切れ', 'error');
+      }
+    } catch (err) {
+      addStep(err.message, 'fail');
+      setStatusKind('error');
+      showToast(err.message, 'error');
+    } finally {
+      $btnPublish.disabled = false;
+      $btnPublish.textContent = originalLabel;
+    }
+  });
+
+  refreshStatus();
 
   // -------------- Initial load --------------
   const loadFromServer = async () => {
