@@ -517,6 +517,73 @@
       letter-spacing: 0.04em;
     }
     @media (max-width: 640px) { .sticky-cta { display: block; } }
+
+    /* ===== CALENDAR BUTTONS ===== */
+    .cal-btns {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      max-width: 480px;
+      margin: 0 auto var(--space-l);
+    }
+    .btn-cal {
+      display: flex;
+      align-items: center;
+      gap: var(--space-m);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius-md);
+      padding: var(--space-s) var(--space-m);
+      color: var(--color-surface);
+      text-decoration: none;
+      transition: background 0.15s;
+      text-align: left;
+    }
+    .btn-cal:hover { background: rgba(255,255,255,0.16); }
+    .btn-cal-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--color-primary-base);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+    .btn-cal-label { flex: 1; }
+    .btn-cal-session { font-size: 11px; color: #93c5fd; display: block; margin-bottom: 2px; }
+    .btn-cal-date { font-size: 13px; font-weight: 700; display: block; }
+    .btn-cal-arrow { font-size: 16px; color: rgba(255,255,255,0.5); }
+
+    /* Card-level calendar button */
+    .btn-cal-card {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-top: var(--space-m);
+      padding: 8px 16px;
+      background: var(--color-background);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-medium);
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-cal-card:hover {
+      border-color: var(--color-primary-base);
+      color: var(--color-primary-base);
+    }
+    .btn-cal-card svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+
+    /* Dark-bg variant (CTA section) */
+    .cal-btns-dark .btn-cal {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .cal-btns-dark .btn-cal:hover { background: rgba(255,255,255,0.15); }
   </style>
 </head>
 <body>
@@ -601,8 +668,33 @@
       <span>Google Meet開催</span>
     </div>
 
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfL2aflmratxkSdnjb3gqTkm2S_-q7aVdEM_Vzx5jg0xUKA_g/viewform" class="btn-primary" id="hero-cta">無料で申し込む →</a>
-    <span class="btn-note">※ 申込み後にGoogle MeetのURLをお送りします</span>
+    <div class="cal-btns" id="hero-cal-btns">
+      <a class="btn-cal" href="#" data-gcal="0" target="_blank" rel="noopener">
+        <div class="btn-cal-icon">📅</div>
+        <div class="btn-cal-label">
+          <span class="btn-cal-session">第1回</span>
+          <span class="btn-cal-date">6月7日（日）21:00〜21:30</span>
+        </div>
+        <span class="btn-cal-arrow">＋</span>
+      </a>
+      <a class="btn-cal" href="#" data-gcal="1" target="_blank" rel="noopener">
+        <div class="btn-cal-icon">📅</div>
+        <div class="btn-cal-label">
+          <span class="btn-cal-session">第2回</span>
+          <span class="btn-cal-date">6月14日（日）21:00〜21:30</span>
+        </div>
+        <span class="btn-cal-arrow">＋</span>
+      </a>
+      <a class="btn-cal" href="#" data-gcal="2" target="_blank" rel="noopener">
+        <div class="btn-cal-icon">📅</div>
+        <div class="btn-cal-label">
+          <span class="btn-cal-session">第3回</span>
+          <span class="btn-cal-date">6月21日（日）21:00〜21:30</span>
+        </div>
+        <span class="btn-cal-arrow">＋</span>
+      </a>
+    </div>
+    <span id="hero-cta"></span>
 
   </div>
 </section>
@@ -644,7 +736,7 @@
 </div>
 
 <!-- ===== セッション ===== -->
-<section class="sessions">
+<section class="sessions" id="sessions">
   <div class="container">
     <span class="sec-label">プログラム</span>
     <h2 class="sec-title">3回で「知る → 使う → 任せる」を体験する</h2>
@@ -669,6 +761,10 @@
             <div class="s-point">ライブデモ：メール返信をAIに作らせる（無料版で今日からできる）</div>
             <div class="s-point">次回予告：AIがカレンダーを直接見る「MCP」とは？</div>
           </div>
+          <a class="btn-cal-card" href="#" data-gcal="0" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.9 2 3 2.9 3 4v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H5V8h14v13zM7 10h5v5H7z"/></svg>
+            Googleカレンダーに追加（第1回）
+          </a>
         </div>
       </div>
 
@@ -688,6 +784,10 @@
             <div class="s-point">MCP本番デモ：カレンダーを直接読んで会議前アジェンダを自動生成</div>
             <div class="s-point">持ち帰り：コピペで使える「議事録プロンプトの最初の一文」</div>
           </div>
+          <a class="btn-cal-card" href="#" data-gcal="1" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.9 2 3 2.9 3 4v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H5V8h14v13zM7 10h5v5H7z"/></svg>
+            Googleカレンダーに追加（第2回）
+          </a>
         </div>
       </div>
 
@@ -707,6 +807,10 @@
             <div class="s-point">ライブデモ：過去資料→目次出し→Claudeで肉付け→完成（全工程15分）</div>
             <div class="s-point">持ち帰り：資料づくりの最初の投げかけ方テンプレート</div>
           </div>
+          <a class="btn-cal-card" href="#" data-gcal="2" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.9 2 3 2.9 3 4v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H5V8h14v13zM7 10h5v5H7z"/></svg>
+            Googleカレンダーに追加（第3回）
+          </a>
         </div>
       </div>
 
@@ -759,7 +863,7 @@
         <th>形式</th>
         <td>
           オンライン（Google Meet）<br>
-          <span style="font-size:12px;color:var(--color-text-medium)">※ 申込み後にURLをお送りします。アプリのインストール不要です。</span>
+          <span style="font-size:12px;color:var(--color-text-medium)">※ アプリのインストール不要です。</span>
         </td>
       </tr>
       <tr>
@@ -815,13 +919,37 @@
 </section>
 
 <!-- ===== CTA ===== -->
-<section class="cta">
+<section class="cta" id="cta">
   <div class="container">
     <div class="cta-badge">参加費 無料</div>
     <h2 class="cta-title">「ただ話しかけるだけ」を、<br>体験しに来てください。</h2>
-    <p class="cta-sub">申込みはGoogleフォームから1分で完了します。<br>3回すべて参加できなくても大丈夫です。</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfL2aflmratxkSdnjb3gqTkm2S_-q7aVdEM_Vzx5jg0xUKA_g/viewform" class="btn-primary">無料で申し込む →</a>
-    <p style="font-size:12px;color:rgba(255,255,255,0.45);margin-top:8px;">第1回：6月7日（日）21:00〜 ｜ Google Meet</p>
+    <p class="cta-sub">参加したい回のカレンダーボタンをクリックするだけ。<br>3回すべて参加できなくても大丈夫です。</p>
+    <div class="cal-btns cal-btns-dark" style="max-width:420px;">
+      <a class="btn-cal" href="#" data-gcal="0" target="_blank" rel="noopener">
+        <div class="btn-cal-icon">📅</div>
+        <div class="btn-cal-label">
+          <span class="btn-cal-session">第1回</span>
+          <span class="btn-cal-date">6月7日（日）21:00〜21:30</span>
+        </div>
+        <span class="btn-cal-arrow">＋</span>
+      </a>
+      <a class="btn-cal" href="#" data-gcal="1" target="_blank" rel="noopener">
+        <div class="btn-cal-icon">📅</div>
+        <div class="btn-cal-label">
+          <span class="btn-cal-session">第2回</span>
+          <span class="btn-cal-date">6月14日（日）21:00〜21:30</span>
+        </div>
+        <span class="btn-cal-arrow">＋</span>
+      </a>
+      <a class="btn-cal" href="#" data-gcal="2" target="_blank" rel="noopener">
+        <div class="btn-cal-icon">📅</div>
+        <div class="btn-cal-label">
+          <span class="btn-cal-session">第3回</span>
+          <span class="btn-cal-date">6月21日（日）21:00〜21:30</span>
+        </div>
+        <span class="btn-cal-arrow">＋</span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -874,10 +1002,46 @@
 
 <!-- Sticky CTA (SP) -->
 <div class="sticky-cta">
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfL2aflmratxkSdnjb3gqTkm2S_-q7aVdEM_Vzx5jg0xUKA_g/viewform">無料で申し込む →</a>
+  <a href="#cta">📅 カレンダーに追加する →</a>
 </div>
 
 <script>
+  // ===== Google カレンダーリンク生成 =====
+  const GC_BASE = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+  const GC_LOC  = encodeURIComponent('Google Meet（オンライン）');
+
+  const GC_SESSIONS = [
+    {
+      title:   encodeURIComponent('【無料Webセミナー】AIと話すだけで仕事が変わる｜第1回'),
+      dates:   '20260607T120000Z/20260607T123000Z',
+      meetUrl: 'https://meet.google.com/voe-riau-uov'
+    },
+    {
+      title:   encodeURIComponent('【無料Webセミナー】AIと話すだけで仕事が変わる｜第2回'),
+      dates:   '20260614T120000Z/20260614T123000Z',
+      meetUrl: 'https://meet.google.com/oig-hymw-pys'
+    },
+    {
+      title:   encodeURIComponent('【無料Webセミナー】AIと話すだけで仕事が変わる｜第3回'),
+      dates:   '20260621T120000Z/20260621T123000Z',
+      meetUrl: 'https://meet.google.com/mst-uvin-err'
+    }
+  ];
+
+  function gcUrl(i) {
+    const s = GC_SESSIONS[i];
+    const det = encodeURIComponent(
+      '主催：AI・ITよろず相談所ビジネス（清水幸久）\n' +
+      'Google Meet：' + s.meetUrl
+    );
+    return GC_BASE + '&text=' + s.title + '&dates=' + s.dates + '&details=' + det + '&location=' + GC_LOC;
+  }
+
+  document.querySelectorAll('[data-gcal]').forEach(el => {
+    el.href = gcUrl(parseInt(el.dataset.gcal));
+  });
+
+  // ===== FAQ =====
   function toggleFaq(el) {
     const item = el.closest('.faq-item');
     const ans  = item.querySelector('.faq-a');
@@ -889,12 +1053,13 @@
     if (!open) { item.classList.add('open'); ans.classList.add('open'); }
   }
 
-  const heroCta  = document.getElementById('hero-cta');
-  const stickyCta = document.querySelector('.sticky-cta');
-  if (heroCta && stickyCta) {
+  // ===== Sticky CTA =====
+  const heroCalBtns = document.getElementById('hero-cal-btns');
+  const stickyCta   = document.querySelector('.sticky-cta');
+  if (heroCalBtns && stickyCta) {
     new IntersectionObserver(e => {
       stickyCta.style.display = e[0].isIntersecting ? 'none' : 'block';
-    }).observe(heroCta);
+    }).observe(heroCalBtns);
   }
 </script>
 </body>
