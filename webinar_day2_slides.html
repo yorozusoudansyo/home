@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>第2回 ルーチン作業をAIに任せる——コピペから「つながる」へ｜AI・ITよろず相談所</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary-base: #D32F2F;
+    --color-primary-hover: #B71C1C;
+    --color-primary-light: #FFEBEE;
+    --color-text-high: #1F2937;
+    --color-text-medium: #4B5563;
+    --color-border: #E5E7EB;
+    --color-background: #F9FAFB;
+    --color-surface: #FFFFFF;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-pill: 999px;
+    --shadow-card: 0 4px 6px rgba(0,0,0,0.05);
+    --shadow-overlay: 0 10px 15px rgba(0,0,0,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; overflow: hidden; background: #1F2937; }
+  body {
+    font-family: "Inter", "Noto Sans JP", sans-serif;
+    color: var(--color-text-high);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage {
+    position: fixed; inset: 0;
+    display: grid; place-items: center;
+    background: #1F2937;
+  }
+  .deck {
+    position: relative;
+    width: min(100vw, calc(100vh * 16 / 9));
+    height: min(100vh, calc(100vw * 9 / 16));
+    overflow: hidden;
+  }
+
+  /* ---- Slide base ---- */
+  .slide {
+    position: absolute; inset: 0;
+    padding: 52px 68px 72px;
+    background: var(--color-background);
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity 260ms ease;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+
+  /* ---- Nav buttons ---- */
+  .nav-btn {
+    position: fixed;
+    top: 50%; transform: translateY(-50%);
+    width: 44px; height: 72px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 22px;
+    transition: background 180ms ease;
+    z-index: 200;
+    user-select: none;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.22); }
+  .nav-btn:active { background: rgba(255,255,255,0.32); }
+  .nav-btn.prev { left: 8px; }
+  .nav-btn.next { right: 8px; }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+
+  /* ---- Header / Footer ---- */
+  .slide-header {
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--color-text-medium);
+    font-size: 13px; letter-spacing: 0.05em;
+    margin-bottom: 18px; flex-shrink: 0;
+  }
+  .slide-header .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--color-text-high); font-weight: 700;
+    font-size: 14px; letter-spacing: 0.04em;
+  }
+  .logo-mark { width: 36px; height: 28px; display: block; flex-shrink: 0; }
+  .logo-full  { width: 260px; height: 130px; display: block; }
+
+  .slide-footer {
+    margin-top: auto; flex-shrink: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--color-text-medium);
+    font-size: 12px; letter-spacing: 0.05em;
+    padding-top: 10px;
+  }
+  .page-num { font-family: "Inter", sans-serif; font-weight: 500; }
+  .page-num strong { color: var(--color-primary-base); font-weight: 700; }
+
+  /* ---- Utilities ---- */
+  .kicker {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.14em;
+    color: var(--color-primary-base); text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: 34px; font-weight: 700; line-height: 1.4;
+    letter-spacing: 0.03em; color: var(--color-text-high);
+  }
+  .section-sub {
+    font-size: 17px; line-height: 1.7; color: var(--color-text-medium);
+    margin-top: 8px;
+  }
+  .accent { color: var(--color-primary-base); }
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 22px 26px;
+    box-shadow: var(--shadow-card);
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+  }
+  .badge-red   { background: var(--color-primary-base); color: #fff; }
+  .badge-light { background: var(--color-primary-light); color: var(--color-primary-base); }
+  .badge-neutral { background: var(--color-background); color: var(--color-text-medium); border: 1px solid var(--color-border); }
+
+  /* ===== COVER ===== */
+  #s1 {
+    background:
+      radial-gradient(1100px 500px at 110% -5%, var(--color-primary-light) 0%, transparent 55%),
+      var(--color-background);
+    padding: 68px 80px;
+    justify-content: space-between;
+  }
+  #s1 .series-tag {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.1em; color: var(--color-text-medium);
+  }
+  #s1 .series-tag .dot { width: 6px; height: 6px; background: var(--color-primary-base); border-radius: 50%; }
+  #s1 h1 { font-size: 54px; font-weight: 700; line-height: 1.35; letter-spacing: 0.02em; color: var(--color-text-high); margin-top: 20px; max-width: 880px; }
+  #s1 h1 em { font-style: normal; color: var(--color-primary-base); }
+  #s1 .cover-sub { font-size: 21px; font-weight: 500; line-height: 1.65; color: var(--color-text-medium); margin-top: 20px; max-width: 820px; }
+  #s1 .cover-bar { width: 56px; height: 4px; background: var(--color-primary-base); border-radius: var(--radius-sm); margin-top: 28px; }
+  #s1 .cover-meta { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+  #s1 .cover-meta .name { font-size: 17px; font-weight: 700; color: var(--color-text-high); }
+  #s1 .cover-meta .name span { font-size: 13px; font-weight: 400; color: var(--color-text-medium); margin-left: 8px; }
+  #s1 .cover-meta .info { font-size: 13px; color: var(--color-text-medium); letter-spacing: 0.05em; }
+
+  /* ===== PROFILE ===== */
+  #s2 .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 8px; flex: 1; align-items: start; }
+  #s2 .profile-left { display: flex; flex-direction: column; gap: 14px; }
+  #s2 .name-block .ja { font-size: 30px; font-weight: 700; color: var(--color-text-high); }
+  #s2 .name-block .en { font-size: 14px; color: var(--color-text-medium); letter-spacing: 0.1em; margin-top: 4px; }
+  #s2 .catch { font-size: 16px; line-height: 1.75; color: var(--color-text-high); padding: 14px 18px; background: var(--color-primary-light); border-left: 4px solid var(--color-primary-base); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+  #s2 .career { display: flex; flex-direction: column; gap: 8px; }
+  #s2 .career-item { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; line-height: 1.6; }
+  #s2 .career-item .year { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700; color: var(--color-primary-base); letter-spacing: 0.05em; min-width: 50px; padding-top: 2px; }
+  #s2 .profile-right { display: flex; flex-direction: column; gap: 12px; }
+  #s2 .stat-card { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+  #s2 .stat-card .num { font-family: "Inter", sans-serif; font-size: 38px; font-weight: 700; color: var(--color-primary-base); line-height: 1; min-width: 72px; text-align: center; }
+  #s2 .stat-card .desc { font-size: 14px; line-height: 1.6; color: var(--color-text-high); }
+  #s2 .stat-card .desc strong { display: block; font-size: 16px; font-weight: 700; }
+
+  /* ===== GOAL ===== */
+  #s3 .goal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 16px; flex: 1; align-items: start; }
+  #s3 .goal-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 24px 20px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 10px; }
+  #s3 .goal-card .g-num { font-family: "Inter", sans-serif; font-size: 44px; font-weight: 700; color: var(--color-primary-base); line-height: 1; }
+  #s3 .goal-card .g-title { font-size: 17px; font-weight: 700; color: var(--color-text-high); line-height: 1.4; }
+  #s3 .goal-card .g-body { font-size: 14px; line-height: 1.7; color: var(--color-text-medium); }
+  #s3 .agenda-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 16px; padding: 12px 18px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+  #s3 .a-item { font-size: 13px; color: var(--color-text-medium); }
+  #s3 .sep { color: var(--color-border); }
+
+  /* ===== QUESTION ===== */
+  #s4 .question-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; text-align: center; }
+  #s4 .big-q { font-size: 48px; font-weight: 700; line-height: 1.45; color: var(--color-text-high); max-width: 820px; }
+  #s4 .big-q em { font-style: normal; color: var(--color-primary-base); }
+  #s4 .time-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  #s4 .time-chip { padding: 12px 26px; border-radius: var(--radius-pill); font-size: 18px; font-weight: 600; }
+  #s4 .time-chip.task { background: var(--color-surface); border: 2px solid var(--color-border); color: var(--color-text-high); }
+  #s4 .time-chip.time { background: var(--color-primary-light); border: 2px solid var(--color-primary-base); color: var(--color-primary-base); }
+
+  /* ===== CONNECT CONCEPT (s5) ===== */
+  #s5 .connect-flow { display: flex; align-items: stretch; gap: 0; margin-top: 20px; flex: 1; }
+  #s5 .flow-side { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  #s5 .flow-side-title { font-size: 16px; font-weight: 700; padding: 10px 18px; border-radius: var(--radius-md) var(--radius-md) 0 0; text-align: center; }
+  #s5 .flow-side-title.before { background: var(--color-border); color: var(--color-text-medium); }
+  #s5 .flow-side-title.after  { background: var(--color-primary-base); color: #fff; }
+  #s5 .flow-items { background: var(--color-surface); border: 1px solid var(--color-border); border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+  #s5 .flow-item { display: flex; align-items: flex-start; gap: 10px; font-size: 16px; line-height: 1.65; color: var(--color-text-high); padding: 8px 0; border-bottom: 1px solid var(--color-border); }
+  #s5 .flow-item:last-child { border-bottom: none; }
+  #s5 .fi-icon { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-top: 2px; }
+  #s5 .fi-icon.bad  { background: var(--color-border); color: var(--color-text-medium); }
+  #s5 .fi-icon.good { background: var(--color-primary-base); color: #fff; }
+  #s5 .flow-arrow { display: flex; align-items: center; justify-content: center; width: 56px; font-size: 28px; color: var(--color-primary-base); font-weight: 700; flex-shrink: 0; }
+  #s5 .key-msg { margin-top: 16px; padding: 14px 22px; background: var(--color-text-high); color: #fff; border-radius: var(--radius-md); font-size: 17px; font-weight: 600; text-align: center; line-height: 1.5; }
+  #s5 .key-msg em { font-style: normal; color: #FCA5A5; }
+
+  /* ===== DEMO PASTE (s6) ===== */
+  #s6 .demo-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 14px; flex: 1; align-items: start; }
+  #s6 .demo-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 20px 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 10px; }
+  #s6 .demo-card.highlight { border-color: var(--color-primary-base); box-shadow: 0 0 0 1px var(--color-primary-base), var(--shadow-card); }
+  #s6 .d-step { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--color-text-medium); }
+  #s6 .d-title { font-size: 18px; font-weight: 700; color: var(--color-text-high); line-height: 1.3; }
+  #s6 .d-body { font-size: 14px; line-height: 1.75; color: var(--color-text-medium); }
+  #s6 .memo-box { background: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13px; line-height: 1.75; color: var(--color-text-high); }
+  #s6 .prompt-box { background: var(--color-text-high); color: #E5E7EB; padding: 11px 13px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.75; }
+  #s6 .result-box { background: var(--color-primary-light); border-left: 3px solid var(--color-primary-base); padding: 10px 12px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 13px; line-height: 1.7; color: var(--color-text-high); }
+  #s6 .note-bar { margin-top: 14px; padding: 12px 20px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 15px; color: var(--color-text-medium); }
+  #s6 .note-bar strong { color: var(--color-text-high); }
+
+  /* ===== PROMPT FIRST LINE (s7) ===== */
+  #s7 .prompt-anatomy { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; flex: 1; }
+  #s7 .anatomy-row { display: flex; gap: 16px; align-items: stretch; }
+  #s7 .anatomy-label { width: 120px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--color-text-high); color: #fff; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; text-align: center; line-height: 1.4; padding: 12px 8px; }
+  #s7 .anatomy-label.accent-bg { background: var(--color-primary-base); }
+  #s7 .anatomy-content { flex: 1; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px 20px; box-shadow: var(--shadow-card); }
+  #s7 .anatomy-content .a-title { font-size: 15px; font-weight: 700; color: var(--color-text-high); margin-bottom: 6px; }
+  #s7 .anatomy-content .a-body { font-size: 14px; line-height: 1.75; color: var(--color-text-medium); }
+  #s7 .anatomy-content .a-example { margin-top: 10px; padding: 10px 14px; background: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 14px; line-height: 1.75; color: var(--color-text-high); }
+  #s7 .takeaway-box { margin-top: 14px; padding: 14px 22px; background: var(--color-primary-light); border: 2px solid var(--color-primary-base); border-radius: var(--radius-md); font-size: 17px; font-weight: 700; color: var(--color-primary-base); text-align: center; line-height: 1.5; }
+
+  /* ===== PROMPT PRACTICE (s8) ===== */
+  #s8 .practice-grid { display: grid; grid-template-columns: 1fr 48px 1fr; gap: 0; align-items: stretch; flex: 1; margin-top: 14px; }
+  #s8 .practice-side { display: flex; flex-direction: column; }
+  #s8 .practice-header { padding: 12px 18px; border-radius: var(--radius-md) var(--radius-md) 0 0; font-size: 18px; font-weight: 700; text-align: center; }
+  #s8 .practice-header.raw  { background: var(--color-border); color: var(--color-text-medium); }
+  #s8 .practice-header.done { background: var(--color-primary-base); color: #fff; }
+  #s8 .practice-body { background: var(--color-surface); border: 1px solid var(--color-border); border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 18px 20px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+  #s8 .p-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--color-text-medium); }
+  #s8 .p-text { font-size: 15px; line-height: 1.8; color: var(--color-text-high); }
+  #s8 .p-prompt { background: var(--color-text-high); color: #E5E7EB; padding: 12px 14px; border-radius: var(--radius-sm); font-size: 14px; line-height: 1.8; }
+  #s8 .p-result { background: var(--color-primary-light); border-left: 3px solid var(--color-primary-base); padding: 10px 12px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 14px; line-height: 1.7; color: var(--color-text-high); }
+  #s8 .practice-sep { display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--color-primary-base); }
+  #s8 .point-bar { margin-top: 14px; padding: 12px 22px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 16px; color: var(--color-text-high); line-height: 1.6; }
+  #s8 .point-bar strong { color: var(--color-primary-base); }
+
+  /* ===== MCP CONCEPT (s9) ===== */
+  #s9 .mcp-explain { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 14px; flex: 1; align-items: start; }
+  #s9 .mcp-left { display: flex; flex-direction: column; gap: 14px; }
+  #s9 .mcp-right { display: flex; flex-direction: column; gap: 12px; }
+  #s9 .mcp-def { padding: 16px 20px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+  #s9 .mcp-def .def-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--color-text-medium); margin-bottom: 8px; }
+  #s9 .mcp-def .def-text { font-size: 16px; line-height: 1.75; color: var(--color-text-high); }
+  #s9 .mcp-analogy { padding: 14px 18px; background: var(--color-primary-light); border-left: 4px solid var(--color-primary-base); border-radius: 0 var(--radius-md) var(--radius-md) 0; font-size: 16px; line-height: 1.7; color: var(--color-text-high); }
+  #s9 .mcp-analogy strong { color: var(--color-primary-base); }
+  #s9 .connector-list { display: flex; flex-direction: column; gap: 10px; }
+  #s9 .connector-item { display: flex; align-items: center; gap: 14px; padding: 13px 16px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+  #s9 .ci-icon { font-size: 22px; flex-shrink: 0; }
+  #s9 .ci-name { font-size: 16px; font-weight: 700; color: var(--color-text-high); }
+  #s9 .ci-desc { font-size: 13px; color: var(--color-text-medium); margin-top: 2px; line-height: 1.5; }
+  #s9 .ci-badge { margin-left: auto; flex-shrink: 0; }
+  #s9 .note-bar { margin-top: 14px; padding: 12px 20px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 15px; color: var(--color-text-medium); }
+  #s9 .note-bar strong { color: var(--color-text-high); }
+
+  /* ===== MCP DEMO (s10) ===== */
+  #s10 .demo-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
+  #s10 .flow-step-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px 14px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center; position: relative; }
+  #s10 .flow-step-card.highlight { border-color: var(--color-primary-base); box-shadow: 0 0 0 1px var(--color-primary-base), var(--shadow-card); }
+  #s10 .fs-num { font-family: "Inter", sans-serif; font-size: 30px; font-weight: 700; color: var(--color-primary-base); line-height: 1; }
+  #s10 .fs-icon { font-size: 26px; }
+  #s10 .fs-title { font-size: 15px; font-weight: 700; color: var(--color-text-high); line-height: 1.4; }
+  #s10 .fs-body { font-size: 13px; line-height: 1.65; color: var(--color-text-medium); }
+  #s10 .fs-arrow { position: absolute; right: -9px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--color-primary-base); z-index: 1; }
+  #s10 .result-wrap { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  #s10 .result-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px 16px; box-shadow: var(--shadow-card); }
+  #s10 .result-card .rc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--color-text-medium); margin-bottom: 8px; }
+  #s10 .result-card .rc-body { font-size: 14px; line-height: 1.75; color: var(--color-text-high); }
+
+  /* ===== COMPARE (s11) ===== */
+  #s11 .compare-wrap { display: grid; grid-template-columns: 1fr 52px 1fr; gap: 0; align-items: stretch; flex: 1; margin-top: 14px; }
+  #s11 .compare-side { display: flex; flex-direction: column; }
+  #s11 .compare-header { padding: 12px 18px; border-radius: var(--radius-md) var(--radius-md) 0 0; font-size: 18px; font-weight: 700; text-align: center; }
+  #s11 .compare-header.paste { background: var(--color-border); color: var(--color-text-medium); }
+  #s11 .compare-header.mcp   { background: var(--color-primary-base); color: #fff; }
+  #s11 .compare-body { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 0 0 var(--radius-md) var(--radius-md); padding: 18px; flex: 1; }
+  #s11 .compare-item { display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.65; padding: 7px 0; border-bottom: 1px solid var(--color-border); color: var(--color-text-high); }
+  #s11 .compare-item:last-child { border-bottom: none; }
+  #s11 .ci-i { flex-shrink: 0; margin-top: 3px; }
+  #s11 .compare-sep { display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--color-primary-base); }
+  #s11 .message-box { margin-top: 14px; padding: 14px 22px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 16px; line-height: 1.65; color: var(--color-text-high); }
+  #s11 .message-box strong { color: var(--color-primary-base); }
+
+  /* ===== TAKEAWAY (s12) ===== */
+  #s12 .takeaway-main { margin-top: 16px; flex: 1; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+  #s12 .prompt-showcase { background: var(--color-text-high); color: #E5E7EB; padding: 28px 32px; border-radius: var(--radius-md); }
+  #s12 .ps-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: rgba(255,255,255,0.5); margin-bottom: 14px; }
+  #s12 .ps-text { font-size: 22px; font-weight: 600; line-height: 1.75; color: #fff; }
+  #s12 .ps-text em { font-style: normal; color: #FCA5A5; }
+  #s12 .ps-sub { font-size: 15px; color: rgba(255,255,255,0.6); margin-top: 10px; line-height: 1.65; }
+  #s12 .usage-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  #s12 .usage-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 6px; }
+  #s12 .uc-scene { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--color-primary-base); }
+  #s12 .uc-prompt { font-size: 14px; line-height: 1.7; color: var(--color-text-high); }
+
+  /* ===== SUMMARY (s13) ===== */
+  #s13 .summary-list { display: flex; flex-direction: column; gap: 14px; flex: 1; margin-top: 14px; justify-content: center; }
+  #s13 .summary-item { display: flex; align-items: center; gap: 18px; padding: 18px 22px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+  #s13 .summary-num { font-family: "Inter", sans-serif; font-size: 36px; font-weight: 700; color: var(--color-primary-base); line-height: 1; min-width: 52px; text-align: center; }
+  #s13 .summary-text { font-size: 18px; font-weight: 700; color: var(--color-text-high); line-height: 1.5; }
+  #s13 .summary-text span { color: var(--color-primary-base); }
+  #s13 .closing-msg { margin-top: 16px; padding: 14px 24px; background: var(--color-text-high); color: #fff; border-radius: var(--radius-md); font-size: 17px; font-weight: 600; text-align: center; line-height: 1.5; }
+  #s13 .closing-msg em { font-style: normal; color: #FCA5A5; }
+
+  /* ===== NEXT (s14) ===== */
+  #s14 .next-card { flex: 1; margin-top: 14px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 32px 36px; display: flex; flex-direction: column; gap: 16px; }
+  #s14 .next-date { font-size: 17px; font-weight: 600; color: var(--color-text-medium); letter-spacing: 0.05em; }
+  #s14 .next-title { font-size: 32px; font-weight: 700; line-height: 1.4; color: var(--color-text-high); }
+  #s14 .next-title em { font-style: normal; color: var(--color-primary-base); }
+  #s14 .next-tagline { font-size: 17px; color: var(--color-text-medium); line-height: 1.7; }
+  #s14 .next-points { display: flex; flex-direction: column; gap: 8px; }
+  #s14 .next-point { display: flex; align-items: flex-start; gap: 10px; font-size: 16px; line-height: 1.65; color: var(--color-text-high); }
+  #s14 .next-point::before { content: '▶'; color: var(--color-primary-base); font-size: 10px; margin-top: 6px; flex-shrink: 0; }
+  #s14 .meet-url { padding: 11px 18px; background: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 14px; color: var(--color-text-medium); }
+  #s14 .meet-url strong { color: var(--color-text-high); }
+
+  /* ===== CONTACT (s15) ===== */
+  #s15 { background: radial-gradient(1000px 500px at -10% 110%, var(--color-primary-light) 0%, transparent 55%), var(--color-background); }
+  #s15 .contact-wrap { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 14px; align-items: start; }
+  #s15 .qa-block { display: flex; flex-direction: column; gap: 12px; }
+  #s15 .qa-box { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px 20px; box-shadow: var(--shadow-card); }
+  #s15 .qa-box .q { font-size: 15px; font-weight: 700; color: var(--color-primary-base); margin-bottom: 5px; }
+  #s15 .qa-box .a { font-size: 14px; line-height: 1.7; color: var(--color-text-high); }
+  #s15 .contact-block { display: flex; flex-direction: column; gap: 12px; }
+  #s15 .contact-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px 18px; box-shadow: var(--shadow-card); display: flex; align-items: center; gap: 14px; }
+  #s15 .c-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--color-text-medium); min-width: 44px; }
+  #s15 .c-value { font-size: 15px; font-weight: 600; color: var(--color-text-high); }
+  #s15 .c-value small { display: block; font-size: 12px; font-weight: 400; color: var(--color-text-medium); }
+  #s15 .next-series { margin-top: 4px; padding: 13px 20px; background: var(--color-text-high); color: #fff; border-radius: var(--radius-md); font-size: 15px; font-weight: 600; text-align: center; line-height: 1.6; }
+  #s15 .next-series em { font-style: normal; color: #FCA5A5; }
+
+  /* ---- Nav hint ---- */
+  .nav-hint {
+    position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; color: rgba(255,255,255,0.35);
+    letter-spacing: 0.08em; pointer-events: none; z-index: 100;
+  }
+</style>
+</head>
+<body>
+
+<!-- ロゴSVG -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="brand-logo" viewBox="0 0 800 400">
+    <g fill="#1F2937"><polygon points="330,200 290,250 350,220"/><circle cx="360" cy="150" r="75"/></g>
+    <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+      <line x1="320" y1="120" x2="380" y2="100"/><line x1="320" y1="120" x2="340" y2="170"/><line x1="380" y1="100" x2="390" y2="150"/>
+    </g>
+    <g fill="#FFFFFF"><circle cx="320" cy="120" r="5"/><circle cx="380" cy="100" r="5"/><circle cx="340" cy="170" r="5"/><circle cx="390" cy="150" r="5"/></g>
+    <g fill="#D32F2F"><polygon points="470,200 510,250 450,220"/><circle cx="440" cy="150" r="75"/></g>
+    <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+      <line x1="420" y1="130" x2="470" y2="110"/><line x1="420" y1="130" x2="450" y2="180"/><line x1="470" y1="110" x2="480" y2="160"/>
+    </g>
+    <g fill="#FFFFFF"><circle cx="420" cy="130" r="5"/><circle cx="470" cy="110" r="5"/><circle cx="450" cy="180" r="5"/><circle cx="480" cy="160" r="5"/></g>
+    <text x="400" y="325" text-anchor="middle" font-family="'Inter','Noto Sans JP',sans-serif" font-weight="700" font-size="56" letter-spacing="2" fill="#1F2937">AI・ITよろず相談所</text>
+  </symbol>
+  <symbol id="brand-mark" viewBox="280 70 240 190">
+    <g fill="#1F2937"><polygon points="330,200 290,250 350,220"/><circle cx="360" cy="150" r="75"/></g>
+    <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+      <line x1="320" y1="120" x2="380" y2="100"/><line x1="320" y1="120" x2="340" y2="170"/><line x1="380" y1="100" x2="390" y2="150"/>
+    </g>
+    <g fill="#FFFFFF"><circle cx="320" cy="120" r="5"/><circle cx="380" cy="100" r="5"/><circle cx="340" cy="170" r="5"/><circle cx="390" cy="150" r="5"/></g>
+    <g fill="#D32F2F"><polygon points="470,200 510,250 450,220"/><circle cx="440" cy="150" r="75"/></g>
+    <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+      <line x1="420" y1="130" x2="470" y2="110"/><line x1="420" y1="130" x2="450" y2="180"/><line x1="470" y1="110" x2="480" y2="160"/>
+    </g>
+    <g fill="#FFFFFF"><circle cx="420" cy="130" r="5"/><circle cx="470" cy="110" r="5"/><circle cx="450" cy="180" r="5"/><circle cx="480" cy="160" r="5"/></g>
+  </symbol>
+</svg>
+
+<!-- ナビボタン -->
+<button class="nav-btn prev" id="btnPrev" aria-label="前のスライド">&#8249;</button>
+<button class="nav-btn next" id="btnNext" aria-label="次のスライド">&#8250;</button>
+
+<div class="stage">
+  <div class="deck" id="deck">
+
+    <!-- ======== S1: COVER ======== -->
+    <div class="slide active" id="s1">
+      <div class="series-tag">
+        <div class="dot"></div>
+        3回シリーズ無料Webセミナー　第2回　／　2026年6月14日（日）21:00〜21:30
+      </div>
+      <div>
+        <h1>ルーチン作業を<em>AIに任せる</em><br>——コピペから<em>「つながる」</em>へ</h1>
+        <p class="cover-sub">議事録まとめが30分→3分に。<br>コピペで使える「最初の一文」と、カレンダーに直接つながるAIを体験します。</p>
+        <div class="cover-bar"></div>
+      </div>
+      <div class="cover-meta">
+        <svg class="logo-full" role="img" aria-label="AI・ITよろず相談所"><use href="#brand-logo"></use></svg>
+        <div>
+          <div class="name">清水 幸久（Yukisa）<span>AI・ITよろず相談所</span></div>
+          <div class="info" style="margin-top:6px">Google Meet　参加無料　各回30分</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======== S2: 自己紹介 ======== -->
+    <div class="slide" id="s2">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Speaker</div>
+      <div class="section-title" style="margin-bottom:14px">自己紹介</div>
+      <div class="profile-grid">
+        <div class="profile-left">
+          <div class="name-block">
+            <div class="ja">清水 幸久（Yukisa）</div>
+            <div class="en">SHIMIZU YUKIHISA / Yukisa</div>
+          </div>
+          <div class="catch">「AIの最初の一歩に、隣で寄り添う。」<br>専門用語なし・失敗談歓迎の伴走スタイルで支援します。</div>
+          <div class="career">
+            <div class="career-item"><span class="year">〜2024</span><span>CADソフト会社でアプリケーションエンジニア（AE）として<strong>約25年</strong>勤務。技術と現場をつなぐ役割を担う。</span></div>
+            <div class="career-item"><span class="year">2024.09</span><span><strong>独立</strong>。AI・ITよろず相談所を開業。個人事業主・中小企業のAI活用を伴走支援。</span></div>
+          </div>
+        </div>
+        <div class="profile-right">
+          <div class="stat-card">
+            <div class="num">25</div>
+            <div class="desc"><strong>年のAEキャリア</strong>技術と人をつなぐ視点をAI支援に活用</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">12</div>
+            <div class="desc"><strong>回連載中：Note AI活用マガジン</strong>B層向けに「今日から使える」AIネタを発信</div>
+          </div>
+          <div class="card" style="padding:16px 18px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:var(--color-text-medium);margin-bottom:7px">CONTACT</div>
+            <div style="font-size:14px;color:var(--color-text-high);line-height:1.8">
+              Web: yorozusoudansyo.github.io/home/<br>
+              Note: note.com/yukisa0814<br>
+              X: @Yorozu0519
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>2</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S3: 今日のゴール ======== -->
+    <div class="slide" id="s3">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Today's Goal</div>
+      <div class="section-title">この30分で持ち帰れること</div>
+      <div class="goal-grid">
+        <div class="goal-card">
+          <div class="g-num">01</div>
+          <div class="g-title">「議事録プロジェクト」を育てると何が変わるか</div>
+          <div class="g-body">過去の決定事項を覚えたAIにメモを貼ると、文脈を踏まえた議事録が出る。単発チャットとの違いを体験します。</div>
+        </div>
+        <div class="goal-card">
+          <div class="g-num">02</div>
+          <div class="g-title">「議事録プロンプトの最初の一文」を手に入れる</div>
+          <div class="g-body">コピペして使い回せるプロンプトの型を持ち帰ります。ゼロから書かなくてよくなります。</div>
+        </div>
+        <div class="goal-card">
+          <div class="g-num">03</div>
+          <div class="g-title">Coworkが「最後までやってくれる」感覚をつかむ</div>
+          <div class="g-body">カレンダーと過去議事録を同時に読み、アジェンダをファイルに保存まで一気通貫。コピペ卒業の先を見ます。</div>
+        </div>
+      </div>
+      <div class="agenda-bar">
+        <div class="a-item">前回の振り返り (2分)</div><div class="sep">|</div>
+        <div class="a-item">コピペ→つながる (4分)</div><div class="sep">|</div>
+        <div class="a-item">🔴デモ①プロジェクト活用 (7分)</div><div class="sep">|</div>
+        <div class="a-item">プロンプトの型 (4分)</div><div class="sep">|</div>
+        <div class="a-item">🔴デモ②Cowork一括処理 (8分)</div><div class="sep">|</div>
+        <div class="a-item">Q&amp;A (3分)</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>3</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S3b: アンケート案内（冒頭） ======== -->
+    <div class="slide" id="s3b">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Before We Start — はじめに1つだけ</div>
+      <div class="section-title">アンケートで<span class="accent">「今日の資料」と「録画リンク」</span>をお渡しします</div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:32px;margin-top:18px;flex:1;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="font-size:17px;line-height:1.8;color:var(--color-text-high)">
+            本日ご参加の<strong>御礼</strong>として、<br>
+            アンケートにご記入いただいた方に<br>
+            <strong class="accent">本日のスライド資料</strong>と<strong class="accent">録画リンク</strong>を<br>
+            後日メールでお送りします。
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);font-size:15px;color:var(--color-text-high)">
+              <span style="font-size:20px">📱</span><span>右のQRコードを読み取り → フォームに記入</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);font-size:15px;color:var(--color-text-high)">
+              <span style="font-size:20px">⏱</span><span>所要1分。<strong>最後にもう一度</strong>ご案内します</span>
+            </div>
+          </div>
+          <div style="padding:11px 18px;background:var(--color-primary-light);border-left:4px solid var(--color-primary-base);border-radius:0 var(--radius-md) var(--radius-md) 0;font-size:14px;line-height:1.65;color:var(--color-text-high)">
+            💡 「あとで」と思うと忘れがち。<strong>今このタイミング</strong>で開いておくのがおすすめです。
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-md);padding:14px;box-shadow:var(--shadow-card)">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeoAAAHqCAIAAABED5ptAAAL9klEQVR4nO3dMY7sxhVAUY2ghSj2CrT/yCtw7J3Q6RcgFOSpX3p12efk7GGzOReVPLyv53l+AaDm1+kbAOA75BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGSftu5+Pd//fGz7uMS//3Pv6dv4S+sn/P6nqd+o3N3NfUbTd3zuV/wzid55/t8zs6v4PQNkCTfAEnyDZAk3wBJ8g2QJN8ASfINkCTfAEnyDZC0NXW5VpxgPPfJO7NkxWt3nJtR3PnknafxvlnBtXO/wtqnNcfpGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5Bsg6eDU5dqdM3vn/u7UHNrUc975u1PPased0613vpNT3tccp2+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgKSxqctPc27+7dxmyJ1rp+5qx9SezHPXTn3y2qdNe57j9A2QJN8ASfINkCTfAEnyDZAk3wBJ8g2QJN8ASfINkGTq8qc5t5Nwx52ThDvOTYqeu3btzl2X3M/pGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgaWzqsrjRrjj/dm7H5tTM3p0TqlPznOd+3/d53/d1+gZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSDo4dflpm/Sm5hs/7dq1O+cMi8/5zmvXPq05Tt8ASfINkCTfAEnyDZAk3wBJ8g2QJN8ASfINkCTfAElbU5fv2x23dufM3s61d85G7pjahLlzrf+jf+ba93H6BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZI+nqe59sXT+2sOzcNOLWjb+3TZvbu3Fh45/xqcatkcYvmnZy+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGStqYudxSnts55311NTfStvW/ubu3cf9k5xVnuqf8Up2+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgKTfdi7emSbamVO6cwLqfXv27nzOa+/b37g2NVf5vnej+P/r9A2QJN8ASfINkCTfAEnyDZAk3wBJ8g2QJN8ASfINkLQ1dbnj3NTWnRNuxem4nU8+d+2ds4LFfaRrd04h3rnJdurXd/oGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgCT5Bkj6ep7n2xffuRtw6q7OmXpWUzOZa+97c+5866YUN39OcfoGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgCT5Bkg6uOtyZ4qpOCs4dc877nxWO4qzc2vnvlFxXnf9yXe+z+eeldM3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0DSwanLHTsTUJ82DTi1v/HctfyouCdz6q07N99450y10zdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QNLX8zzfvnhqpmvtzqmtqWd151TenfsbpxTnKnfc+Y3ufDfWnL4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZK2dl2+b77xzrnKqSm1O6fj1u7c/HlurvJ9d7V257Nas+sSgD+Rb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZI2pq6XCtO5a3dOXm1NjVZd+evv3bnzO2Oc1OIxenH4v/vmtM3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0DSwanLtXNTW1OfvGNqOm7n2qlth+dMvXXve5LnFCc213a+kdM3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0DS1/M8hz76fbNkd+7Km9qyeG7X5bnJuuJ+zuKbU9yEWSyS0zdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QNLYrsv3TcftKG7gPOfc3z03lVd8VnfuMvXf/fc5fQMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJI1NXZ6b2pqaB9v5u8XdgFOK835Tb3tx92Px9536P3L6BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZI2pq6LE4DTt3zubnK901O7nyj972TO9735tjA+SOnb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+ApIO7Lqfmo9am/u5acWPhnZOid/6+537BqXdj6tf/tPd5zekbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyDp63meb19858TXlHPbLIuKM2w73veN1nzfH02V0OkbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyDp4K7LO6cQz93VzuTV1NM4Ny32vl2XU5OEUxspz31y8dq1qbfd6RsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIGlr12XRnbNzxem4teL049T+1Tvnk8+ZelZ3fvIOp2+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgKStXZd3TiLt/N3iTObOJ++4c97vzn2kd04D3vl31+6cbl1fe25u1ukbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBpbNfl1Aa/c7NV79tIOXVXO4p3tePO93ntzhnUO6eI15y+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGStnZd7jCH9ve9767Mc/6sa+98Vmt3Tk5ObQ3d4fQNkCTfAEnyDZAk3wBJ8g2QJN8ASfINkCTfAEnyDZB0cNdlcSqv+MlT7vxGxY2ja3dOEq592kz11KSo0zdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QNLWrss7J6DWip+8485ZwakptSnvm0I8t9vzfVOm5+7K6RsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIOmFuy7XpqY91963RfPOeb+1O++5+E6uFedm7/wFnb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZJeuOvyfXOV53zaDsapd/LOOcP37Zw8Z+fNOfecnb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZIO7ro8531TeVPu3Dm5NjUpunbnmzO1ofHOJ3nn0zB1CfBx5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkrZ2Xa7due/uzknCOxVnMtfOfaNz33dqA+edf3fHub879bY7fQMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJG1NXZ6by7pzhu3Ou7rzk8+Z+hXOufPv3rlzcm1qm+XUJzt9AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkbU1dFueUzn3yufnGc6b2Cq5NPcni7OuOO7eVTv2+O6a2hjp9AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkHdx1WbSegDo3pTY1ZTp1z5+2NXRqKm/tzjd2rbi71a5LAP5EvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgaWvqcu192x3PXXvn/sap73vnNODUZshzT6M4NW0L7o+cvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4Bkr6e5/n2xVOTdWtTewXvnBVcu3MW9E5TezLPKf4KU+6cIXf6BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIOrjr8n3OTZlOzYLeuXNyam52x53P+X1Tte/bOLrD6RsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIMnU5f/h0ybc1u78RlPzfnfOVe7YeZ/P3fOdb/vUTLXTN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkyTdA0tjU5dROwqKpTZh3et/3Pfe/MDX9eG4mc2oGdW2qZk7fAEnyDZAk3wBJ8g2QJN8ASfINkCTfAEnyDZAk3wBJX8/zfPviO2fYdnzaPNi5b3TntWt3vs/nvlFxd+ud09pT9+z0DZAk3wBJ8g2QJN8ASfINkCTfAEnyDZAk3wBJ8g2QtDV1CcAUp2+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+ApP8BVRq7FLp/YBsAAAAASUVORK5CYII=" alt="アンケートQRコード" style="width:200px;height:200px;display:block">
+          </div>
+          <div style="font-size:12px;color:var(--color-text-medium);text-align:center;line-height:1.6">スマホのカメラで読み取り<br>または チャット欄のURLから</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>4</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S4: 前回の振り返り ======== -->
+    <div class="slide" id="s4">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Review — 第1回の振り返り</div>
+      <div class="section-title">前回（6/7）「<span class="accent">作らせる</span>」を学んだ——4つの要点が今日につながる</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;flex:1;align-items:start">
+
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:18px 15px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Inter',sans-serif;font-size:34px;font-weight:700;color:var(--color-primary-base);line-height:1">01</div>
+          <div style="font-size:15px;font-weight:700;color:var(--color-text-high);line-height:1.4">4大AIの使い分け</div>
+          <div style="font-size:13px;line-height:1.65;color:var(--color-text-medium)">ChatGPT・Copilot・Gemini・Claudeを比較。<strong>「隣にいるAIを使う」</strong>原則。</div>
+          <div style="margin-top:auto;padding:8px 10px;background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:12px;color:var(--color-text-high);line-height:1.55">
+            → 今日も <strong>Claudeブラウザ版</strong>
+          </div>
+        </div>
+
+        <div style="background:var(--color-surface);border:1px solid var(--color-primary-base);border-radius:var(--radius-md);padding:18px 15px;box-shadow:0 0 0 1px var(--color-primary-base),var(--shadow-card);display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Inter',sans-serif;font-size:34px;font-weight:700;color:var(--color-primary-base);line-height:1">02</div>
+          <div style="font-size:15px;font-weight:700;color:var(--color-text-high);line-height:1.4">Gmailコネクターで過去メール分析</div>
+          <div style="font-size:13px;line-height:1.65;color:var(--color-text-medium)">コネクターをON → 送信済みメールを自動分析 → プロンプト設計。</div>
+          <div style="margin-top:auto;padding:8px 10px;background:var(--color-primary-light);border:1px solid var(--color-primary-base);border-radius:var(--radius-sm);font-size:12px;color:var(--color-text-high);line-height:1.55">
+            → その裏側が <strong>「MCP」</strong>。今日深掘り。
+          </div>
+        </div>
+
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:18px 15px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Inter',sans-serif;font-size:34px;font-weight:700;color:var(--color-primary-base);line-height:1">03</div>
+          <div style="font-size:15px;font-weight:700;color:var(--color-text-high);line-height:1.4">プロジェクトに保存</div>
+          <div style="font-size:13px;line-height:1.65;color:var(--color-text-medium)">「指示」にプロンプトを保存。呼び出すだけで自分スタイルのAIが起動。</div>
+          <div style="margin-top:auto;padding:8px 10px;background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:12px;color:var(--color-text-high);line-height:1.55">
+            → 今日 <strong>「議事録プロジェクト」</strong> を作成
+          </div>
+        </div>
+
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:18px 15px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Inter',sans-serif;font-size:34px;font-weight:700;color:var(--color-primary-base);line-height:1">04</div>
+          <div style="font-size:15px;font-weight:700;color:var(--color-text-high);line-height:1.4">コンテキストに自分を記憶</div>
+          <div style="font-size:13px;line-height:1.65;color:var(--color-text-medium)">しゃべり言葉で話して「構造化して」。毎回の説明が不要に。</div>
+          <div style="margin-top:auto;padding:8px 10px;background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:12px;color:var(--color-text-high);line-height:1.55">
+            → 第3回で本格的に育てます
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding:13px 22px;background:var(--color-text-high);color:#fff;border-radius:var(--radius-md);font-size:16px;font-weight:600;text-align:center;line-height:1.5">
+        前回は「単発で<em style="font-style:normal;color:#FCA5A5">作らせる</em>」→ 今日は「ルーチンを<em style="font-style:normal;color:#FCA5A5">繰り返し任せる</em>」。同じClaudeで一歩進みます。
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>5</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S5: 問い ======== -->
+    <div class="slide" id="s5-q">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="question-center">
+        <div class="kicker">Question</div>
+        <div class="big-q">議事録まとめに、今<em>何分</em>かけていますか？</div>
+        <div class="time-row">
+          <div class="time-chip task">会議メモを整理して</div>
+          <div class="time-chip task">担当者・期日を抜き出して</div>
+          <div class="time-chip task">メールに貼り直して…</div>
+        </div>
+        <div style="font-size:22px;font-weight:700;color:var(--color-text-high);text-align:center;line-height:1.6">
+          この流れ、<span style="color:var(--color-primary-base)">そのままAIに渡せます。</span><br>
+          <span style="font-size:17px;font-weight:400;color:var(--color-text-medium)">「貼るだけ」でも動く。「つなげる」ともっと速い。</span>
+        </div>
+        <div class="time-chip time">30分 → 3分へ</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>6</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S5: コピペから「つながる」へ ======== -->
+    <div class="slide" id="s5">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Concept</div>
+      <div class="section-title">コピペが<span class="accent">「つながる」</span>に変わるとは</div>
+      <div class="connect-flow">
+        <div class="flow-side">
+          <div class="flow-side-title before">コピペ方式（今日すぐできる）</div>
+          <div class="flow-items">
+            <div class="flow-item">
+              <div class="fi-icon bad">1</div>
+              会議メモをコピーしてClaudeに貼り付ける
+            </div>
+            <div class="flow-item">
+              <div class="fi-icon bad">2</div>
+              プロンプトを添えて送信する
+            </div>
+            <div class="flow-item">
+              <div class="fi-icon bad">3</div>
+              要約・ToDo・議事録が出てくる
+            </div>
+            <div class="flow-item">
+              <div class="fi-icon bad">4</div>
+              結果をメールやNotionに手で貼り直す
+            </div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-side">
+          <div class="flow-side-title after">つながる方式（MCP × Cowork）</div>
+          <div class="flow-items">
+            <div class="flow-item">
+              <div class="fi-icon good">1</div>
+              「カレンダーと前回議事録を見てアジェンダ作って」と頼む
+            </div>
+            <div class="flow-item">
+              <div class="fi-icon good">2</div>
+              ClaudeがカレンダーもPC内のファイルも直接読む
+            </div>
+            <div class="flow-item">
+              <div class="fi-icon good">3</div>
+              複数の情報を統合して成果物を自動生成
+            </div>
+            <div class="flow-item">
+              <div class="fi-icon good">4</div>
+              ファイル保存まで一気通貫・あなたの手作業ゼロ
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="key-msg">同じ議事録でも、まず<em>プロジェクトで賢く</em>、慣れたら<em>Coworkで最後まで任せる</em>。今日はその両方をライブで見せます。</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>7</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S6: ブラウザデモ ======== -->
+    <div class="slide" id="s6">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">🔴 LIVE DEMO ① — 議事録プロジェクト（実画面でお見せします）</div>
+      <div class="section-title">同じメモでも、<span class="accent">プロジェクト</span>だと結果が変わる</div>
+      <div style="margin-top:10px;padding:9px 16px;background:var(--color-primary-light);border:1px solid var(--color-primary-base);border-radius:var(--radius-pill);font-size:13px;color:var(--color-primary-base);font-weight:700;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">▶ 画面共有：前回作った「議事録プロジェクト」（過去の決定事項＋フォーマットを記憶済み）に、同じメモを貼ります</div>
+      <div class="demo-steps" style="margin-top:12px;grid-template-columns:0.85fr 0.85fr 1.3fr">
+        <div class="demo-card">
+          <div class="d-step">STEP 1</div>
+          <div class="d-title">議事録プロジェクトを開く</div>
+          <div class="d-body">プロジェクトには「指示」として下記が記憶済み。毎回書かなくてよい。</div>
+          <div class="memo-box" style="font-size:12px;line-height:1.7">
+            <strong>📌 記憶している指示</strong><br>
+            ・出力は①要約②決定事項③担当・期日④次回課題<br>
+            ・<strong>過去の決定と必ず照合</strong>（前回：予算30万→<strong>25万に減額</strong>決定済み）<br>
+            ・担当：山田=LP / 田中=競合
+          </div>
+        </div>
+        <div class="demo-card highlight">
+          <div class="d-step">STEP 2</div>
+          <div class="d-title">いつものメモを貼るだけ</div>
+          <div class="d-body">プロンプトは不要。プロジェクトが指示を覚えているのでメモを貼って送信。</div>
+          <div class="prompt-box" style="font-size:12px">【今日の会議メモ】<br>・山田さん：LP修正を今週中に<br>・予算：30万円以内で調整<br>・次回MTG：6/21（日）15時<br>・田中さん：競合調査担当</div>
+        </div>
+        <div class="demo-card">
+          <div class="d-step">STEP 3 — ここが差</div>
+          <div class="d-title">過去の文脈を踏まえた議事録が出る</div>
+          <div class="d-body">単発チャットなら「予算30万」とそのまま書く。プロジェクトは過去と照合して<strong>矛盾を指摘</strong>する。</div>
+          <div class="result-box" style="font-size:12px;line-height:1.65">
+            <strong>① 要約</strong>　LP修正を今週中／次回6/21<br>
+            <strong>② 決定</strong>　LP修正：山田（今週中）<br>
+            <strong>⚠ 確認</strong>　メモに<strong>「予算30万」とありますが、前回25万へ減額決定済み</strong>です。どちらが正ですか？<br>
+            <strong>③ 担当</strong>　山田=LP／田中=競合調査<br>
+            <strong>④ 次回課題</strong>　予算の最終確定
+          </div>
+        </div>
+      </div>
+      <div class="note-bar" style="margin-top:12px;padding:10px 18px;font-size:14px">💡 <strong>これが「育てる」効果。</strong>単発チャットは毎回まっさら。プロジェクトは過去の決定・用語・フォーマットを記憶し、<strong>人間が見落とす矛盾まで拾います。</strong></div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>8</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S7: プロンプトの最初の一文 ======== -->
+    <div class="slide" id="s7">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Prompt Design</div>
+      <div class="section-title">「議事録プロンプト」の解剖</div>
+      <div class="prompt-anatomy">
+        <div class="anatomy-row">
+          <div class="anatomy-label">① 文脈宣言</div>
+          <div class="anatomy-content">
+            <div class="a-title">「何のデータを渡すか」をまず宣言する</div>
+            <div class="a-body">AIは最初の一文で「どう処理すべきか」を判断します。「以下は〇〇です」と先に伝えるだけで精度が上がります。</div>
+            <div class="a-example">「以下は会議のメモです。」「以下はお客様との通話内容です。」</div>
+          </div>
+        </div>
+        <div class="anatomy-row">
+          <div class="anatomy-label accent-bg">② 出力指定</div>
+          <div class="anatomy-content">
+            <div class="a-title">「何を、何個、どんな形式で」を番号で列挙する</div>
+            <div class="a-body">「①要約（3行以内）②担当者一覧③次のアクション」のように番号をつけると、抜け漏れが減り、そのまま使える形式で出てきます。</div>
+            <div class="a-example">①要約（3行以内）②担当者と期日の一覧③次のアクション</div>
+          </div>
+        </div>
+        <div class="anatomy-row">
+          <div class="anatomy-label">③ データ本文</div>
+          <div class="anatomy-content">
+            <div class="a-title">【】で区切ってメモを貼り付ける</div>
+            <div class="a-body">プロンプトとデータを明確に分けると、AIが混乱しません。「【会議メモ】」のように見出しをつけて貼るだけ。</div>
+            <div class="a-example">【会議メモ】<br>（ここにメモを貼り付ける）</div>
+          </div>
+        </div>
+      </div>
+      <div class="takeaway-box">この3構造を覚えれば、議事録・報告書・メール返信、どこでも使い回せます</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>9</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S8: プロンプト実践 ======== -->
+    <div class="slide" id="s8">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Prompt Practice + Project</div>
+      <div class="section-title">ざっくりメモ → 整った議事録 → プロジェクトに保存</div>
+      <div class="practice-grid">
+        <div class="practice-side">
+          <div class="practice-header raw">Before：ざっくりメモ</div>
+          <div class="practice-body">
+            <div class="p-label">会議後に書いたメモ（そのまま）</div>
+            <div class="p-text">田中さん資料作成、来週月曜まで。佐藤さん見積もりだす。次回は再来週火曜。予算上限は50万。デザインはシンプルで。</div>
+            <div class="p-prompt">以下は会議のメモです。<br>①要約（2行以内）<br>②担当者と期日一覧<br>③次回MTG日時<br>の形式でまとめてください。<br><br>【会議メモ】<br>田中さん資料作成、来週月曜まで。佐藤さん見積もりだす。…</div>
+          </div>
+        </div>
+        <div class="practice-sep">→</div>
+        <div class="practice-side">
+          <div class="practice-header done">After：整った議事録 ＋ プロジェクト保存</div>
+          <div class="practice-body">
+            <div class="p-result" style="margin-bottom:10px">
+              <strong>① 要約</strong>　デザインはシンプル方針で確定。予算50万以内で対応。<br>
+              <strong>② 担当</strong>　田中：資料作成（月曜）／ 佐藤：見積（月曜）<br>
+              <strong>③ 次回MTG</strong>　再来週火曜日
+            </div>
+            <div class="p-label" style="color:var(--color-primary-base);margin-top:4px">▶ プロジェクトに保存して次回から使い回す</div>
+            <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:12px 14px;font-size:13px;line-height:1.75;color:var(--color-text-high);margin-top:6px">
+              <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--color-primary-base);margin-bottom:6px">HOW TO SAVE</div>
+              Claude.ai → 左サイドバー「プロジェクト」→「新しいプロジェクト」を作成<br>
+              → 「プロジェクト指示」にこのプロンプトを貼り付けて保存<br>
+              → 次回以降はプロジェクトを開いてメモを貼るだけで完了
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="point-bar">💡 <strong>プロジェクト保存のメリット：</strong>毎回プロンプトを書かなくてよい。チームで共有すれば誰でも同じ品質の議事録が作れる。</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>10</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S9: MCPとは ======== -->
+    <div class="slide" id="s9">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Advanced — コネクターの裏側</div>
+      <div class="section-title">第1回で使ったコネクター、その仕組みが「MCP」</div>
+      <div class="mcp-explain">
+        <div class="mcp-left">
+          <div class="mcp-def">
+            <div class="def-label">前回の復習</div>
+            <div class="def-text">第1回でGmailコネクターを使って<strong>過去メールを読み込みプロンプト設計</strong>をしました。あの「コネクター」を動かしている通信規格が <strong>MCP（Model Context Protocol）</strong> です。</div>
+          </div>
+          <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:14px 16px;box-shadow:var(--shadow-card)">
+            <div style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:var(--color-text-medium);margin-bottom:10px">コネクターが動く仕組み（3ステップ）</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.65">
+                <span style="background:var(--color-primary-base);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
+                <span>ClaudeがユーザーのGmail・カレンダーへの<strong>アクセス許可を受け取る</strong></span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.65">
+                <span style="background:var(--color-primary-base);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
+                <span>MCPの規格に沿って<strong>外部ツールへリクエストを送り、データを受け取る</strong></span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.65">
+                <span style="background:var(--color-primary-base);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
+                <span>受け取ったデータをClaudeが<strong>言語処理して自然な文章で返答する</strong></span>
+              </div>
+            </div>
+          </div>
+          <div class="mcp-analogy">
+            <strong>コピペとの違い：</strong>あなたが手でデータを橋渡しするのではなく、<strong>ClaudeとツールがMCPで直接会話している</strong>のがポイントです。
+          </div>
+        </div>
+        <div class="mcp-right">
+          <div style="font-size:13px;font-weight:700;letter-spacing:0.08em;color:var(--color-text-medium);margin-bottom:6px">コピペ方式 vs MCP方式の情報の流れ</div>
+          <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:14px 16px;box-shadow:var(--shadow-card);margin-bottom:10px">
+            <div style="font-size:12px;font-weight:700;color:var(--color-text-medium);margin-bottom:8px">コピペ方式</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:13px;flex-wrap:wrap;color:var(--color-text-high)">
+              <span style="padding:4px 10px;background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-sm)">Gmail</span>
+              <span style="color:var(--color-text-medium)">→ あなたがコピー →</span>
+              <span style="padding:4px 10px;background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-sm)">Claudeに貼り付け</span>
+              <span style="color:var(--color-text-medium)">→</span>
+              <span style="padding:4px 10px;background:var(--color-primary-light);border:1px solid var(--color-primary-base);border-radius:var(--radius-sm);color:var(--color-primary-base)">出力</span>
+            </div>
+          </div>
+          <div style="background:var(--color-surface);border:1px solid var(--color-primary-base);border-radius:var(--radius-md);padding:14px 16px;box-shadow:0 0 0 1px var(--color-primary-base),var(--shadow-card)">
+            <div style="font-size:12px;font-weight:700;color:var(--color-primary-base);margin-bottom:8px">MCP方式</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:13px;flex-wrap:wrap;color:var(--color-text-high)">
+              <span style="padding:4px 10px;background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-sm)">Gmail</span>
+              <span style="color:var(--color-primary-base);font-weight:700">⇌ MCP直接通信 ⇌</span>
+              <span style="padding:4px 10px;background:var(--color-text-high);border-radius:var(--radius-sm);color:#fff">Claude</span>
+              <span style="color:var(--color-text-medium)">→</span>
+              <span style="padding:4px 10px;background:var(--color-primary-light);border:1px solid var(--color-primary-base);border-radius:var(--radius-sm);color:var(--color-primary-base)">出力</span>
+            </div>
+            <div style="font-size:12px;color:var(--color-text-medium);margin-top:8px">あなたの手作業ゼロ。Claudeが自律的にデータを取りに行く。</div>
+          </div>
+          <div class="note-bar" style="margin-top:10px">⚠️ ブラウザ版のコネクターは「1つのデータを読む」のが中心。<strong>次のデモ②では、Coworkがカレンダーとファイルを“またいで”使う様子をお見せします。</strong></div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>11</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S10: MCPデモ ======== -->
+    <div class="slide" id="s10">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">🔴 LIVE DEMO ② — Cowork（デスクトップ版・実画面でお見せします）</div>
+      <div class="section-title">ブラウザ版は単発。<span class="accent">Cowork</span>は複数をまたいで最後までやる</div>
+      <div style="margin-top:10px;padding:9px 16px;background:var(--color-primary-light);border:1px solid var(--color-primary-base);border-radius:var(--radius-pill);font-size:13px;color:var(--color-primary-base);font-weight:700;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">▶ 画面共有：一つの指示で「カレンダー＋PC内の過去議事録」を読み、アジェンダを作り、<strong>ファイルに保存</strong>まで実演</div>
+      <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:16px;margin-top:12px;flex:1;align-items:start">
+
+        <!-- 左：1つの指示と内部動作 -->
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font-size:13px;font-weight:700;letter-spacing:0.08em;color:var(--color-text-medium)">あなたの入力（たった1つの指示）</div>
+          <div style="background:var(--color-text-high);color:#E5E7EB;padding:11px 14px;border-radius:var(--radius-md);font-size:13px;line-height:1.65">
+            「今日14時の会議をカレンダーで確認して、<strong style="color:#FCA5A5">PCの議事録フォルダの前回議事録</strong>も踏まえてアジェンダを作り、<strong style="color:#FCA5A5">ファイルに保存</strong>して」
+          </div>
+
+          <div style="font-size:13px;font-weight:700;letter-spacing:0.08em;color:var(--color-primary-base);margin-top:2px">Coworkが自分で順にやること</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:flex-start;gap:9px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:8px 12px;font-size:12.5px;line-height:1.5">
+              <span style="background:var(--color-text-high);color:#fff;border-radius:50%;width:19px;height:19px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">①</span>
+              <span>📅 <strong>カレンダーMCP</strong>で14時の会議を取得</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:8px 12px;font-size:12.5px;line-height:1.5">
+              <span style="background:var(--color-text-high);color:#fff;border-radius:50%;width:19px;height:19px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">②</span>
+              <span>📂 <strong>PCの議事録フォルダ</strong>を開いて前回ファイルを読む<span style="color:var(--color-primary-base);font-weight:700">（ブラウザ版にはできない）</span></span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:8px 12px;font-size:12.5px;line-height:1.5">
+              <span style="background:var(--color-text-high);color:#fff;border-radius:50%;width:19px;height:19px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">③</span>
+              <span>🔗 <strong>2つの情報を統合</strong>：前回の宿題＋今日の議題でアジェンダ構成</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;background:var(--color-primary-light);border:1px solid var(--color-primary-base);border-radius:var(--radius-md);padding:8px 12px;font-size:12.5px;line-height:1.5">
+              <span style="background:var(--color-primary-base);color:#fff;border-radius:50%;width:19px;height:19px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">④</span>
+              <span style="color:var(--color-text-high)">💾 <strong>アジェンダをファイルとして保存</strong> → 手元に成果物が残る</span>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--color-text-medium);font-weight:600;text-align:center">指示は1回。①〜④をClaudeが<span style="color:var(--color-primary-base)">自分で順番に</span>こなします。</div>
+        </div>
+
+        <!-- 右：2ソース→保存ファイル -->
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+            <div style="background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:10px 12px;font-size:11.5px;line-height:1.6;color:var(--color-text-high)">
+              <div style="font-weight:700;color:var(--color-primary-base);margin-bottom:4px">📅 ソースA：カレンダー</div>
+              6/14 14:00 営業戦略MTG<br>参加：田中・佐藤・山田<br>説明：Q3施策・予算確認
+            </div>
+            <div style="background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:10px 12px;font-size:11.5px;line-height:1.6;color:var(--color-text-high)">
+              <div style="font-weight:700;color:var(--color-primary-base);margin-bottom:4px">📂 ソースB：前回議事録(PC)</div>
+              宿題：LP修正は山田<br>予算は<strong>25万に減額</strong>済<br>競合調査：田中→未報告
+            </div>
+          </div>
+          <div style="font-size:13px;font-weight:700;letter-spacing:0.08em;color:var(--color-primary-base)">💾 保存されたファイル（2つを統合した成果物）</div>
+          <div style="background:var(--color-surface);border:1px solid var(--color-primary-base);border-radius:var(--radius-md);padding:13px 15px;box-shadow:0 0 0 1px var(--color-primary-base),var(--shadow-card);font-size:12.5px;line-height:1.75;color:var(--color-text-high)">
+            <div style="font-size:11px;color:var(--color-text-medium);margin-bottom:6px">📄 議事録フォルダ／<strong>0614_営業戦略MTGアジェンダ.docx</strong></div>
+            <strong>【6/14 営業戦略MTG アジェンダ】</strong><br>
+            ①前回の宿題確認（10分）<br>
+            　└ <strong>競合調査（田中・前回未報告）</strong>を冒頭で<br>
+            ②LP修正の進捗：山田（5分）<br>
+            ③<strong>予算25万</strong>での施策確認（10分）<span style="color:var(--color-text-medium);font-size:11px">※前回減額を反映</span><br>
+            ④次回日程（5分）
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>12</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S11: コピペ vs MCP ======== -->
+    <div class="slide" id="s11">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Comparison</div>
+      <div class="section-title">ブラウザ版（＋プロジェクト） vs Cowork</div>
+      <div class="compare-wrap">
+        <div class="compare-side">
+          <div class="compare-header paste">ブラウザ版＋プロジェクト（デモ①）</div>
+          <div class="compare-body">
+            <div class="compare-item"><span class="ci-i">✅</span>今日すぐ始められる・無料プランOK</div>
+            <div class="compare-item"><span class="ci-i">✅</span>プロジェクトで過去の決定・文脈を記憶</div>
+            <div class="compare-item"><span class="ci-i">✅</span>スマホからでも使える</div>
+            <div class="compare-item"><span class="ci-i">⚠️</span>データは自分で貼る（コピペは残る）</div>
+            <div class="compare-item"><span class="ci-i">⚠️</span>PC内のファイルは扱えない</div>
+            <div class="compare-item"><span class="ci-i">⚠️</span>1つのチャット内で完結する作業向き</div>
+          </div>
+        </div>
+        <div class="compare-sep">vs</div>
+        <div class="compare-side">
+          <div class="compare-header mcp">Cowork（デスクトップ版・デモ②）</div>
+          <div class="compare-body">
+            <div class="compare-item"><span class="ci-i" style="color:var(--color-primary-base)">🚀</span>カレンダーもPC内ファイルも直接読む</div>
+            <div class="compare-item"><span class="ci-i" style="color:var(--color-primary-base)">🚀</span>複数ツールをまたいで一括処理</div>
+            <div class="compare-item"><span class="ci-i" style="color:var(--color-primary-base)">🚀</span>成果物をファイルとして保存できる</div>
+            <div class="compare-item"><span class="ci-i" style="color:var(--color-primary-base)">🚀</span>「最後までやって」が成立する</div>
+            <div class="compare-item"><span class="ci-i">⚠️</span>デスクトップ版の初期設定が1回必要</div>
+            <div class="compare-item"><span class="ci-i">⚠️</span>接続するツールを選んで許可する</div>
+          </div>
+        </div>
+      </div>
+      <div class="message-box">💡 <strong>正解は「段階的に移行」</strong>。まずブラウザ版＋プロジェクトで慣れる → 毎日の定型業務はCoworkに任せると一気に楽になる</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>13</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S12: 持ち帰りプロンプト ======== -->
+    <div class="slide" id="s12">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Takeaway</div>
+      <div class="section-title">今日の持ち帰り：<span class="accent">コピペして使える議事録プロンプト</span></div>
+      <div class="takeaway-main">
+        <div class="prompt-showcase">
+          <div class="ps-label">COPY &amp; PASTE — そのまま使えます</div>
+          <div class="ps-text">
+            以下は会議のメモです。<br>
+            ①要約（<em>3行以内</em>）<br>
+            ②担当者と期日の一覧<br>
+            ③次のアクション<br>
+            の3つの形式でまとめてください。<br><br>
+            【会議メモ】<br>
+            （ここに会議のメモを貼り付ける）
+          </div>
+          <div class="ps-sub">「3行以内」「担当者と期日」の部分は自分の用途に合わせて変えてOK。これが「議事録プロンプトの最初の一文」です。</div>
+        </div>
+        <div class="usage-row">
+          <div class="usage-card">
+            <div class="uc-scene">アレンジ例①</div>
+            <div class="uc-prompt">②を「担当者・期日・優先度」に変えると進捗管理にも使える</div>
+          </div>
+          <div class="usage-card">
+            <div class="uc-scene">アレンジ例②</div>
+            <div class="uc-prompt">「以下は顧客との通話メモです。」に変えると営業報告書にも転用できる</div>
+          </div>
+          <div class="usage-card">
+            <div class="uc-scene">アレンジ例③</div>
+            <div class="uc-prompt">Claudeプロジェクトに保存しておくと、毎回貼らずに呼び出せる（第1回で紹介）</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>14</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S13: まとめ ======== -->
+    <div class="slide" id="s13">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Summary</div>
+      <div class="section-title">今日のまとめ</div>
+      <div class="summary-list">
+        <div class="summary-item">
+          <div class="summary-num">01</div>
+          <div class="summary-text">議事録は<span>「プロジェクトを育てる」</span>と、過去の決定を踏まえて矛盾まで拾ってくれる。</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-num">02</div>
+          <div class="summary-text"><span>「以下は〇〇です。①②③でまとめて。【データ】」</span>の3構造が汎用プロンプトの型。</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-num">03</div>
+          <div class="summary-text">Coworkは<span>「カレンダー＋PC内ファイルをまたいで、保存まで」</span>一気にやる。ブラウザ版との決定的な差。</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-num">04</div>
+          <div class="summary-text"><span>ブラウザ版＋プロジェクト → Cowork</span>の段階的移行が現実的。今日プロジェクトを作ることが第一歩。</div>
+        </div>
+      </div>
+      <div class="closing-msg">手を動かすことが一番の近道。<em>今夜、議事録プロジェクトを1つ作ってみましょう。</em></div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>15</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S14: 次回予告 ======== -->
+    <div class="slide" id="s14">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Next Session</div>
+      <div class="section-title">次回予告</div>
+      <div class="next-card">
+        <div class="next-date">第3回　2026年6月21日（日）21:00〜21:30</div>
+        <div class="next-title">AIと<em>「チームになる」</em><br>——自分専用AIアシスタントの育て方</div>
+        <div class="next-tagline">ここまで2回で「作らせる」「つながる」を体験しました。最終回は<strong>AIに「自分」を覚えさせる</strong>方法を深掘りします。</div>
+        <div class="next-points">
+          <div class="next-point">プロジェクトに「自分情報・仕事の文脈」を蓄積させる方法</div>
+          <div class="next-point">毎回ゼロから説明しないAIの作り方（コンテキスト設計）</div>
+          <div class="next-point">3回シリーズ総仕上げ：自分だけのAIアシスタントを設計する</div>
+        </div>
+        <div class="meet-url">🔗 Google Meet URL：<strong>meet.google.com/mst-uvin-err</strong>（6月21日 21:00〜）</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>16</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S15: Q&A / 連絡先 ======== -->
+    <div class="slide" id="s15">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Q&amp;A / Contact</div>
+      <div class="section-title">質問・ご相談はお気軽に</div>
+      <div class="contact-wrap">
+        <div class="qa-block">
+          <div class="qa-box">
+            <div class="q">Q. 無料プランのClaudeでもMCPは使えますか？</div>
+            <div class="a">ブラウザ版のGmailコネクターなど一部のコネクターは無料プランでも使用できます。フルに活用するにはClaudeデスクトップ版（Coworkモード）の設定が必要です。</div>
+          </div>
+          <div class="qa-box">
+            <div class="q">Q. プロンプトの型は他の業務にも使えますか？</div>
+            <div class="a">はい。「以下は〇〇です。①②③でまとめて。【データ】」の3構造は、メール返信・報告書・提案書など幅広い場面で使い回せます。</div>
+          </div>
+          <div class="qa-box">
+            <div class="q">Q. 第1回を見ていなくても大丈夫ですか？</div>
+            <div class="a">各回単独でも参加できる構成です。第1回の資料・録画も、アンケートにご記入いただいた方へ後日メールでまとめてお送りします。</div>
+          </div>
+        </div>
+        <div class="contact-block">
+          <div style="font-size:13px;font-weight:700;letter-spacing:0.08em;color:var(--color-text-medium);margin-bottom:4px">CONTACT</div>
+          <div class="contact-card">
+            <div class="c-label">Web</div>
+            <div class="c-value">yorozusoudansyo.github.io/home/<small>無料相談ボタンからどうぞ</small></div>
+          </div>
+          <div class="contact-card">
+            <div class="c-label">Note</div>
+            <div class="c-value">note.com/yukisa0814<small>AI活用マガジン 全12回連載中</small></div>
+          </div>
+          <div class="contact-card">
+            <div class="c-label">X</div>
+            <div class="c-value">@Yorozu0519<small>最新情報・小ネタを発信中</small></div>
+          </div>
+          <div class="next-series">
+            第3回まで無料でご参加いただけます。<br>
+            <em>最終回 6月21日（日）21:00</em>　お待ちしています。
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>17</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S16: アンケート（締め） ======== -->
+    <div class="slide" id="s16">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.06.14</span>
+      </div>
+      <div class="kicker">Thank You — 最後にお願いです</div>
+      <div class="section-title">アンケートで<span class="accent">資料・録画リンク</span>をお受け取りください</div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:32px;margin-top:18px;flex:1;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="font-size:18px;line-height:1.85;color:var(--color-text-high)">
+            本日はご参加ありがとうございました。<br>
+            <strong>1分のアンケート</strong>にご記入いただいた方へ、<br>
+            <strong class="accent">本日のスライド資料</strong>と<strong class="accent">録画リンク</strong>を<br>
+            後日メールでお送りします。
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);font-size:15px;color:var(--color-text-high)">
+              <span style="font-size:20px">📱</span><span>右のQRコード、または<strong>チャット欄のURL</strong>から</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-primary-light);border:1px solid var(--color-primary-base);border-radius:var(--radius-md);font-size:15px;color:var(--color-text-high)">
+              <span style="font-size:20px">🎁</span><span>記入された方限定で<strong>資料・録画</strong>をお届けします</span>
+            </div>
+          </div>
+          <div style="padding:13px 20px;background:var(--color-text-high);color:#fff;border-radius:var(--radius-md);font-size:16px;font-weight:600;text-align:center;line-height:1.6">
+            次回 第3回は<em style="font-style:normal;color:#FCA5A5">6月21日（日）21:00〜</em>　お待ちしています。
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-md);padding:14px;box-shadow:var(--shadow-card)">
+            <img src="data:image/png;base64,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" alt="アンケートQRコード" style="width:210px;height:210px;display:block">
+          </div>
+          <div style="font-size:12px;color:var(--color-text-medium);text-align:center;line-height:1.6">アンケートフォーム<br>スマホのカメラで読み取り</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>18</strong> / 18</span>
+      </div>
+    </div>
+
+  </div><!-- /deck -->
+</div><!-- /stage -->
+
+<div class="nav-hint">← → キーで移動　／　F でフルスクリーン</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = Math.max(0, Math.min(total - 1, n));
+    slides[cur].classList.add('active');
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+
+  btnPrev.disabled = true;
+  btnPrev.addEventListener('click', () => go(cur - 1));
+  btnNext.addEventListener('click', () => go(cur + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (e.key >= '1' && e.key <= '9') { go(parseInt(e.key) - 1); }
+    else if (e.key === '0') { go(9); }
+  });
+</script>
+</body>
+</html>
