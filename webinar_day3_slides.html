@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>第3回 資料づくりをAIと一緒にやる——8票の悩みに正面から応える｜AI・ITよろず相談所</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary-base: #D32F2F;
+    --color-primary-hover: #B71C1C;
+    --color-primary-light: #FFEBEE;
+    --color-text-high: #1F2937;
+    --color-text-medium: #4B5563;
+    --color-border: #E5E7EB;
+    --color-background: #F9FAFB;
+    --color-surface: #FFFFFF;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-pill: 999px;
+    --shadow-card: 0 4px 6px rgba(0,0,0,0.05);
+    --shadow-overlay: 0 10px 15px rgba(0,0,0,0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; overflow: hidden; background: #1F2937; }
+  body { font-family: "Inter", "Noto Sans JP", sans-serif; color: var(--color-text-high); -webkit-font-smoothing: antialiased; }
+  .stage { position: fixed; inset: 0; display: grid; place-items: center; background: #1F2937; }
+  .deck { position: relative; width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); overflow: hidden; }
+  .slide { position: absolute; inset: 0; padding: 52px 68px 72px; background: var(--color-background); display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 260ms ease; }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 44px; height: 72px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; transition: background 180ms ease; z-index: 200; user-select: none; }
+  .nav-btn:hover { background: rgba(255,255,255,0.22); }
+  .nav-btn:active { background: rgba(255,255,255,0.32); }
+  .nav-btn.prev { left: 8px; }
+  .nav-btn.next { right: 8px; }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+  .slide-header { display: flex; align-items: center; justify-content: space-between; color: var(--color-text-medium); font-size: 13px; letter-spacing: 0.05em; margin-bottom: 18px; flex-shrink: 0; }
+  .slide-header .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--color-text-high); font-weight: 700; font-size: 14px; letter-spacing: 0.04em; }
+  .logo-mark { width: 36px; height: 28px; display: block; flex-shrink: 0; }
+  .logo-full  { width: 260px; height: 130px; display: block; }
+  .slide-footer { margin-top: auto; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; color: var(--color-text-medium); font-size: 12px; letter-spacing: 0.05em; padding-top: 10px; }
+  .page-num { font-family: "Inter", sans-serif; font-weight: 500; }
+  .page-num strong { color: var(--color-primary-base); font-weight: 700; }
+  .kicker { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--color-primary-base); text-transform: uppercase; margin-bottom: 12px; }
+  .section-title { font-size: 34px; font-weight: 700; line-height: 1.4; letter-spacing: 0.03em; color: var(--color-text-high); }
+  .section-sub { font-size: 17px; line-height: 1.7; color: var(--color-text-medium); margin-top: 8px; }
+  .accent { color: var(--color-primary-base); }
+  .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 22px 26px; box-shadow: var(--shadow-card); }
+  .badge { display: inline-block; padding: 3px 12px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; }
+  .badge-red   { background: var(--color-primary-base); color: #fff; }
+  .badge-light { background: var(--color-primary-light); color: var(--color-primary-base); }
+  .badge-neutral { background: var(--color-background); color: var(--color-text-medium); border: 1px solid var(--color-border); }
+
+  /* COVER */
+  #s1 { background: radial-gradient(1100px 500px at 110% -5%, var(--color-primary-light) 0%, transparent 55%), var(--color-background); padding: 68px 80px; justify-content: space-between; }
+  #s1 .series-tag { display: inline-flex; align-items: center; gap: 14px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; color: var(--color-text-medium); }
+  #s1 .series-tag .dot { width: 6px; height: 6px; background: var(--color-primary-base); border-radius: 50%; }
+  #s1 h1 { font-size: 52px; font-weight: 700; line-height: 1.35; letter-spacing: 0.02em; color: var(--color-text-high); margin-top: 20px; max-width: 900px; }
+  #s1 h1 em { font-style: normal; color: var(--color-primary-base); }
+  #s1 .cover-sub { font-size: 21px; font-weight: 500; line-height: 1.65; color: var(--color-text-medium); margin-top: 20px; max-width: 840px; }
+  #s1 .cover-bar { width: 56px; height: 4px; background: var(--color-primary-base); border-radius: var(--radius-sm); margin-top: 28px; }
+  #s1 .cover-meta { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+  #s1 .cover-meta .name { font-size: 17px; font-weight: 700; color: var(--color-text-high); }
+  #s1 .cover-meta .name span { font-size: 13px; font-weight: 400; color: var(--color-text-medium); margin-left: 8px; }
+  #s1 .cover-meta .info { font-size: 13px; color: var(--color-text-medium); letter-spacing: 0.05em; }
+  #s1 .final-pill { display:inline-block; padding:4px 14px; background:var(--color-primary-base); color:#fff; border-radius:var(--radius-pill); font-size:12px; font-weight:700; letter-spacing:0.08em; margin-left:10px; }
+
+  /* PROFILE */
+  #s2 .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 8px; flex: 1; align-items: start; }
+  #s2 .profile-left { display: flex; flex-direction: column; gap: 14px; }
+  #s2 .name-block .ja { font-size: 30px; font-weight: 700; color: var(--color-text-high); }
+  #s2 .name-block .en { font-size: 14px; color: var(--color-text-medium); letter-spacing: 0.1em; margin-top: 4px; }
+  #s2 .catch { font-size: 16px; line-height: 1.75; color: var(--color-text-high); padding: 14px 18px; background: var(--color-primary-light); border-left: 4px solid var(--color-primary-base); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+  #s2 .career { display: flex; flex-direction: column; gap: 8px; }
+  #s2 .career-item { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; line-height: 1.6; }
+  #s2 .career-item .year { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700; color: var(--color-primary-base); letter-spacing: 0.05em; min-width: 50px; padding-top: 2px; }
+  #s2 .profile-right { display: flex; flex-direction: column; gap: 12px; }
+  #s2 .stat-card { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+  #s2 .stat-card .num { font-family: "Inter", sans-serif; font-size: 38px; font-weight: 700; color: var(--color-primary-base); line-height: 1; min-width: 72px; text-align: center; }
+  #s2 .stat-card .desc { font-size: 14px; line-height: 1.6; color: var(--color-text-high); }
+  #s2 .stat-card .desc strong { display: block; font-size: 16px; font-weight: 700; }
+
+  /* GOAL */
+  #s3 .goal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 16px; flex: 1; align-items: start; }
+  #s3 .goal-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 24px 20px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 10px; }
+  #s3 .goal-card .g-num { font-family: "Inter", sans-serif; font-size: 44px; font-weight: 700; color: var(--color-primary-base); line-height: 1; }
+  #s3 .goal-card .g-title { font-size: 17px; font-weight: 700; color: var(--color-text-high); line-height: 1.4; }
+  #s3 .goal-card .g-body { font-size: 14px; line-height: 1.7; color: var(--color-text-medium); }
+  #s3 .agenda-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 16px; padding: 12px 18px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+  #s3 .a-item { font-size: 13px; color: var(--color-text-medium); }
+  #s3 .sep { color: var(--color-border); }
+
+  /* 8-VOTE DATA (s5) */
+  #s5 .vote-wrap { display:grid; grid-template-columns: 1fr 1fr; gap:28px; margin-top:14px; flex:1; align-items:start; }
+  #s5 .vote-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:18px 22px; box-shadow:var(--shadow-card); }
+  #s5 .vote-q { font-size:14px; font-weight:700; color:var(--color-text-high); margin-bottom:14px; line-height:1.5; }
+  #s5 .vote-q small { display:block; font-size:11px; font-weight:400; color:var(--color-text-medium); margin-top:3px; letter-spacing:0.04em; }
+  #s5 .bar-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; font-size:13px; }
+  #s5 .bar-label { width:118px; flex-shrink:0; color:var(--color-text-high); line-height:1.4; }
+  #s5 .bar-track { flex:1; height:18px; background:var(--color-background); border:1px solid var(--color-border); border-radius:var(--radius-pill); overflow:hidden; }
+  #s5 .bar-fill { height:100%; background:var(--color-border); }
+  #s5 .bar-fill.win { background:var(--color-primary-base); }
+  #s5 .bar-num { width:24px; text-align:right; font-family:"Inter",sans-serif; font-weight:700; color:var(--color-text-medium); }
+  #s5 .bar-row.win .bar-label { font-weight:700; color:var(--color-primary-base); }
+  #s5 .bar-row.win .bar-num { color:var(--color-primary-base); }
+  #s5 .vote-msg { margin-top:14px; padding:13px 22px; background:var(--color-text-high); color:#fff; border-radius:var(--radius-md); font-size:16px; font-weight:600; text-align:center; line-height:1.55; }
+  #s5 .vote-msg em { font-style:normal; color:#FCA5A5; }
+
+  /* REVIEW (s6) */
+  #s6 .review-flow { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:16px; flex:1; align-items:stretch; }
+  #s6 .rv-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:18px 15px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:8px; position:relative; }
+  #s6 .rv-card.now { border-color:var(--color-primary-base); box-shadow:0 0 0 1px var(--color-primary-base),var(--shadow-card); }
+  #s6 .rv-step { font-family:"Inter",sans-serif; font-size:11px; font-weight:700; letter-spacing:0.12em; color:var(--color-text-medium); }
+  #s6 .rv-verb { font-size:22px; font-weight:700; color:var(--color-primary-base); line-height:1.2; }
+  #s6 .rv-when { font-size:12px; font-weight:700; color:var(--color-text-medium); }
+  #s6 .rv-body { font-size:13px; line-height:1.6; color:var(--color-text-medium); }
+  #s6 .rv-arrow { position:absolute; right:-9px; top:50%; transform:translateY(-50%); font-size:16px; color:var(--color-primary-base); z-index:1; }
+  #s6 .review-msg { margin-top:14px; padding:13px 22px; background:var(--color-text-high); color:#fff; border-radius:var(--radius-md); font-size:16px; font-weight:600; text-align:center; line-height:1.5; }
+  #s6 .review-msg em { font-style:normal; color:#FCA5A5; }
+
+  /* TOKEN / CONTEXT (s7) */
+  #s7 .token-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:14px; flex:1; align-items:start; }
+  #s7 .desk { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:18px 20px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:10px; }
+  #s7 .desk-title { font-size:15px; font-weight:700; color:var(--color-text-high); display:flex; align-items:center; gap:8px; }
+  #s7 .desk-vis { height:74px; border:1px dashed var(--color-border); border-radius:var(--radius-sm); background:var(--color-background); position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:6px; gap:4px; }
+  #s7 .doc { width:20px; background:var(--color-primary-light); border:1px solid var(--color-primary-base); border-radius:2px; }
+  #s7 .desk-cap { font-size:13px; line-height:1.65; color:var(--color-text-medium); }
+  #s7 .desk-cap strong { color:var(--color-text-high); }
+  #s7 .token-steps { display:flex; flex-direction:column; gap:9px; }
+  #s7 .ts { display:flex; gap:10px; align-items:flex-start; font-size:13.5px; line-height:1.6; padding:9px 12px; border-radius:var(--radius-sm); }
+  #s7 .ts.bad { background:var(--color-background); border:1px solid var(--color-border); color:var(--color-text-high); }
+  #s7 .ts.half { background:var(--color-primary-light); border:1px solid #F3C0C0; color:var(--color-text-high); }
+  #s7 .ts .ic { flex-shrink:0; font-weight:700; }
+  #s7 .ts b { color:var(--color-primary-base); }
+  #s7 .token-msg { margin-top:14px; padding:13px 22px; background:var(--color-text-high); color:#fff; border-radius:var(--radius-md); font-size:15.5px; font-weight:600; text-align:center; line-height:1.55; }
+  #s7 .token-msg em { font-style:normal; color:#FCA5A5; }
+
+  /* ANSWER 2-TOOL (s8) */
+  #s8 .answer-flow { display:flex; align-items:stretch; gap:0; margin-top:18px; flex:1; }
+  #s8 .tool-col { flex:1; display:flex; flex-direction:column; }
+  #s8 .tool-head { padding:14px 18px; border-radius:var(--radius-md) var(--radius-md) 0 0; text-align:center; }
+  #s8 .tool-head .tn { font-size:20px; font-weight:700; line-height:1.2; }
+  #s8 .tool-head .tr { font-size:13px; font-weight:600; margin-top:4px; opacity:0.9; }
+  #s8 .tool-head.nlm { background:#1F2937; color:#fff; }
+  #s8 .tool-head.cla { background:var(--color-primary-base); color:#fff; }
+  #s8 .tool-body { background:var(--color-surface); border:1px solid var(--color-border); border-top:none; border-radius:0 0 var(--radius-md) var(--radius-md); padding:18px; flex:1; display:flex; flex-direction:column; gap:9px; }
+  #s8 .tb-item { display:flex; gap:8px; align-items:flex-start; font-size:14px; line-height:1.6; color:var(--color-text-high); }
+  #s8 .tb-item .ic { color:var(--color-primary-base); flex-shrink:0; margin-top:3px; font-size:11px; }
+  #s8 .answer-arrow { display:flex; align-items:center; justify-content:center; width:64px; font-size:30px; color:var(--color-primary-base); font-weight:700; flex-shrink:0; }
+  #s8 .answer-msg { margin-top:16px; padding:14px 22px; background:var(--color-primary-light); border:2px solid var(--color-primary-base); border-radius:var(--radius-md); font-size:17px; font-weight:700; color:var(--color-primary-base); text-align:center; line-height:1.5; }
+
+  /* NLM LIBRARIAN (s9) */
+  #s9 .nlm-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:14px; flex:1; align-items:start; }
+  #s9 .nlm-left { display:flex; flex-direction:column; gap:12px; }
+  #s9 .nlm-def { padding:16px 20px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); box-shadow:var(--shadow-card); }
+  #s9 .nlm-def .lbl { font-size:11px; font-weight:700; letter-spacing:0.1em; color:var(--color-text-medium); margin-bottom:8px; }
+  #s9 .nlm-def .txt { font-size:16px; line-height:1.75; color:var(--color-text-high); }
+  #s9 .nlm-analogy { padding:14px 18px; background:var(--color-primary-light); border-left:4px solid var(--color-primary-base); border-radius:0 var(--radius-md) var(--radius-md) 0; font-size:15.5px; line-height:1.7; color:var(--color-text-high); }
+  #s9 .nlm-analogy strong { color:var(--color-primary-base); }
+  #s9 .compare-mini { display:flex; flex-direction:column; gap:10px; }
+  #s9 .cm-row { display:flex; gap:12px; align-items:stretch; }
+  #s9 .cm-box { flex:1; padding:13px 16px; border-radius:var(--radius-md); border:1px solid var(--color-border); background:var(--color-surface); box-shadow:var(--shadow-card); }
+  #s9 .cm-box .h { font-size:13px; font-weight:700; margin-bottom:6px; }
+  #s9 .cm-box.bad .h { color:var(--color-text-medium); }
+  #s9 .cm-box.good .h { color:var(--color-primary-base); }
+  #s9 .cm-box .d { font-size:13px; line-height:1.65; color:var(--color-text-high); }
+  #s9 .nlm-note { margin-top:12px; padding:11px 18px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); font-size:13.5px; color:var(--color-text-medium); line-height:1.6; }
+  #s9 .nlm-note strong { color:var(--color-text-high); }
+
+  /* DEMO cards (s10, s11) */
+  .demo-banner { display:inline-flex; align-items:center; gap:10px; padding:5px 16px; background:var(--color-primary-base); color:#fff; border-radius:var(--radius-pill); font-size:13px; font-weight:700; letter-spacing:0.06em; }
+  .demo-steps3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:14px; flex:1; align-items:start; }
+  .demo-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:18px 18px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:10px; position:relative; }
+  .demo-card.hl { border-color:var(--color-primary-base); box-shadow:0 0 0 1px var(--color-primary-base),var(--shadow-card); }
+  .demo-card .d-step { font-family:"Inter",sans-serif; font-size:11px; font-weight:700; letter-spacing:0.14em; color:var(--color-text-medium); }
+  .demo-card .d-title { font-size:17px; font-weight:700; color:var(--color-text-high); line-height:1.3; }
+  .demo-card .d-body { font-size:13.5px; line-height:1.7; color:var(--color-text-medium); }
+  .prompt-box { background:var(--color-text-high); color:#E5E7EB; padding:11px 13px; border-radius:var(--radius-sm); font-size:12.5px; line-height:1.7; }
+  .result-box { background:var(--color-primary-light); border-left:3px solid var(--color-primary-base); padding:10px 12px; border-radius:0 var(--radius-sm) var(--radius-sm) 0; font-size:12.5px; line-height:1.65; color:var(--color-text-high); }
+  .demo-note { margin-top:14px; padding:12px 20px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); font-size:14px; color:var(--color-text-medium); line-height:1.6; }
+  .demo-note strong { color:var(--color-text-high); }
+
+  /* DEMO2 flow (s11) */
+  #s11 .d2-flow { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:14px; }
+  #s11 .d2-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:16px 13px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:7px; align-items:center; text-align:center; position:relative; }
+  #s11 .d2-card.hl { border-color:var(--color-primary-base); box-shadow:0 0 0 1px var(--color-primary-base),var(--shadow-card); }
+  #s11 .d2-num { font-family:"Inter",sans-serif; font-size:26px; font-weight:700; color:var(--color-primary-base); line-height:1; }
+  #s11 .d2-ic { font-size:24px; }
+  #s11 .d2-title { font-size:14px; font-weight:700; color:var(--color-text-high); line-height:1.35; }
+  #s11 .d2-body { font-size:12px; line-height:1.55; color:var(--color-text-medium); }
+  #s11 .d2-arrow { position:absolute; right:-9px; top:50%; transform:translateY(-50%); font-size:15px; color:var(--color-primary-base); z-index:1; }
+  #s11 .d2-tag { font-size:10px; font-weight:700; padding:2px 8px; border-radius:var(--radius-pill); }
+  #s11 .d2-tag.live { background:var(--color-primary-light); color:var(--color-primary-base); }
+  #s11 .d2-tag.prep { background:var(--color-background); color:var(--color-text-medium); border:1px solid var(--color-border); }
+  #s11 .d2-result { margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  #s11 .d2-rc { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:13px 16px; box-shadow:var(--shadow-card); }
+  #s11 .d2-rc .lbl { font-size:11px; font-weight:700; letter-spacing:0.1em; color:var(--color-text-medium); margin-bottom:6px; }
+  #s11 .d2-rc .bd { font-size:13.5px; line-height:1.7; color:var(--color-text-high); }
+
+  /* WHOLE FLOW (s12) */
+  #s12 .whole-flow { display:flex; align-items:center; gap:0; margin-top:18px; flex:1; }
+  #s12 .wf-step { flex:1; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:20px 16px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:9px; align-items:center; text-align:center; }
+  #s12 .wf-step.tool-nlm { border-top:4px solid #1F2937; }
+  #s12 .wf-step.tool-cla { border-top:4px solid var(--color-primary-base); }
+  #s12 .wf-ic { font-size:30px; }
+  #s12 .wf-tool { font-size:11px; font-weight:700; letter-spacing:0.06em; padding:2px 10px; border-radius:var(--radius-pill); }
+  #s12 .wf-tool.nlm { background:#1F2937; color:#fff; }
+  #s12 .wf-tool.cla { background:var(--color-primary-base); color:#fff; }
+  #s12 .wf-title { font-size:15px; font-weight:700; color:var(--color-text-high); line-height:1.35; }
+  #s12 .wf-body { font-size:12.5px; line-height:1.6; color:var(--color-text-medium); }
+  #s12 .wf-arrow { width:44px; flex-shrink:0; text-align:center; font-size:24px; color:var(--color-primary-base); font-weight:700; }
+  #s12 .whole-msg { margin-top:16px; padding:14px 22px; background:var(--color-text-high); color:#fff; border-radius:var(--radius-md); font-size:16px; font-weight:600; text-align:center; line-height:1.5; }
+  #s12 .whole-msg em { font-style:normal; color:#FCA5A5; }
+
+  /* TAKEAWAY TEMPLATE (s13) */
+  #s13 .tk-main { margin-top:16px; flex:1; display:flex; flex-direction:column; gap:14px; justify-content:center; }
+  #s13 .tk-show { background:var(--color-text-high); color:#E5E7EB; padding:26px 32px; border-radius:var(--radius-md); }
+  #s13 .tk-lbl { font-size:11px; font-weight:700; letter-spacing:0.14em; color:rgba(255,255,255,0.5); margin-bottom:14px; }
+  #s13 .tk-text { font-size:19px; font-weight:500; line-height:1.85; color:#fff; }
+  #s13 .tk-text em { font-style:normal; color:#FCA5A5; font-weight:700; }
+  #s13 .tk-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  #s13 .tk-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:15px 18px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:6px; }
+  #s13 .tk-scene { font-size:12px; font-weight:700; letter-spacing:0.06em; color:var(--color-primary-base); }
+  #s13 .tk-prompt { font-size:13.5px; line-height:1.65; color:var(--color-text-high); }
+
+  /* CHEAT TABLE (s14) */
+  #s14 .cheat-table { margin-top:16px; flex:1; display:flex; flex-direction:column; gap:0; border:1px solid var(--color-border); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-card); }
+  #s14 .ct-row { display:grid; grid-template-columns:1.2fr 1fr 1.6fr; }
+  #s14 .ct-row > div { padding:13px 18px; border-bottom:1px solid var(--color-border); font-size:14px; line-height:1.55; display:flex; align-items:center; }
+  #s14 .ct-row:last-child > div { border-bottom:none; }
+  #s14 .ct-head { background:var(--color-text-high); }
+  #s14 .ct-head > div { color:#fff; font-weight:700; font-size:13px; letter-spacing:0.04em; }
+  #s14 .ct-row > div:nth-child(1) { font-weight:700; color:var(--color-text-high); background:var(--color-background); }
+  #s14 .ct-row > div:nth-child(2) { font-weight:700; }
+  #s14 .ct-row .tool-n { color:#1F2937; }
+  #s14 .ct-row .tool-c { color:var(--color-primary-base); }
+  #s14 .ct-row .tool-b { color:var(--color-primary-base); }
+  #s14 .ct-row > div:nth-child(3) { color:var(--color-text-medium); }
+
+  /* SERIES SUMMARY (s15) */
+  #s15 .ss-list { display:flex; flex-direction:column; gap:12px; flex:1; margin-top:14px; justify-content:center; }
+  #s15 .ss-item { display:flex; align-items:center; gap:18px; padding:16px 22px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); box-shadow:var(--shadow-card); }
+  #s15 .ss-day { font-family:"Inter",sans-serif; font-size:13px; font-weight:700; color:#fff; background:var(--color-primary-base); border-radius:var(--radius-pill); padding:5px 14px; flex-shrink:0; }
+  #s15 .ss-verb { font-size:19px; font-weight:700; color:var(--color-primary-base); min-width:62px; }
+  #s15 .ss-text { font-size:15.5px; color:var(--color-text-high); line-height:1.5; }
+  #s15 .ss-text strong { color:var(--color-text-high); }
+  #s15 .ss-close { margin-top:14px; padding:14px 24px; background:var(--color-text-high); color:#fff; border-radius:var(--radius-md); font-size:17px; font-weight:600; text-align:center; line-height:1.5; }
+  #s15 .ss-close em { font-style:normal; color:#FCA5A5; }
+
+  /* NEXT STEP (s16) */
+  #s16 .ns-card { flex:1; margin-top:14px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:30px 36px; display:flex; flex-direction:column; gap:16px; }
+  #s16 .ns-lead { font-size:24px; font-weight:700; line-height:1.45; color:var(--color-text-high); }
+  #s16 .ns-lead em { font-style:normal; color:var(--color-primary-base); }
+  #s16 .ns-points { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  #s16 .ns-point { display:flex; align-items:flex-start; gap:10px; padding:13px 16px; background:var(--color-background); border:1px solid var(--color-border); border-radius:var(--radius-md); font-size:14.5px; line-height:1.6; color:var(--color-text-high); }
+  #s16 .ns-point .ic { font-size:18px; flex-shrink:0; }
+  #s16 .ns-cta { padding:14px 22px; background:var(--color-primary-light); border:2px solid var(--color-primary-base); border-radius:var(--radius-md); font-size:16px; font-weight:700; color:var(--color-primary-base); text-align:center; line-height:1.55; }
+
+  /* CONTACT (s17) */
+  #s17 .contact-wrap { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:36px; margin-top:14px; align-items:start; }
+  #s17 .qa-block { display:flex; flex-direction:column; gap:12px; }
+  #s17 .qa-box { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:15px 20px; box-shadow:var(--shadow-card); }
+  #s17 .qa-box .q { font-size:14.5px; font-weight:700; color:var(--color-primary-base); margin-bottom:5px; }
+  #s17 .qa-box .a { font-size:13.5px; line-height:1.65; color:var(--color-text-high); }
+  #s17 .contact-block { display:flex; flex-direction:column; gap:12px; }
+  #s17 .contact-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:14px 18px; box-shadow:var(--shadow-card); display:flex; align-items:center; gap:14px; }
+  #s17 .c-label { font-size:11px; font-weight:700; letter-spacing:0.1em; color:var(--color-text-medium); min-width:44px; }
+  #s17 .c-value { font-size:15px; font-weight:600; color:var(--color-text-high); }
+  #s17 .c-value small { display:block; font-size:12px; font-weight:400; color:var(--color-text-medium); }
+  #s17 .next-series { margin-top:4px; padding:13px 20px; background:var(--color-text-high); color:#fff; border-radius:var(--radius-md); font-size:15px; font-weight:600; text-align:center; line-height:1.6; }
+  #s17 .next-series em { font-style:normal; color:#FCA5A5; }
+
+  /* SURVEY (s4, s18) */
+  #s18 { background: radial-gradient(1000px 500px at -10% 110%, var(--color-primary-light) 0%, transparent 55%), var(--color-background); }
+
+  /* APPENDIX (s11b) — 参考スライド・本編ページ数に含めない */
+  #s11b .appendix-tag { display:inline-block; padding:4px 14px; background:var(--color-text-high); color:#fff; border-radius:var(--radius-pill); font-size:11px; font-weight:700; letter-spacing:0.1em; }
+  #s11b .ax-grid { display:grid; grid-template-columns:1.05fr 0.95fr; gap:22px; margin-top:14px; flex:1; align-items:start; }
+  #s11b .ax-steps { display:flex; flex-direction:column; gap:10px; }
+  #s11b .ax-step { display:grid; grid-template-columns:26px 1fr; gap:12px; align-items:start; }
+  #s11b .ax-step .n { width:26px; height:26px; border-radius:50%; background:var(--color-primary-base); color:#fff; font-family:"Inter",sans-serif; font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+  #s11b .ax-step .t { font-size:14px; font-weight:700; color:var(--color-text-high); line-height:1.4; }
+  #s11b .ax-step .d { font-size:12.5px; color:var(--color-text-medium); line-height:1.55; margin-top:2px; }
+  #s11b .ax-code { background:var(--color-text-high); color:#E5E7EB; border-radius:var(--radius-sm); padding:7px 11px; font-size:12px; line-height:1.6; margin-top:5px; font-family:"Inter","Noto Sans JP",monospace; word-break:break-all; }
+  #s11b .ax-right { display:flex; flex-direction:column; gap:12px; }
+  #s11b .ax-box { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:14px 18px; box-shadow:var(--shadow-card); }
+  #s11b .ax-box .h { font-size:12px; font-weight:700; letter-spacing:0.08em; color:var(--color-primary-base); margin-bottom:8px; }
+  #s11b .ax-box ul { margin:0; padding-left:18px; }
+  #s11b .ax-box li { font-size:12.5px; line-height:1.7; color:var(--color-text-high); }
+  #s11b .ax-warn { background:var(--color-primary-light); border-left:4px solid var(--color-primary-base); border-radius:0 var(--radius-md) var(--radius-md) 0; padding:12px 16px; font-size:12.5px; line-height:1.65; color:var(--color-text-high); }
+  #s11b .ax-warn strong { color:var(--color-primary-base); }
+  #s11b .ax-foot { margin-top:12px; padding:10px 18px; background:var(--color-background); border:1px solid var(--color-border); border-radius:var(--radius-md); font-size:12px; color:var(--color-text-medium); line-height:1.6; }
+  #s11b .ax-foot strong { color:var(--color-text-high); }
+
+  .nav-hint { position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; pointer-events: none; z-index: 100; }
+</style>
+</head>
+<body>
+
+<!-- ロゴSVG -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="brand-logo" viewBox="0 0 800 400">
+    <g fill="#1F2937"><polygon points="330,200 290,250 350,220"/><circle cx="360" cy="150" r="75"/></g>
+    <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+      <line x1="320" y1="120" x2="380" y2="100"/><line x1="320" y1="120" x2="340" y2="170"/><line x1="380" y1="100" x2="390" y2="150"/>
+    </g>
+    <g fill="#FFFFFF"><circle cx="320" cy="120" r="5"/><circle cx="380" cy="100" r="5"/><circle cx="340" cy="170" r="5"/><circle cx="390" cy="150" r="5"/></g>
+    <g fill="#D32F2F"><polygon points="470,200 510,250 450,220"/><circle cx="440" cy="150" r="75"/></g>
+    <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+      <line x1="420" y1="130" x2="470" y2="110"/><line x1="420" y1="130" x2="450" y2="180"/><line x1="470" y1="110" x2="480" y2="160"/>
+    </g>
+    <g fill="#FFFFFF"><circle cx="420" cy="130" r="5"/><circle cx="470" cy="110" r="5"/><circle cx="450" cy="180" r="5"/><circle cx="480" cy="160" r="5"/></g>
+    <text x="400" y="325" text-anchor="middle" font-family="'Inter','Noto Sans JP',sans-serif" font-weight="700" font-size="56" letter-spacing="2" fill="#1F2937">AI・ITよろず相談所</text>
+  </symbol>
+  <symbol id="brand-mark" viewBox="280 70 240 190">
+    <g fill="#1F2937"><polygon points="330,200 290,250 350,220"/><circle cx="360" cy="150" r="75"/></g>
+    <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+      <line x1="320" y1="120" x2="380" y2="100"/><line x1="320" y1="120" x2="340" y2="170"/><line x1="380" y1="100" x2="390" y2="150"/>
+    </g>
+    <g fill="#FFFFFF"><circle cx="320" cy="120" r="5"/><circle cx="380" cy="100" r="5"/><circle cx="340" cy="170" r="5"/><circle cx="390" cy="150" r="5"/></g>
+    <g fill="#D32F2F"><polygon points="470,200 510,250 450,220"/><circle cx="440" cy="150" r="75"/></g>
+    <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+      <line x1="420" y1="130" x2="470" y2="110"/><line x1="420" y1="130" x2="450" y2="180"/><line x1="470" y1="110" x2="480" y2="160"/>
+    </g>
+    <g fill="#FFFFFF"><circle cx="420" cy="130" r="5"/><circle cx="470" cy="110" r="5"/><circle cx="450" cy="180" r="5"/><circle cx="480" cy="160" r="5"/></g>
+  </symbol>
+</svg>
+
+<button class="nav-btn prev" id="btnPrev" aria-label="前のスライド">&#8249;</button>
+<button class="nav-btn next" id="btnNext" aria-label="次のスライド">&#8250;</button>
+
+<div class="stage">
+  <div class="deck" id="deck">
+
+    <!-- ======== S1: COVER ======== -->
+    <div class="slide active" id="s1">
+      <div class="series-tag">
+        <div class="dot"></div>
+        3回シリーズ無料Webセミナー　第3回<span class="final-pill">最終回</span>　／　2026年6月21日（日）21:00〜21:30
+      </div>
+      <div>
+        <h1>資料づくりを<em>AIと一緒に</em>やる<br>——アンケート<em>8票の悩み</em>に正面から応える</h1>
+        <p class="cover-sub">「調べる・整理する」はNotebookLM、「書く・仕上げる」はClaude。<br>2つのAIを役割分担させて、ハルシネーションを抑えながら資料を仕上げます。</p>
+        <div class="cover-bar"></div>
+      </div>
+      <div class="cover-meta">
+        <svg class="logo-full" role="img" aria-label="AI・ITよろず相談所"><use href="#brand-logo"></use></svg>
+        <div>
+          <div class="name">清水 幸久（Yukisa）<span>AI・ITよろず相談所</span></div>
+          <div class="info" style="margin-top:6px">Google Meet　参加無料　各回30分</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======== S2: 自己紹介 ======== -->
+    <div class="slide" id="s2">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Speaker</div>
+      <div class="section-title" style="margin-bottom:14px">自己紹介</div>
+      <div class="profile-grid">
+        <div class="profile-left">
+          <div class="name-block">
+            <div class="ja">清水 幸久（Yukisa）</div>
+            <div class="en">SHIMIZU YUKIHISA / Yukisa</div>
+          </div>
+          <div class="catch">「AIの最初の一歩に、隣で寄り添う。」<br>専門用語なし・失敗談歓迎の伴走スタイルで支援します。</div>
+          <div class="career">
+            <div class="career-item"><span class="year">前職</span><span>住宅メーカーでアルミサッシ設計を経て、<strong>CADソフト会社でAE（アプリケーションエンジニア）約25年</strong>。技術と現場をつなぐ役割を担う。</span></div>
+            <div class="career-item"><span class="year">2025.09</span><span><strong>独立</strong>。AI・ITよろず相談所を開業。個人事業主・ビジネスパーソンのAI活用を伴走支援。</span></div>
+          </div>
+        </div>
+        <div class="profile-right">
+          <div class="stat-card">
+            <div class="num">25</div>
+            <div class="desc"><strong>年のAEキャリア</strong>技術と人をつなぐ視点をAI支援に活用</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">12</div>
+            <div class="desc"><strong>回連載中：Note AI活用マガジン</strong>B層向けに「今日から使える」AIネタを発信</div>
+          </div>
+          <div class="card" style="padding:16px 18px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:var(--color-text-medium);margin-bottom:7px">CONTACT</div>
+            <div style="font-size:14px;color:var(--color-text-high);line-height:1.8">
+              Web: yorozusoudansyo.github.io/home/<br>
+              Note: note.com/yukisa0814<br>
+              X: @Yorozu0519
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>2</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S3: 今日のゴール ======== -->
+    <div class="slide" id="s3">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Today's Goal</div>
+      <div class="section-title">この30分で持ち帰れること</div>
+      <div class="goal-grid">
+        <div class="goal-card">
+          <div class="g-num">01</div>
+          <div class="g-title">なぜ「1つのAIで全部」だとうまくいかないか</div>
+          <div class="g-body">資料を読ませるほどAIの作業机が埋まる仕組みを理解。NotebookLMが「自分の資料専用のAI司書」としてハルシネーションを抑える理由がわかります。</div>
+        </div>
+        <div class="goal-card">
+          <div class="g-num">02</div>
+          <div class="g-title">NotebookLM × Claude の連携を見る</div>
+          <div class="g-body">調べる・整理するはNotebookLM、書く・仕上げるはClaude。役割分担で資料が形になる流れをライブで体験します。</div>
+        </div>
+        <div class="goal-card">
+          <div class="g-num">03</div>
+          <div class="g-title">「最初の投げかけ方」テンプレートを手に入れる</div>
+          <div class="g-body">資料づくりをAIに頼むときの最初の一文。コピペして使い回せる型を持ち帰ります。</div>
+        </div>
+      </div>
+      <div class="agenda-bar">
+        <div class="a-item">8票の悩み (2分)</div><div class="sep">|</div>
+        <div class="a-item">3回の振り返り (2分)</div><div class="sep">|</div>
+        <div class="a-item">なぜ2ツール連携か (4分)</div><div class="sep">|</div>
+        <div class="a-item">🔴デモ①NotebookLM→Claude (6分)</div><div class="sep">|</div>
+        <div class="a-item">🔴デモ②Claude Code→PPTX (10分)</div><div class="sep">|</div>
+        <div class="a-item">持ち帰り＆Q&amp;A (3分)</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>3</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S4: アンケート案内（冒頭） ======== -->
+    <div class="slide" id="s4">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Before We Start — はじめに1つだけ</div>
+      <div class="section-title">アンケートで<span class="accent">「今日の資料」と「録画リンク」</span>をお渡しします</div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:32px;margin-top:18px;flex:1;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="font-size:17px;line-height:1.8;color:var(--color-text-high)">
+            本日ご参加の<strong>御礼</strong>として、<br>
+            アンケートにご記入いただいた方に<br>
+            <strong class="accent">本日のスライド資料</strong>と<strong class="accent">録画リンク</strong>を<br>
+            後日メールでお送りします。
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);font-size:15px;color:var(--color-text-high)">
+              <span style="font-size:20px">📱</span><span>右のQRコードを読み取り → フォームに記入</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);font-size:15px;color:var(--color-text-high)">
+              <span style="font-size:20px">⏱</span><span>所要1分。<strong>最後にもう一度</strong>ご案内します</span>
+            </div>
+          </div>
+          <div style="padding:11px 18px;background:var(--color-primary-light);border-left:4px solid var(--color-primary-base);border-radius:0 var(--radius-md) var(--radius-md) 0;font-size:14px;line-height:1.65;color:var(--color-text-high)">
+            💡 最終回の今日は<strong>シリーズ3回分の資料</strong>もまとめてお渡しします。今このタイミングで開いておくのがおすすめです。
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-md);padding:14px;box-shadow:var(--shadow-card)">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeoAAAHqCAIAAABED5ptAAAL9klEQVR4nO3dMY7sxhVAUY2ghSj2CrT/yCtw7J3Q6RcgFOSpX3p12efk7GGzOReVPLyv53l+AaDm1+kbAOA75BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGSftu5+Pd//fGz7uMS//3Pv6dv4S+sn/P6nqd+o3N3NfUbTd3zuV/wzid55/t8zs6v4PQNkCTfAEnyDZAk3wBJ8g2QJN8ASfINkCTfAEnyDZC0NXW5VpxgPPfJO7NkxWt3nJtR3PnknafxvlnBtXO/wtqnNcfpGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5Bsg6eDU5dqdM3vn/u7UHNrUc975u1PPased0613vpNT3tccp2+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgKSxqctPc27+7dxmyJ1rp+5qx9SezHPXTn3y2qdNe57j9A2QJN8ASfINkCTfAEnyDZAk3wBJ8g2QJN8ASfINkGTq8qc5t5Nwx52ThDvOTYqeu3btzl2X3M/pGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgaWzqsrjRrjj/dm7H5tTM3p0TqlPznOd+3/d53/d1+gZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSDo4dflpm/Sm5hs/7dq1O+cMi8/5zmvXPq05Tt8ASfINkCTfAEnyDZAk3wBJ8g2QJN8ASfINkCTfAElbU5fv2x23dufM3s61d85G7pjahLlzrf+jf+ba93H6BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZI+nqe59sXT+2sOzcNOLWjb+3TZvbu3Fh45/xqcatkcYvmnZy+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGStqYudxSnts55311NTfStvW/ubu3cf9k5xVnuqf8Up2+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgKTfdi7emSbamVO6cwLqfXv27nzOa+/b37g2NVf5vnej+P/r9A2QJN8ASfINkCTfAEnyDZAk3wBJ8g2QJN8ASfINkLQ1dbnj3NTWnRNuxem4nU8+d+2ds4LFfaRrd04h3rnJdurXd/oGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgCT5Bkj6ep7n2xffuRtw6q7OmXpWUzOZa+97c+5866YUN39OcfoGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgCT5Bkg6uOtyZ4qpOCs4dc877nxWO4qzc2vnvlFxXnf9yXe+z+eeldM3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0DSwanLHTsTUJ82DTi1v/HctfyouCdz6q07N99450y10zdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QNLX8zzfvnhqpmvtzqmtqWd151TenfsbpxTnKnfc+Y3ufDfWnL4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZK2dl2+b77xzrnKqSm1O6fj1u7c/HlurvJ9d7V257Nas+sSgD+Rb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZI2pq6XCtO5a3dOXm1NjVZd+evv3bnzO2Oc1OIxenH4v/vmtM3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0DSwanLtXNTW1OfvGNqOm7n2qlth+dMvXXve5LnFCc213a+kdM3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0DS1/M8hz76fbNkd+7Km9qyeG7X5bnJuuJ+zuKbU9yEWSyS0zdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QNLYrsv3TcftKG7gPOfc3z03lVd8VnfuMvXf/fc5fQMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJI1NXZ6b2pqaB9v5u8XdgFOK835Tb3tx92Px9536P3L6BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZI2pq6LE4DTt3zubnK901O7nyj972TO9735tjA+SOnb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+ApIO7Lqfmo9am/u5acWPhnZOid/6+537BqXdj6tf/tPd5zekbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyDp63meb19858TXlHPbLIuKM2w73veN1nzfH02V0OkbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyDp4K7LO6cQz93VzuTV1NM4Ny32vl2XU5OEUxspz31y8dq1qbfd6RsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIGlr12XRnbNzxem4teL049T+1Tvnk8+ZelZ3fvIOp2+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgKStXZd3TiLt/N3iTObOJ++4c97vzn2kd04D3vl31+6cbl1fe25u1ukbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBpbNfl1Aa/c7NV79tIOXVXO4p3tePO93ntzhnUO6eI15y+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGStnZd7jCH9ve9767Mc/6sa+98Vmt3Tk5ObQ3d4fQNkCTfAEnyDZAk3wBJ8g2QJN8ASfINkCTfAEnyDZB0cNdlcSqv+MlT7vxGxY2ja3dOEq592kz11KSo0zdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJMk3QNLWrss7J6DWip+8485ZwakptSnvm0I8t9vzfVOm5+7K6RsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIOmFuy7XpqY91963RfPOeb+1O++5+E6uFedm7/wFnb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZJeuOvyfXOV53zaDsapd/LOOcP37Zw8Z+fNOfecnb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIEm+AZIO7ro8531TeVPu3Dm5NjUpunbnmzO1ofHOJ3nn0zB1CfBx5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkrZ2Xa7due/uzknCOxVnMtfOfaNz33dqA+edf3fHub879bY7fQMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkyTdAknwDJG1NXZ6by7pzhu3Ou7rzk8+Z+hXOufPv3rlzcm1qm+XUJzt9AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkbU1dFueUzn3yufnGc6b2Cq5NPcni7OuOO7eVTv2+O6a2hjp9AyTJN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkHdx1WbSegDo3pTY1ZTp1z5+2NXRqKm/tzjd2rbi71a5LAP5EvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgaWvqcu192x3PXXvn/sap73vnNODUZshzT6M4NW0L7o+cvgGS5BsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4Bkr6e5/n2xVOTdWtTewXvnBVcu3MW9E5TezLPKf4KU+6cIXf6BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIOrjr8n3OTZlOzYLeuXNyam52x53P+X1Tte/bOLrD6RsgSb4BkuQbIEm+AZLkGyBJvgGS5BsgSb4BkuQbIMnU5f/h0ybc1u78RlPzfnfOVe7YeZ/P3fOdb/vUTLXTN0CSfAMkyTdAknwDJMk3QJJ8AyTJN0CSfAMkyTdA0tjU5dROwqKpTZh3et/3Pfe/MDX9eG4mc2oGdW2qZk7fAEnyDZAk3wBJ8g2QJN8ASfINkCTfAEnyDZAk3wBJX8/zfPviO2fYdnzaPNi5b3TntWt3vs/nvlFxd+ud09pT9+z0DZAk3wBJ8g2QJN8ASfINkCTfAEnyDZAk3wBJ8g2QtDV1CcAUp2+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+AJPkGSJJvgCT5BkiSb4Ak+QZIkm+ApP8BVRq7FLp/YBsAAAAASUVORK5CYII=" alt="アンケートQRコード" style="width:200px;height:200px;display:block">
+          </div>
+          <div style="font-size:12px;color:var(--color-text-medium);text-align:center;line-height:1.6">スマホのカメラで読み取り<br>または チャット欄のURLから</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>4</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S5: 8票の悩み ======== -->
+    <div class="slide" id="s5">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Why Today — みなさんの声から</div>
+      <div class="section-title">事前アンケートで<span class="accent">「資料づくり」が8票＝全員</span>でした</div>
+      <div class="vote-wrap">
+        <div class="vote-card">
+          <div class="vote-q">Q1. いちばん時間を取られている作業は？<small>複数選択可 ／ 8人が投票</small></div>
+          <div class="bar-row"><div class="bar-label">メール</div><div class="bar-track"><div class="bar-fill" style="width:25%"></div></div><div class="bar-num">2</div></div>
+          <div class="bar-row"><div class="bar-label">議事録・要約</div><div class="bar-track"><div class="bar-fill" style="width:37.5%"></div></div><div class="bar-num">3</div></div>
+          <div class="bar-row win"><div class="bar-label">資料づくり</div><div class="bar-track"><div class="bar-fill win" style="width:100%"></div></div><div class="bar-num">8</div></div>
+          <div class="bar-row"><div class="bar-label">調べもの</div><div class="bar-track"><div class="bar-fill" style="width:25%"></div></div><div class="bar-num">2</div></div>
+          <div class="bar-row"><div class="bar-label">文章書き</div><div class="bar-track"><div class="bar-fill" style="width:25%"></div></div><div class="bar-num">2</div></div>
+        </div>
+        <div class="vote-card">
+          <div class="vote-q">Q2. 「これが見られるなら参加したい」テーマは？<small>複数選択可 ／ 6人が投票</small></div>
+          <div class="bar-row"><div class="bar-label">どのツールを使う？</div><div class="bar-track"><div class="bar-fill" style="width:60%"></div></div><div class="bar-num">3</div></div>
+          <div class="bar-row"><div class="bar-label">うまく質問するコツ</div><div class="bar-track"><div class="bar-fill" style="width:40%"></div></div><div class="bar-num">2</div></div>
+          <div class="bar-row win"><div class="bar-label">ルーチンの自動化</div><div class="bar-track"><div class="bar-fill win" style="width:100%"></div></div><div class="bar-num">5</div></div>
+          <div class="bar-row"><div class="bar-label">AIに作業を任せる</div><div class="bar-track"><div class="bar-fill" style="width:60%"></div></div><div class="bar-num">3</div></div>
+          <div class="bar-row"><div class="bar-label">注意点（著作権等）</div><div class="bar-track"><div class="bar-fill" style="width:40%"></div></div><div class="bar-num">2</div></div>
+        </div>
+      </div>
+      <div class="vote-msg">
+        「資料づくりに時間がかかる」は<em>全員共通の悩み</em>。だから最終回は、ここに<em>正面から</em>応えます。
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>5</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S6: 3回の振り返り ======== -->
+    <div class="slide" id="s6">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Review — シリーズの集大成</div>
+      <div class="section-title">「<span class="accent">知る → 使う → 任せる</span>」の先へ。今日は<span class="accent">一緒に作る</span></div>
+      <div class="review-flow">
+        <div class="rv-card">
+          <div class="rv-step">DAY 1 ／ 6.07</div>
+          <div class="rv-verb">作らせる</div>
+          <div class="rv-when">知る</div>
+          <div class="rv-body">4大AIの使い分け。AIは「調べる」より「作らせる」。メール返信を無料版で。</div>
+          <div class="rv-arrow">▶</div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-step">DAY 2 ／ 6.14</div>
+          <div class="rv-verb">つながる</div>
+          <div class="rv-when">使う</div>
+          <div class="rv-body">コピペから「つながる」へ。MCPでカレンダーを直接読む。議事録3分。</div>
+          <div class="rv-arrow">▶</div>
+        </div>
+        <div class="rv-card now">
+          <div class="rv-step">DAY 3 ／ 6.21 — 今日</div>
+          <div class="rv-verb">一緒に作る</div>
+          <div class="rv-when">任せる＋創る</div>
+          <div class="rv-body">2つのAIを役割分担。自分の資料から、ハルシネーションを抑えて資料を仕上げる。</div>
+          <div class="rv-arrow">▶</div>
+        </div>
+        <div class="rv-card" style="justify-content:center;align-items:center;text-align:center;background:var(--color-primary-light);border-color:var(--color-primary-base)">
+          <div style="font-size:30px">🎯</div>
+          <div style="font-size:15px;font-weight:700;color:var(--color-primary-base);line-height:1.4">毎日の「資料づくり半日」が変わる</div>
+        </div>
+      </div>
+      <div class="review-msg">
+        単発で作らせる → 繰り返し任せる → <em>2つのAIと一緒に、ちゃんとした資料を仕上げる</em>。今日が最終ステップ。
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>6</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S7: トークン/コンテキストの話 ======== -->
+    <div class="slide" id="s7">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Key Concept — まず知っておきたいこと</div>
+      <div class="section-title">資料をたくさん読ませると、AIの<span class="accent">「作業机」</span>が埋まる</div>
+      <div class="token-grid">
+        <div class="desk">
+          <div class="desk-title">📚 チャットに資料を全部貼ると…</div>
+          <div class="desk-vis">
+            <div class="doc" style="height:90%"></div><div class="doc" style="height:80%"></div><div class="doc" style="height:95%"></div><div class="doc" style="height:70%"></div><div class="doc" style="height:88%"></div><div class="doc" style="height:78%"></div><div class="doc" style="height:92%"></div><div class="doc" style="height:85%"></div>
+          </div>
+          <div class="desk-cap">AIが一度に見ていられる範囲（＝<strong>作業机の広さ／コンテキスト</strong>）には限りがあります。資料が多いほど机が埋まる。</div>
+        </div>
+        <div class="token-steps">
+          <div class="ts bad"><span class="ic">①</span><span>机が埋まると、AIは<b>古い内容から「忘れる」</b>。最初の資料の話が抜け落ちる。</span></div>
+          <div class="ts bad"><span class="ic">②</span><span>毎回すべて読み直すので<b>動作が重く・割高</b>になりがち。</span></div>
+          <div class="ts half"><span class="ic">③</span><span>プロジェクトに保存すれば<b>スレッドをまたいでも資料は残る</b>（前回学んだ通り）。でも“使う瞬間”に机へ広げる点は同じ。</span></div>
+          <div class="ts half"><span class="ic">④</span><span>だから本命は <b>「全部広げず、必要な箇所だけ検索して渡す」</b> 仕組み（＝RAG）。これがNotebookLMの正体。</span></div>
+        </div>
+      </div>
+      <div class="token-msg">
+        ポイントは<em>「全部読ませる」より「必要な所だけ探させる」</em>。次のスライドで、その役割をどう分けるか見ます。
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>7</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S8: 答え＝2ツール連携 ======== -->
+    <div class="slide" id="s8">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">The Answer — 資料づくりの最適解</div>
+      <div class="section-title">「調べる・整理する」と「書く・仕上げる」を<span class="accent">分業</span>させる</div>
+      <div class="answer-flow">
+        <div class="tool-col">
+          <div class="tool-head nlm"><div class="tn">NotebookLM</div><div class="tr">調べる・整理する係（AI司書）</div></div>
+          <div class="tool-body">
+            <div class="tb-item"><span class="ic">●</span><span>自分が入れた資料<strong>だけ</strong>を読む</span></div>
+            <div class="tb-item"><span class="ic">●</span><span>大量資料でも机が溢れにくい（必要な所だけ検索）</span></div>
+            <div class="tb-item"><span class="ic">●</span><span>答えに<strong>出典</strong>が付く＝ウソが混じりにくい</span></div>
+            <div class="tb-item"><span class="ic">●</span><span>「何が書いてある？」「骨子を出して」が得意</span></div>
+          </div>
+        </div>
+        <div class="answer-arrow">→</div>
+        <div class="tool-col">
+          <div class="tool-head cla"><div class="tn">Claude</div><div class="tr">書く・仕上げる係（書き手）</div></div>
+          <div class="tool-body">
+            <div class="tb-item"><span class="ic">●</span><span>骨子を受け取り<strong>文章に肉付け</strong></span></div>
+            <div class="tb-item"><span class="ic">●</span><span>トーンや構成を整える・言い回しを磨く</span></div>
+            <div class="tb-item"><span class="ic">●</span><span>表・スライド・PPTXなど<strong>成果物の形</strong>にする</span></div>
+            <div class="tb-item"><span class="ic">●</span><span>Code版なら<strong>ファイルを直接生成</strong>まで</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="answer-msg">2ツール連携が、資料づくりの答え。— LPの約束を今日その場で確かめます</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>8</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S9: NotebookLM＝AI司書 ======== -->
+    <div class="slide" id="s9">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">NotebookLM — あなたの資料専用のAI司書</div>
+      <div class="section-title">「自分の資料の中だけ」で答えるから、<span class="accent">ウソが減る</span></div>
+      <div class="nlm-grid">
+        <div class="nlm-left">
+          <div class="nlm-def">
+            <div class="lbl">WHAT IS IT</div>
+            <div class="txt">あなたがアップした資料<strong>だけ</strong>を読み込み、その中身についてだけ答えてくれるGoogleの無料ツール。例えるなら<strong>「自分の本棚しか見ない司書さん」</strong>です。</div>
+          </div>
+          <div class="nlm-analogy">
+            🔖 普通のAIは「世界中の知識から、それっぽく」答える。NotebookLMは<strong>「あなたの資料から、出典つきで」</strong>答える。だから<strong>ハルシネーション（もっともらしいウソ）が激減</strong>します。
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="compare-mini">
+            <div class="cm-row">
+              <div class="cm-box bad">
+                <div class="h">😵 ふつうのチャットAIに資料を全部貼る</div>
+                <div class="d">机が埋まる・忘れる・出典が曖昧。「それっぽいけど資料に無い話」が混じることも。</div>
+              </div>
+            </div>
+            <div class="cm-row">
+              <div class="cm-box good">
+                <div class="h">📗 NotebookLMに資料を預ける</div>
+                <div class="d">何冊でもOK。質問すると関係する箇所を探し、<strong>「資料のここに書いてあります」</strong>と出典つきで答える。</div>
+              </div>
+            </div>
+          </div>
+          <div class="nlm-note">
+            <strong>今日の使い方：</strong>複数のバラバラ資料をNotebookLMに預け、「要点は？」「目次（骨子）を作って」と頼む。整理された骨子を、次にClaudeへ渡します。
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>9</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S10: デモ① NotebookLM→Claude ======== -->
+    <div class="slide" id="s10">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
+        <span class="demo-banner">🔴 LIVE DEMO ①</span>
+        <span style="font-size:13px;color:var(--color-text-medium)">所要 約6分 ／ 全員が無料版で再現できます</span>
+      </div>
+      <div class="section-title" style="font-size:30px">バラバラ資料 → <span class="accent">骨子</span> → Claudeで資料化</div>
+      <div class="section-sub" style="margin-bottom:4px">題材：新サービス「まちかどステイ」の<strong>企画・市場調査</strong>3資料から、上司・取引先向け<strong>事業説明プレゼン</strong>の骨子を作る</div>
+      <div class="demo-steps3">
+        <div class="demo-card">
+          <div class="d-step">STEP 1 — NotebookLM</div>
+          <div class="d-title">3つの資料を預ける</div>
+          <div class="d-body">事業概要メモ・市場調査メモ・顧客アンケートをアップ。「司書さん」に本を渡すイメージ。</div>
+          <div class="result-box">📗 ノートブックに3ソース追加。何冊でも溢れません。</div>
+        </div>
+        <div class="demo-card hl">
+          <div class="d-step">STEP 2 — NotebookLM</div>
+          <div class="d-title">骨子を出させる</div>
+          <div class="prompt-box">この資料をもとに、事業説明プレゼンの<br>目次（骨子）を作って。各項目に<br>「どの資料のどこが根拠か」も付けて。</div>
+          <div class="result-box">📑 出典つきの骨子（課題→解決→市場→収益→チーム）が出る。</div>
+        </div>
+        <div class="demo-card">
+          <div class="d-step">STEP 3 — Claude</div>
+          <div class="d-title">骨子を渡して肉付け</div>
+          <div class="prompt-box">以下は資料から作った骨子です。<br>社内提案向けに、各項目を3〜4文で<br>肉付けして。【骨子を貼る】</div>
+          <div class="result-box">✍️ 読める文章のドラフトが完成。ここまで数分。</div>
+        </div>
+      </div>
+      <div class="demo-note">
+        💡 ポイントは <strong>「NotebookLMで土台＝出典つきの骨子を固めてから、Claudeで書く」</strong>こと。いきなりClaudeに全資料を貼るより、ウソが減り・机も溢れません。
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>10</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S11: デモ② Claude Code → PPTX ======== -->
+    <div class="slide" id="s11">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
+        <span class="demo-banner">🔴 LIVE DEMO ②</span>
+        <span style="font-size:13px;color:var(--color-text-medium)">所要 約10分 ／ 「こんな世界もある」上級デモ</span>
+      </div>
+      <div class="section-title" style="font-size:30px">Claude Codeが<span class="accent">①のNotebookLMにMCP接続</span>、編集できるPPTXまで</div>
+      <div class="d2-flow">
+        <div class="d2-card hl">
+          <div class="d2-num">1</div>
+          <div class="d2-ic">🔌</div>
+          <div class="d2-title">NotebookLMにMCP接続</div>
+          <div class="d2-body">デモ①で骨子まで作った<strong>同じノートブック</strong>に、Claude CodeがMCPでつながる。</div>
+          <span class="d2-tag live">ライブ</span>
+          <div class="d2-arrow">▶</div>
+        </div>
+        <div class="d2-card hl">
+          <div class="d2-num">2</div>
+          <div class="d2-ic">🔍</div>
+          <div class="d2-title">骨子・情報を抜き取る</div>
+          <div class="d2-body">「①の骨子と数字を取り出して、プレゼンの構成案にして」。①の成果をそのまま継承。</div>
+          <span class="d2-tag live">ライブ</span>
+          <div class="d2-arrow">▶</div>
+        </div>
+        <div class="d2-card">
+          <div class="d2-num">3</div>
+          <div class="d2-ic">🎨</div>
+          <div class="d2-title">Codexで見栄えを設計</div>
+          <div class="d2-body">Codexにデザイン込みで「カッコいいスライド」に。配色・レイアウトを自動生成。</div>
+          <span class="d2-tag prep">仕込み済み</span>
+          <div class="d2-arrow">▶</div>
+        </div>
+        <div class="d2-card">
+          <div class="d2-num">4</div>
+          <div class="d2-ic">📊</div>
+          <div class="d2-title">編集可能なPPTXを生成</div>
+          <div class="d2-body">画像で終わらせず<strong>.pptx</strong>で出力。PowerPointで自分で直せる状態に。</div>
+          <span class="d2-tag prep">仕込み済み</span>
+        </div>
+      </div>
+      <div class="d2-result">
+        <div class="d2-rc">
+          <div class="lbl">DEMO①と地続き</div>
+          <div class="bd">①の<strong>同じノートブック</strong>にCodeがMCP接続。①で手で操作した整理を、②では<strong>AIが直接読み</strong>、ファイル生成まで一気通貫。</div>
+        </div>
+        <div class="d2-rc">
+          <div class="lbl">正直にお伝えすると</div>
+          <div class="bd">後半（Codex→PPTX）は<strong>事前に作った成果物</strong>をお見せします。手元で再現する手順は資料に残します。</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>11</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S11b: 付録｜Code×NotebookLM接続（参考・本編ページ数に含めない） ======== -->
+    <div class="slide" id="s11b">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 参考資料（Appendix）</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <span class="appendix-tag">参考 ／ 後でやりたい方向け</span>
+        <span style="font-size:13px;color:var(--color-text-medium)">セミナーでは詳しく触れません。デモ②をご自分で再現したい方へ。</span>
+      </div>
+      <div class="section-title" style="font-size:28px">Claude CodeでNotebookLMにつなぐ方法<span style="font-size:15px;font-weight:600;color:var(--color-text-medium)">（MCP接続）</span></div>
+      <div class="ax-grid">
+        <div class="ax-steps">
+          <div class="ax-step"><div class="n">0</div><div><div class="t">前提を用意</div><div class="d">Node.js（18以上）／ Google Chrome ／ Claude Code がインストール済みであること。</div></div></div>
+          <div class="ax-step"><div class="n">1</div><div><div class="t">MCPサーバーを登録（コマンド1行）</div><div class="d">ターミナルで Claude Code に NotebookLM 用のMCPサーバーを追加します。</div>
+            <div class="ax-code">claude mcp add notebooklm -- npx notebooklm-mcp@latest</div></div></div>
+          <div class="ax-step"><div class="n">2</div><div><div class="t">Googleに一度だけログイン</div><div class="d">Claude Codeで <code>setup_auth</code> を実行 → 開いたChromeでGoogleにログイン。認証はPCに保存され、毎回は不要（数週間で再ログイン）。</div></div></div>
+          <div class="ax-step"><div class="n">3</div><div><div class="t">ノートブックを指定して質問</div><div class="d">「NotebookLMの○○ノートブックに接続して、骨子と数字を取り出して」と頼むだけ。出典つきで返ってきます。</div></div></div>
+        </div>
+        <div class="ax-right">
+          <div class="ax-box">
+            <div class="h">できること（主なツール）</div>
+            <ul>
+              <li>list_notebooks … ノートブック一覧を取得</li>
+              <li>select_notebook … 使うノートを指定</li>
+              <li>ask_question … 出典つきで質問・回答</li>
+              <li>add_source … 資料を追加</li>
+            </ul>
+          </div>
+          <div class="ax-warn">
+            ⚠️ これは <strong>Googleの公式機能ではなく、有志が公開しているMCPサーバー</strong>（例：notebooklm-mcp）です。仕様変更で動かなくなる場合があり、機密資料の扱いは自己責任で。まずは試験的にお使いください。
+          </div>
+        </div>
+      </div>
+      <div class="ax-foot">
+        <strong>もっと知りたい方へ：</strong>「NotebookLM MCP Claude Code」で検索 → GitHubの導入手順（README）に沿って設定。詰まったら<strong>無料相談</strong>でも一緒にセットアップできます。
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num" style="color:var(--color-text-medium)">参考資料（Appendix）</span>
+      </div>
+    </div>
+
+    <!-- ======== S12: 連携フロー全体図（保険） ======== -->
+    <div class="slide" id="s12">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Big Picture — 今日の全体像</div>
+      <div class="section-title">過去資料が、<span class="accent">提出できる資料</span>になるまで</div>
+      <div class="whole-flow">
+        <div class="wf-step">
+          <div class="wf-ic">📚</div>
+          <div class="wf-tool" style="background:var(--color-background);color:var(--color-text-medium);border:1px solid var(--color-border)">手元の資料</div>
+          <div class="wf-title">バラバラの過去資料</div>
+          <div class="wf-body">メモ・調査・アンケート…形式も場所もバラバラ。</div>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step tool-nlm">
+          <div class="wf-ic">📗</div>
+          <div class="wf-tool nlm">NotebookLM</div>
+          <div class="wf-title">整理して骨子に</div>
+          <div class="wf-body">出典つきで要点を抽出。土台が固まる。</div>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step tool-cla">
+          <div class="wf-ic">✍️</div>
+          <div class="wf-tool cla">Claude</div>
+          <div class="wf-title">書いて・仕上げる</div>
+          <div class="wf-body">文章に肉付け。Code版はNotebookLMにMCP接続しPPTX生成まで。</div>
+        </div>
+        <div class="wf-arrow">→</div>
+        <div class="wf-step" style="border-top:4px solid #16A34A">
+          <div class="wf-ic">✅</div>
+          <div class="wf-tool" style="background:#16A34A;color:#fff">完成</div>
+          <div class="wf-title">提出できる資料</div>
+          <div class="wf-body">編集可能なPPTX。最後の微調整だけ自分で。</div>
+        </div>
+      </div>
+      <div class="whole-msg">
+        覚えて帰るのは1つだけ：<em>「司書（NotebookLM）に整理させ、書き手（Claude）に仕上げさせる」</em>。
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>12</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S13: 持ち帰り 最初の投げかけテンプレ ======== -->
+    <div class="slide" id="s13">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Takeaway — 今日のお土産</div>
+      <div class="section-title">資料づくりの<span class="accent">「最初の投げかけ方」</span>テンプレート</div>
+      <div class="tk-main">
+        <div class="tk-show">
+          <div class="tk-lbl">COPY &amp; PASTE — まずNotebookLMにこう投げる</div>
+          <div class="tk-text">
+            これは私の<em>〔資料の種類〕</em>です。<br>
+            この資料をもとに、<em>〔誰向け〕</em>の<em>〔作りたいもの〕</em>の<br>
+            <em>目次（骨子）</em>を作って。各項目に<em>「どの資料のどこが根拠か」</em>も付けて。
+          </div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:14px;line-height:1.6">→ 出た骨子をコピーして、Claudeに「以下の骨子を◯◯向けに肉付けして」と渡すだけ。</div>
+        </div>
+        <div class="tk-row">
+          <div class="tk-card">
+            <div class="tk-scene">提案書をつくる</div>
+            <div class="tk-prompt">「これは商談メモです。お客様向けの提案書の骨子を、根拠つきで作って」</div>
+          </div>
+          <div class="tk-card">
+            <div class="tk-scene">研修資料をつくる</div>
+            <div class="tk-prompt">「これは手順書3点です。新人向け研修スライドの骨子を、出典つきで作って」</div>
+          </div>
+          <div class="tk-card">
+            <div class="tk-scene">報告書をつくる</div>
+            <div class="tk-prompt">「これは今月の数値メモです。上司向け月次報告の骨子を、根拠つきで作って」</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>13</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S14: 使い分け早見表 ======== -->
+    <div class="slide" id="s14">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Cheat Sheet — 結局どっちを使う？</div>
+      <div class="section-title">やりたいこと別・<span class="accent">使い分け早見表</span></div>
+      <div class="cheat-table">
+        <div class="ct-row ct-head"><div>やりたいこと</div><div>まず使う</div><div>ひとこと</div></div>
+        <div class="ct-row"><div>大量の資料を整理・要約したい</div><div class="tool-n">NotebookLM</div><div>出典つきで安心。何冊でも溢れない。</div></div>
+        <div class="ct-row"><div>資料の「骨子・目次」を作りたい</div><div class="tool-n">NotebookLM</div><div>土台づくりはまずここから。</div></div>
+        <div class="ct-row"><div>文章を書く・トーンを整える</div><div class="tool-c">Claude</div><div>骨子を渡して肉付けが鉄板。</div></div>
+        <div class="ct-row"><div>表・スライド・PPTXにしたい</div><div class="tool-c">Claude</div><div>成果物の「形」にするのが得意。</div></div>
+        <div class="ct-row"><div>整理済みノート/資料からファイル自動生成</div><div class="tool-b">Claude Code</div><div>上級者向け。MCP接続でPPTX生成まで一気通貫。</div></div>
+        <div class="ct-row"><div>事実確認が特に重要</div><div class="tool-n">NotebookLM</div><div>「資料に書いてあること」しか言わない。</div></div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>14</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S15: シリーズ総まとめ ======== -->
+    <div class="slide" id="s15">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Series Wrap-up — 3回の総まとめ</div>
+      <div class="section-title">「うまく使おうとしなくていい。<span class="accent">ただ話しかけるだけ</span>」</div>
+      <div class="ss-list">
+        <div class="ss-item">
+          <span class="ss-day">DAY 1</span>
+          <span class="ss-verb">作らせる</span>
+          <span class="ss-text">AIは「調べるもの」じゃない。<strong>普通に話しかけるだけ</strong>でメールも下書きも作ってくれる。</span>
+        </div>
+        <div class="ss-item">
+          <span class="ss-day">DAY 2</span>
+          <span class="ss-verb">つながる</span>
+          <span class="ss-text">コピペから卒業。<strong>カレンダーや過去資料に直接つながり</strong>、議事録もアジェンダも自動で。</span>
+        </div>
+        <div class="ss-item">
+          <span class="ss-day">DAY 3</span>
+          <span class="ss-verb">一緒に作る</span>
+          <span class="ss-text"><strong>司書と書き手、2つのAIを役割分担</strong>。自分の資料から、ウソを抑えて資料を仕上げる。</span>
+        </div>
+      </div>
+      <div class="ss-close">
+        共通していたのは1つ：<em>「うまいプロンプト」より「まず話しかける」</em>。それだけで、AIは動き出します。
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>15</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S16: 次の一歩（継続支援） ======== -->
+    <div class="slide" id="s16">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Next Step — シリーズの後で</div>
+      <div class="section-title">「自分の仕事でやってみたい」<span class="accent">その一歩を、隣で</span></div>
+      <div class="ns-card">
+        <div class="ns-lead">3回で「知る → 使う → 任せる → <em>一緒に作る</em>」を体験しました。<br>次は<em>あなたの実際の仕事</em>で動かす番です。</div>
+        <div class="ns-points">
+          <div class="ns-point" style="border-color:var(--color-primary-base);background:var(--color-primary-light)"><span class="ic">𝕏</span><span><strong>X（@Yorozu0519）でほぼ毎日発信中</strong>：今日からできるAIの小ネタ・最新情報をいちばん早くお届け。まずは<strong>フォロー</strong>を！</span></div>
+          <div class="ns-point"><span class="ic">🗣️</span><span><strong>無料相談</strong>：「自分の業務だと何から？」を一緒に整理します。Webの無料相談ボタンから。</span></div>
+          <div class="ns-point"><span class="ic">📝</span><span><strong>Note連載</strong>：「AI活用マガジン」で、じっくり読める解説を継続発信。</span></div>
+          <div class="ns-point"><span class="ic">📄</span><span><strong>3回分の資料・録画</strong>：アンケート記入者へまとめてお送りします。</span></div>
+        </div>
+        <div class="ns-cta">しつこい営業は一切ありません。「もう少し相談したい」方だけ、お気軽にどうぞ。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>16</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S17: Q&A / 連絡先 ======== -->
+    <div class="slide" id="s17">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Q&amp;A / Contact</div>
+      <div class="section-title">質問・ご相談はお気軽に</div>
+      <div class="contact-wrap">
+        <div class="qa-block">
+          <div class="qa-box">
+            <div class="q">Q. NotebookLMは無料で使えますか？</div>
+            <div class="a">はい、Googleアカウントがあれば無料で使えます。今日のデモ①（資料を預けて骨子を出す）は、全員がそのまま再現できます。</div>
+          </div>
+          <div class="qa-box">
+            <div class="q">Q. 機密資料をAIに入れて大丈夫？（NotebookLMやClaudeなど）</div>
+            <div class="a">これはAI全般に共通する注意で、無料版は入力が学習に使われる場合があるため、社外秘は基本NG。今日のNotebookLMも例外ではありません。ただしNotebookLMは「入れた資料の中だけ」で答え出典も追える設計で、比較的扱いやすい部類。重要資料は必ず社内ルールの確認を。</div>
+          </div>
+          <div class="qa-box">
+            <div class="q">Q. デモ②（Claude Code）は初心者でも？</div>
+            <div class="a">上級者向けです。まずはデモ①の「NotebookLM→Claude」だけで十分。慣れてから②に進むのがおすすめです。手順は資料に残します。</div>
+          </div>
+        </div>
+        <div class="contact-block">
+          <div style="font-size:13px;font-weight:700;letter-spacing:0.08em;color:var(--color-text-medium);margin-bottom:4px">CONTACT</div>
+          <div class="contact-card" style="border-color:var(--color-primary-base);box-shadow:0 0 0 1px var(--color-primary-base),var(--shadow-card)">
+            <div class="c-label" style="color:var(--color-primary-base)">X</div>
+            <div class="c-value">@Yorozu0519<small>👉 ほぼ毎日AIの最新情報・小ネタを発信中。まずはフォローを！</small></div>
+          </div>
+          <div class="contact-card">
+            <div class="c-label">Web</div>
+            <div class="c-value">yorozusoudansyo.github.io/home/<small>無料相談ボタンからどうぞ</small></div>
+          </div>
+          <div class="contact-card">
+            <div class="c-label">Note</div>
+            <div class="c-value">note.com/yukisa0814<small>AI活用マガジン 連載中</small></div>
+          </div>
+          <div class="next-series">
+            3回シリーズへのご参加、<br>
+            <em>ありがとうございました。</em>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>17</strong> / 18</span>
+      </div>
+    </div>
+
+    <!-- ======== S18: アンケート（締め） ======== -->
+    <div class="slide" id="s18">
+      <div class="slide-header">
+        <div class="brand"><svg class="logo-mark"><use href="#brand-mark"></use></svg>AI・ITよろず相談所</div>
+        <span>第3回 ／ 2026.06.21</span>
+      </div>
+      <div class="kicker">Thank You — 最後にお願いです</div>
+      <div class="section-title">アンケートで<span class="accent">3回分の資料・録画リンク</span>をお受け取りください</div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:32px;margin-top:18px;flex:1;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="font-size:18px;line-height:1.85;color:var(--color-text-high)">
+            3回シリーズ、お付き合いいただき<br>ありがとうございました。<br>
+            <strong>1分のアンケート</strong>にご記入いただいた方へ、<br>
+            <strong class="accent">第1〜3回のスライド資料</strong>と<strong class="accent">録画リンク</strong>を<br>
+            後日メールでお送りします。
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);font-size:15px;color:var(--color-text-high)">
+              <span style="font-size:20px">📱</span><span>右のQRコード、または<strong>チャット欄のURL</strong>から</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-primary-light);border:1px solid var(--color-primary-base);border-radius:var(--radius-md);font-size:15px;color:var(--color-text-high)">
+              <span style="font-size:20px">🎁</span><span>記入された方限定で<strong>3回分の資料・録画</strong>をお届け</span>
+            </div>
+          </div>
+          <div style="padding:13px 20px;background:var(--color-text-high);color:#fff;border-radius:var(--radius-md);font-size:16px;font-weight:600;text-align:center;line-height:1.6">
+            「自分の仕事でも試したい」方は<em style="font-style:normal;color:#FCA5A5">無料相談</em>もお気軽に。
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-md);padding:14px;box-shadow:var(--shadow-card)">
+            <img src="data:image/png;base64,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" alt="アンケートQRコード" style="width:210px;height:210px;display:block">
+          </div>
+          <div style="font-size:12px;color:var(--color-text-medium);text-align:center;line-height:1.6">アンケートフォーム<br>スマホのカメラで読み取り</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>18</strong> / 18</span>
+      </div>
+    </div>
+
+  </div><!-- /deck -->
+</div><!-- /stage -->
+
+<div class="nav-hint">← → キーで移動　／　F でフルスクリーン</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = Math.max(0, Math.min(total - 1, n));
+    slides[cur].classList.add('active');
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+
+  btnPrev.disabled = true;
+  btnPrev.addEventListener('click', () => go(cur - 1));
+  btnNext.addEventListener('click', () => go(cur + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (e.key >= '1' && e.key <= '9') { go(parseInt(e.key) - 1); }
+    else if (e.key === '0') { go(9); }
+  });
+</script>
+</body>
+</html>
