@@ -67,11 +67,31 @@
   .meta .dot{width:5px;height:5px;border-radius:50%;background:var(--rule);}
 
   .hero-figure{margin:40px auto 0;}
-  svg{display:block;width:100%;height:auto;margin-inline:auto;}
-  /* 画像は常に中央配置・レスポンシブ */
-  figure{margin:0;text-align:center;}
+  /* 画像・SVG は常に中央配置・レスポンシブ */
+  figure{
+    margin:0;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+  figure > svg,
+  figure > img{
+    display:block;
+    max-width:100%;
+    height:auto;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  svg{display:block;max-width:100%;height:auto;margin-inline:auto;}
   img{display:block;max-width:100%;height:auto;margin-left:auto;margin-right:auto;}
   .fig-img{width:100%;border:1px solid var(--rule);border-radius:14px;}
+  /* bleed-fig パネル内も中身を確実に中央へ */
+  .bleed,
+  .bleed-fig{text-align:center;}
+  .bleed > figure,
+  .bleed-fig > figure{margin-left:auto;margin-right:auto;}
 
   /* ---- callout: 結論 ---- */
   .thesis{
