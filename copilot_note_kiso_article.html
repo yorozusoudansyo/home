@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copilotとは何か？──"別物"になったCopilotの全体像を「速い／じっくり」で掴む</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Old+Mincho:wght@700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C2430;
+    --paper:#FBF9F5;
+    --panel:#F2EDE3;
+    --panel-2:#ECE5D8;
+    --rule:#E0D9CC;
+    --muted:#5C6473;
+    --quick:#D9791C;      /* 速い：アンバー */
+    --quick-soft:#F7E6D0;
+    --deep:#34508F;       /* じっくり：インディゴ */
+    --deep-soft:#DEE4F1;
+    --gothic:"Zen Kaku Gothic New", sans-serif;
+    --body:"Noto Sans JP", sans-serif;
+    --mincho:"Zen Old Mincho", serif;
+    --mono:"Space Mono", monospace;
+    --maxw:720px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--body);font-weight:400;line-height:1.95;
+    font-size:17px;letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px;}
+  .bleed{max-width:980px;margin-left:auto;margin-right:auto;padding:0 22px;}
+
+  /* ---- top bar ---- */
+  .topbar{
+    border-bottom:1px solid var(--rule);background:rgba(251,249,245,.9);
+    backdrop-filter:saturate(120%) blur(6px);position:sticky;top:0;z-index:20;
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;
+    padding-top:14px;padding-bottom:14px;}
+  .brand{font-family:var(--gothic);font-weight:700;font-size:14px;letter-spacing:.04em;}
+  .brand span{color:var(--deep);}
+  .tag{font-family:var(--mono);font-size:11px;color:var(--muted);
+    border:1px solid var(--rule);border-radius:999px;padding:4px 11px;}
+
+  /* ---- hero ---- */
+  .hero{padding:62px 0 26px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+    color:var(--deep);text-transform:uppercase;margin:0 0 22px;}
+  .eyebrow .b{color:var(--quick);}
+  h1{
+    font-family:var(--gothic);font-weight:900;line-height:1.32;
+    font-size:clamp(28px,5.6vw,44px);letter-spacing:.005em;margin:0 0 8px;
+  }
+  h1 .hl{
+    background:linear-gradient(transparent 62%, var(--quick-soft) 62%);
+    padding:0 .05em;
+  }
+  .lead{font-size:18px;color:#33404f;margin:24px 0 0;}
+  .meta{display:flex;gap:18px;flex-wrap:wrap;align-items:center;
+    margin-top:30px;font-size:13px;color:var(--muted);font-family:var(--gothic);}
+  .meta .dot{width:5px;height:5px;border-radius:50%;background:var(--rule);}
+
+  .hero-figure{margin:40px auto 0;}
+  svg{display:block;width:100%;height:auto;margin-inline:auto;}
+  /* 画像は常に中央配置・レスポンシブ */
+  figure{margin:0;text-align:center;}
+  img{display:block;max-width:100%;height:auto;margin-left:auto;margin-right:auto;}
+  .fig-img{width:100%;border:1px solid var(--rule);border-radius:14px;}
+
+  /* ---- callout: 結論 ---- */
+  .thesis{
+    margin:30px auto 0;background:var(--ink);color:#F4F1EA;border-radius:16px;
+    padding:30px 30px 28px;position:relative;overflow:hidden;
+  }
+  .thesis::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(110deg, rgba(217,121,28,.16), rgba(52,80,143,.16));}
+  .thesis .k{position:relative;font-family:var(--mono);font-size:11px;
+    letter-spacing:.18em;color:#c7b9a4;margin:0 0 12px;}
+  .thesis p{position:relative;margin:0;font-family:var(--mincho);font-weight:700;
+    font-size:clamp(19px,3.4vw,25px);line-height:1.7;}
+  .thesis .u-q{color:#F0A45A;}
+  .thesis .u-d{color:#9DB4E6;}
+
+  /* ---- sections ---- */
+  section{padding:46px 0;}
+  .num{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--quick);
+    letter-spacing:.1em;}
+  h2{font-family:var(--gothic);font-weight:900;font-size:clamp(22px,4vw,30px);
+    line-height:1.45;margin:10px 0 6px;letter-spacing:.01em;}
+  h2 .sub{display:block;font-size:14px;font-weight:500;color:var(--muted);
+    margin-top:8px;letter-spacing:.02em;}
+  h3{font-family:var(--gothic);font-weight:700;font-size:19px;margin:34px 0 4px;}
+  p{margin:18px 0;}
+  strong{font-weight:700;}
+  .ink-strong{font-weight:700;
+    background:linear-gradient(transparent 64%, var(--deep-soft) 64%);padding:0 .04em;}
+  a{color:var(--deep);text-decoration:none;border-bottom:1.5px solid var(--deep-soft);}
+  a:hover{border-bottom-color:var(--deep);}
+  .hr{height:1px;background:var(--rule);border:0;margin:42px 0;}
+
+  /* lead-in pull line */
+  .pull{font-family:var(--mincho);font-weight:700;font-size:22px;line-height:1.7;
+    color:var(--ink);border-left:4px solid var(--quick);padding:4px 0 4px 20px;margin:30px 0;}
+
+  /* note box */
+  .note{background:var(--panel);border:1px solid var(--rule);border-radius:14px;
+    padding:20px 22px;margin:26px 0;font-size:15.5px;}
+  .note .lbl{font-family:var(--gothic);font-weight:700;font-size:13px;
+    color:var(--deep);margin:0 0 8px;display:flex;align-items:center;gap:8px;}
+  .note .lbl::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--deep);}
+
+  /* reference box */
+  .ref{background:#fff;border:1px solid var(--rule);border-radius:14px;
+    padding:18px 20px;margin:24px 0;}
+  .ref .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+    color:var(--muted);margin:0 0 10px;}
+  .ref ul{margin:0;padding:0;list-style:none;}
+  .ref li{padding:7px 0;border-top:1px dashed var(--rule);font-size:14.5px;line-height:1.6;}
+  .ref li:first-child{border-top:0;}
+  .ref li a{font-weight:500;}
+
+  /* table */
+  .tbl-wrap{overflow-x:auto;margin:26px 0;}
+  table{width:100%;border-collapse:collapse;font-size:15px;min-width:520px;}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--rule);
+    vertical-align:top;line-height:1.6;}
+  thead th{font-family:var(--gothic);font-weight:700;font-size:13px;
+    background:var(--panel);color:var(--ink);border-bottom:2px solid var(--ink);}
+  tbody tr:nth-child(even){background:rgba(242,237,227,.45);}
+  td .pill{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;
+    white-space:nowrap;}
+  .pill.q{background:var(--quick-soft);color:#9a5310;}
+  .pill.d{background:var(--deep-soft);color:#27406f;}
+
+  /* checklist */
+  .check{list-style:none;padding:0;margin:24px 0;}
+  .check li{position:relative;padding:12px 0 12px 40px;border-bottom:1px solid var(--rule);
+    font-size:16px;line-height:1.7;}
+  .check li::before{content:"";position:absolute;left:4px;top:15px;width:20px;height:20px;
+    border:2px solid var(--deep);border-radius:5px;}
+  .check.q li::before{border-color:var(--quick);}
+
+  /* memorize cards */
+  .memo{list-style:none;padding:0;margin:28px 0;display:grid;gap:14px;}
+  .memo li{display:flex;gap:16px;align-items:flex-start;background:#fff;
+    border:1px solid var(--rule);border-radius:14px;padding:18px 20px;}
+  .memo .mn{flex:0 0 auto;width:38px;height:38px;border-radius:10px;
+    background:var(--ink);color:#F4F1EA;font-family:var(--mono);font-weight:700;
+    font-size:15px;display:flex;align-items:center;justify-content:center;}
+  .memo li.is-key .mn{background:var(--quick);color:#1c1408;}
+  .memo .mt{font-size:15.5px;line-height:1.72;}
+  .memo .mt b{font-family:var(--gothic);}
+  .memo .mt .q{color:var(--quick);font-weight:700;}
+  .memo .mt .d{color:var(--deep);font-weight:700;}
+
+  /* paywall divider */
+  .paywall{margin:52px 0;text-align:center;}
+  .paywall .line{display:flex;align-items:center;gap:16px;color:var(--muted);}
+  .paywall .line::before,.paywall .line::after{content:"";flex:1;height:1px;background:var(--rule);}
+  .paywall .tag2{font-family:var(--gothic);font-weight:700;font-size:13px;
+    letter-spacing:.08em;color:var(--deep);white-space:nowrap;}
+  .paywall .desc{font-size:13.5px;color:var(--muted);margin-top:14px;line-height:1.8;}
+
+  /* free-end marker */
+  .freeend{background:var(--deep-soft);border-radius:12px;padding:16px 20px;
+    font-size:14px;color:#27406f;margin:30px 0;line-height:1.8;}
+  .freeend b{font-family:var(--gothic);}
+
+  /* figure caption */
+  figcaption{font-size:12.5px;color:var(--muted);text-align:center;margin-top:12px;
+    font-family:var(--gothic);letter-spacing:.02em;}
+  .fig{margin:34px 0;}
+  .fig.bleed-fig{background:var(--panel);border:1px solid var(--rule);border-radius:18px;
+    padding:28px 24px 20px;}
+
+  /* closing CTA */
+  .cta{background:var(--ink);color:#F4F1EA;border-radius:20px;padding:40px 30px;
+    margin:50px 0 0;text-align:center;position:relative;overflow:hidden;}
+  .cta::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(120deg,rgba(217,121,28,.18),rgba(52,80,143,.2));}
+  .cta>*{position:relative;}
+  .cta h2{color:#fff;margin:0 0 12px;}
+  .cta p{color:#d8d2c6;margin:0 auto;max-width:42ch;font-size:15px;}
+  .cta .btn{display:inline-block;margin-top:24px;font-family:var(--gothic);font-weight:700;
+    background:var(--quick);color:#1c1408;padding:13px 28px;border-radius:999px;
+    border-bottom:0;font-size:15px;}
+  .cta .btn:hover{background:#e8861f;}
+
+  footer{border-top:1px solid var(--rule);margin-top:60px;padding:36px 0 70px;
+    font-size:13px;color:var(--muted);line-height:1.9;}
+  footer h4{font-family:var(--gothic);font-size:13px;color:var(--ink);margin:0 0 10px;}
+  footer a{font-size:13px;}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+  @media (max-width:560px){
+    body{font-size:16px;}
+    .hero{padding:40px 0 18px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">AI・ITよろず相談所 <span>／ 清水幸久</span></div>
+    <div class="tag">保存版テキスト</div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Copilot 入門 ／ <span class="b">速い</span>と<span style="color:var(--deep)">じっくり</span>で掴む全体像</p>
+    <h1>去年「使えない」と感じたCopilotは、<br><span class="hl">もう"別物"</span>になっています。</h1>
+    <p class="lead">「Copilotって、結局なんなの？」を、これ一本でスッキリさせる。種類・中身のモデル・基本の使い方・他のAIとの違い・最低限の心構えまで、明日から手が動く“地図”として一気に整理します。専門用語はそのつど短く言い換えるので、AIに詳しくなくても大丈夫です。</p>
+    <div class="meta">
+      <span>読了 約12分</span><span class="dot"></span>
+      <span>2026年6月時点</span><span class="dot"></span>
+      <span>保存版・有料記事</span>
+    </div>
+  </div>
+
+  <div class="bleed hero-figure reveal">
+    <figure>
+      <!-- HERO GAUGE : 速い(アンバー)→じっくり(インディゴ) のダイヤル。本ページの署名 -->
+      <svg viewBox="0 0 600 320" role="img" aria-label="速いモードからじっくりモードへ切り替えるダイヤルの図">
+        <defs>
+          <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#D9791C"/>
+            <stop offset="0.5" stop-color="#C7763E"/>
+            <stop offset="1" stop-color="#34508F"/>
+          </linearGradient>
+        </defs>
+        <!-- arc track -->
+        <path d="M70 250 A230 230 0 0 1 530 250" fill="none" stroke="#ECE5D8" stroke-width="34" stroke-linecap="round"/>
+        <path d="M70 250 A230 230 0 0 1 530 250" fill="none" stroke="url(#gaugeGrad)" stroke-width="34" stroke-linecap="round"/>
+        <!-- ticks -->
+        <g stroke="#FBF9F5" stroke-width="3">
+          <line x1="300" y1="38" x2="300" y2="58"/>
+          <line x1="166" y1="86" x2="178" y2="103"/>
+          <line x1="434" y1="86" x2="422" y2="103"/>
+        </g>
+        <!-- needle pointing toward じっくり (right-of-center) -->
+        <g transform="rotate(34 300 250)">
+          <line x1="300" y1="250" x2="300" y2="78" stroke="#1C2430" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="300" cy="250" r="15" fill="#1C2430"/>
+          <circle cx="300" cy="250" r="6" fill="#FBF9F5"/>
+        </g>
+        <!-- labels -->
+        <text x="70" y="292" font-family="Zen Kaku Gothic New, sans-serif" font-weight="900" font-size="26" fill="#D9791C">速い</text>
+        <text x="70" y="312" font-family="Space Mono, monospace" font-size="11" fill="#9a5310">QUICK RESPONSE</text>
+        <text x="530" y="292" text-anchor="end" font-family="Zen Kaku Gothic New, sans-serif" font-weight="900" font-size="26" fill="#34508F">じっくり</text>
+        <text x="530" y="312" text-anchor="end" font-family="Space Mono, monospace" font-size="11" fill="#27406f">THINK DEEPER</text>
+        <text x="300" y="200" text-anchor="middle" font-family="Zen Kaku Gothic New, sans-serif" font-weight="700" font-size="15" fill="#5C6473">重い作業ほど、こちらへ →</text>
+      </svg>
+    </figure>
+  </div>
+
+  <div class="wrap">
+    <div class="thesis reveal">
+      <p class="k">この記事のたった一つの結論</p>
+      <p>Copilotには<span class="u-q">「速く答えるモード」</span>と<span class="u-d">「じっくり考えるモード」</span>がある。<br><strong>重い作業ほど"じっくり"に切り替える。</strong>まずは、これだけ覚えて帰ってください。</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 0. はじめに ============ -->
+<section class="reveal">
+  <div class="wrap">
+    <p>「Copilot？　一度使ったけど、たいしたことなかったよ」——もしあなたが去年そう感じてそのままなら、その記憶は<strong>もう古くなっています</strong>。2025年の終わりから2026年にかけて、Copilotの中身は静かに、しかし決定的に入れ替わりました。</p>
+    <p>厄介なのは、<strong>見た目がほとんど変わっていない</strong>こと。だから多くの人が、中身が入れ替わったことに気づかないまま「前と同じだろう」と素通りしてしまう。これは、とてももったいない。この記事は、そのズレを埋めるための"地図"です。</p>
+  </div>
+</section>
+
+<!-- ============ 1. Copilotとは何か ============ -->
+<section class="reveal">
+  <div class="wrap">
+    <p class="num">01</p>
+    <h2>Copilotとは何か？<span class="sub">ひとことで言えば「Officeの中にいるAI」</span></h2>
+    <p>Copilot（コパイロット）は、Microsoftが提供する生成AIです。生成AIとは、ChatGPTに代表される「文章で頼むと、文章で返してくれるAI」のこと。</p>
+    <p>ただ、Copilotには他と違うはっきりした"立ち位置"があります。<span class="ink-strong">WordやExcel、PowerPoint、Outlook、Teamsという、いつも使っているOfficeソフトの「中に」住んでいる</span>のです。別のサイトに質問しに行くのではなく、<strong>作業している場所から離れずにAIを呼べる</strong>——ここがCopilotの一番の個性です。</p>
+    <p><code style="font-family:var(--mono);background:var(--panel);padding:1px 7px;border-radius:5px;font-size:14px;">Copilot</code>という名前自体が「副操縦士」という意味。操縦桿（仕事の最終判断）を握るのはあなた。Copilotは隣で面倒な計算や下書きを引き受ける相棒。<strong>主役はあくまで人間</strong>という設計思想が、この名前に表れています。</p>
+
+    <div class="pull">AIの出力は「完成品」ではなく「叩き台」。AIは“とても優秀だけれど、まだ会社のことを知らない新人”だと思う。</div>
+    <p>新人が作った下書きを、そのまま社外に出す人はいませんよね。サッと目を通して、直して、使う。Copilotとの付き合い方も、まったく同じです。この感覚は、このあと何度も出てきます。</p>
+
+    <div class="freeend">
+      <b>＼ ここまでが無料部分です ／</b><br>
+      ここから先では、Copilotの<b>「種類」「中身のモデル」「基本の使い方」「他の3大AIとの違い」「最低限の心構え」</b>を一気に整理し、最後に<b>「これだけは覚えておくべき6つのこと」</b>にまとめます。明日から手を動かすための知識を、まるごとお渡しします。
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="paywall">
+    <div class="line"><span class="tag2">ここから先は有料記事です</span></div>
+    <p class="desc">※ Noteに掲載する際は、この位置に有料ライン（販売エリア）を設定してください。</p>
+  </div>
+</div>
+
+<!-- ============ 2. 種類 ============ -->
+<section class="reveal">
+  <div class="wrap">
+    <p class="num">02</p>
+    <h2>どんな種類があるのか？<span class="sub">ここでみんな混乱する。判断軸は「繋がるデータが違う」だけ</span></h2>
+    <p>「Copilot」という名前は、実はいろいろな別物に使い回されています。ここの整理ができていないと、ネットの情報を読んでも噛み合いません。見分ける軸はたったひとつ——<span class="ink-strong">「繋がっているデータが違う」</span>。これだけです。</p>
+  </div>
+
+  <div class="bleed fig bleed-fig">
+    <figure>
+      <!-- 種類マップ : データ軸で6種を配置 -->
+      <svg viewBox="0 0 920 470" role="img" aria-label="Copilotの種類を、繋がるデータ別に並べた地図">
+        <style>
+          .ct-t{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:700;}
+          .ct-s{font-family:"Noto Sans JP",sans-serif;font-weight:400;}
+          .ct-m{font-family:"Space Mono",monospace;}
+        </style>
+        <!-- axis bands -->
+        <text x="40" y="42" class="ct-m" font-size="12" fill="#5C6473">繋がるデータ →</text>
+        <!-- col headers -->
+        <rect x="40" y="58" width="270" height="34" rx="8" fill="#F2EDE3"/>
+        <text x="56" y="80" class="ct-t" font-size="14" fill="#5C6473">Web情報だけ</text>
+        <rect x="328" y="58" width="280" height="34" rx="8" fill="#DEE4F1"/>
+        <text x="344" y="80" class="ct-t" font-size="14" fill="#27406f">社内データに繋がる</text>
+        <rect x="626" y="58" width="254" height="34" rx="8" fill="#F7E6D0"/>
+        <text x="642" y="80" class="ct-t" font-size="14" fill="#9a5310">用途特化</text>
+
+        <!-- card 1 -->
+        <rect x="40" y="106" width="270" height="120" rx="12" fill="#fff" stroke="#E0D9CC"/>
+        <text x="58" y="136" class="ct-t" font-size="16" fill="#1C2430">① 無料Copilot</text>
+        <text x="58" y="158" class="ct-s" font-size="12.5" fill="#5C6473">Web版 / Windows標準</text>
+        <text x="58" y="184" class="ct-s" font-size="12.5" fill="#5C6473">最新GPT-5系を試せる窓口。</text>
+        <text x="58" y="203" class="ct-s" font-size="12.5" fill="#5C6473">“がっかり体験”の発生源でも</text>
+        <text x="58" y="215" class="ct-s" font-size="12.5" fill="#5C6473">ある。</text>
+
+        <!-- card 3 personal -->
+        <rect x="40" y="240" width="270" height="110" rx="12" fill="#fff" stroke="#E0D9CC"/>
+        <text x="58" y="270" class="ct-t" font-size="16" fill="#1C2430">③ 個人版 Copilot</text>
+        <text x="58" y="292" class="ct-s" font-size="12.5" fill="#5C6473">Copilot Pro など</text>
+        <text x="58" y="318" class="ct-s" font-size="12.5" fill="#5C6473">Think Deeperは使えるが、</text>
+        <text x="58" y="336" class="ct-s" font-size="12.5" fill="#5C6473">社内データには繋がらない。</text>
+
+        <!-- card 2 main (highlight) -->
+        <rect x="328" y="106" width="280" height="160" rx="12" fill="#34508F"/>
+        <text x="346" y="134" class="ct-m" font-size="10" fill="#9DB4E6">★ 今回の主役</text>
+        <text x="346" y="160" class="ct-t" font-size="17" fill="#fff">② Microsoft 365</text>
+        <text x="346" y="182" class="ct-t" font-size="17" fill="#fff">Copilot（法人版）</text>
+        <text x="346" y="210" class="ct-s" font-size="12.5" fill="#DEE4F1">Office統合＋社内データ連携</text>
+        <text x="346" y="229" class="ct-s" font-size="12.5" fill="#DEE4F1">（グラウンディング）＋商用</text>
+        <text x="346" y="248" class="ct-s" font-size="12.5" fill="#DEE4F1">データ保護。価値はここに集約。</text>
+
+        <!-- card 5 agent -->
+        <rect x="328" y="280" width="280" height="70" rx="12" fill="#fff" stroke="#E0D9CC"/>
+        <text x="346" y="308" class="ct-t" font-size="15" fill="#1C2430">⑤ エージェントビルダー</text>
+        <text x="346" y="330" class="ct-s" font-size="12.5" fill="#5C6473">自分専用AIを“作る”（第3回の山場）</text>
+
+        <!-- card 4 github -->
+        <rect x="626" y="106" width="254" height="110" rx="12" fill="#fff" stroke="#E0D9CC" stroke-dasharray="5 4"/>
+        <text x="644" y="136" class="ct-t" font-size="16" fill="#1C2430">④ GitHub Copilot</text>
+        <text x="644" y="158" class="ct-s" font-size="12.5" fill="#5C6473">開発者がコードを書く道具</text>
+        <text x="644" y="184" class="ct-t" font-size="13" fill="#D9791C">＝完全な別物。</text>
+        <text x="644" y="203" class="ct-s" font-size="12.5" fill="#5C6473">いったん忘れてOK。</text>
+
+        <!-- card 6 cowork -->
+        <rect x="626" y="230" width="254" height="120" rx="12" fill="#fff" stroke="#E0D9CC"/>
+        <text x="644" y="260" class="ct-t" font-size="16" fill="#1C2430">⑥ Copilot Cowork</text>
+        <text x="644" y="282" class="ct-s" font-size="12.5" fill="#5C6473">アプリを横断して作業を</text>
+        <text x="644" y="300" class="ct-s" font-size="12.5" fill="#5C6473">“任せる”段階のエージェント。</text>
+        <text x="644" y="326" class="ct-s" font-size="12.5" fill="#5C6473">いわば「半年後の章」。</text>
+
+        <!-- footnote -->
+        <text x="40" y="392" class="ct-t" font-size="14" fill="#1C2430">覚えるのは3つだけ：</text>
+        <text x="40" y="416" class="ct-s" font-size="13" fill="#5C6473">① が“がっかりの正体”　／　② が“今回の主役”　／　④ だけ完全な別物。</text>
+        <text x="40" y="440" class="ct-s" font-size="13" fill="#5C6473">この位置関係さえ掴めば、もう混乱しません。</text>
+      </svg>
+    </figure>
+    <figcaption>図1：Copilotの“種類マップ”。見分ける軸は「繋がるデータが違う」の一点だけ。</figcaption>
+  </div>
+
+  <div class="wrap">
+    <p>とはいえ、表や言葉だけではイメージしにくいもの。<strong>同じ「Copilot」でも、画面（UI）を並べてみると“別物”だと一目でわかります。</strong>下の図で、代表的な4つの見た目の違いを掴んでください。</p>
+  </div>
+
+  <div class="bleed fig bleed-fig">
+    <figure>
+      <img class="fig-img" src="copilot_ui_compare.png" alt="無料Copilot・Microsoft 365 Copilot（法人版）・個人版Copilot Pro・GitHub Copilotの4つのUIを並べた比較図" loading="lazy">
+    </figure>
+    <figcaption>図1-2：UIで見るCopilotの違い。①無料版はシンプルなチャット画面／②法人版はOfficeアプリ内のサイドパネルで「社内データに接続」表示が出る／③個人版Proは見た目は似るが社内データ接続が無効／④GitHub Copilotはコードエディタ内の補完で、完全な別物。</figcaption>
+  </div>
+
+  <div class="wrap">
+    <p>補足をひとつ。同じ「Copilot」でも、<strong>個人版と法人版では“できること”がはっきり違います</strong>。本記事で「会社版なら」と書いている部分は、個人版では再現できないことがある——と覚えておいてください。</p>
+    <div class="ref">
+      <p class="lbl">📎 公式リファレンス（本物の画面はこちらで確認できます）</p>
+      <ul>
+        <li><a href="https://www.microsoft.com/ja-jp/microsoft-365/copilot" target="_blank" rel="noopener">Microsoft 365 Copilot 製品ページ（Microsoft公式）</a></li>
+        <li><a href="https://jp.fujitsu.com/platform/pc/content/windows11/copilot/index.html" target="_blank" rel="noopener">生成AI Copilot の基本情報（富士通／代表例として）</a></li>
+        <li><a href="https://jp.fujitsu.com/platform/pc/content/windows11/copilot/point2.html" target="_blank" rel="noopener">社内データ活用の解説（富士通）</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="hr">
+
+<!-- ============ 3. モデル ============ -->
+<section class="reveal">
+  <div class="wrap">
+    <p class="num">03</p>
+    <h2>モデルはどうなっているのか？<span class="sub">結論：「名前で覚えない」が正解です</span></h2>
+    <p>「Copilotの中身ってGPT-5なんでしょ？」とよく聞かれます。半分正解で、半分は“覚えても無駄になる知識”です。理由を、事実の時系列で説明します。</p>
+  </div>
+
+  <div class="bleed fig">
+    <figure>
+      <!-- モデル・タイムライン -->
+      <svg viewBox="0 0 900 240" role="img" aria-label="Copilotのモデルが数か月ごとに更新されてきた時系列">
+        <style>
+          .tl-t{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:700;}
+          .tl-m{font-family:"Space Mono",monospace;font-weight:700;}
+          .tl-s{font-family:"Noto Sans JP",sans-serif;}
+        </style>
+        <line x1="60" y1="120" x2="760" y2="120" stroke="#E0D9CC" stroke-width="3"/>
+        <!-- node 1 -->
+        <circle cx="120" cy="120" r="9" fill="#34508F"/>
+        <text x="120" y="92" text-anchor="middle" class="tl-m" font-size="16" fill="#1C2430">GPT-5</text>
+        <text x="120" y="150" text-anchor="middle" class="tl-s" font-size="11" fill="#5C6473">2025年12月</text>
+        <text x="120" y="168" text-anchor="middle" class="tl-s" font-size="10.5" fill="#5C6473">既定モデルに</text>
+        <!-- node 2 -->
+        <circle cx="340" cy="120" r="9" fill="#34508F"/>
+        <text x="340" y="92" text-anchor="middle" class="tl-m" font-size="16" fill="#1C2430">GPT-5.4</text>
+        <text x="340" y="150" text-anchor="middle" class="tl-s" font-size="11" fill="#5C6473">2026年3月</text>
+        <text x="340" y="168" text-anchor="middle" class="tl-s" font-size="10.5" fill="#5C6473">Thinking 追加</text>
+        <!-- node 3 -->
+        <circle cx="560" cy="120" r="9" fill="#34508F"/>
+        <text x="560" y="92" text-anchor="middle" class="tl-m" font-size="16" fill="#1C2430">GPT-5.5</text>
+        <text x="560" y="150" text-anchor="middle" class="tl-s" font-size="11" fill="#5C6473">2026年4月</text>
+        <text x="560" y="168" text-anchor="middle" class="tl-s" font-size="10.5" fill="#5C6473">Thinking 追加</text>
+        <!-- node future -->
+        <circle cx="700" cy="120" r="7" fill="#D9791C"/>
+        <text x="700" y="92" text-anchor="middle" class="tl-m" font-size="16" fill="#D9791C">…</text>
+        <text x="700" y="150" text-anchor="middle" class="tl-s" font-size="10.5" fill="#9a5310">数か月ごと</text>
+        <text x="700" y="166" text-anchor="middle" class="tl-s" font-size="10.5" fill="#9a5310">更新は続く</text>
+        <!-- caption block -->
+        <rect x="60" y="196" width="780" height="0.5" fill="none"/>
+        <text x="790" y="120" class="tl-t" font-size="14" fill="#1C2430">→ だから</text>
+        <text x="790" y="142" class="tl-t" font-size="14" fill="#D9791C">名前で覚えない</text>
+      </svg>
+    </figure>
+    <figcaption>図2：モデル名は数か月ごとに増える。さらに、見える名前は会社・端末によってバラバラ。</figcaption>
+  </div>
+
+  <div class="wrap">
+    <p>お気づきでしょうか。<strong>数か月ごとに数字が増えています。</strong>そしてここが肝心——<span class="ink-strong">画面に表示されるモデル名は、ロールアウトの進み具合・会社のテナント・使っている端末（Web／デスクトップ／モバイル）によってバラバラ</span>です。隣の人と名前が違っていて当たり前。「GPT-5.4が見える人」も「5.5が見える人」も「数字なんて出ていない人」もいます。</p>
+    <p>つまり、固有名を一生懸命覚えても、<strong>すぐ古くなるか、自分の画面には無いか</strong>のどちらか。だから覚えるべきは、名前ではなく——</p>
+    <div class="pull">モデルの「名前」ではなく、「速いか・じっくりか」で考える。</div>
+    <p>Microsoftが用意したモードは、本質的にこの2軸に集約できます。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>モード</th><th>ひとことで</th><th>向いている作業</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill q">クイック応答</span></td><td>すぐ返す（速い）</td><td>メール文案、短い説明、簡単な要約、言い換え</td></tr>
+          <tr><td><span class="pill d">Think Deeper</span></td><td>時間をかけて深く考える</td><td>戦略の検討、比較、長文の要約、議事録のような多段整理</td></tr>
+          <tr><td><span class="pill" style="background:#ECE5D8;color:#5C6473">自動 / Auto</span></td><td>上の2つを自動で判断</td><td>迷ったらこれ。まずは既定のまま</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>去年「Copilotは使えない」と感じた体験の正体は、たいてい<strong>「重い作業を“速い”モードのまま頼んでいた」</strong>こと。速いモードは速さ優先で、深い検討は苦手。複雑な仕事を投げると論点が浅くなり、途中で切れた要約しか返らない。それを<strong>Think Deeper（じっくり）に切り替える</strong>と、数分かけてでも段階的に考え、構造化して返す。<strong>同じCopilotとは思えないほど結果が変わります。</strong></p>
+
+    <div class="note">
+      <p class="lbl">覚え方</p>
+      回答が薄い・浅いと感じたら、それが<strong>「じっくり（Think Deeper）に切り替える合図」</strong>です。集団で覚えるなら、これ一つで十分。
+    </div>
+
+    <div class="ref">
+      <p class="lbl">📎 公式リファレンス</p>
+      <ul>
+        <li><a href="https://support.microsoft.com/ja-jp/topic/575efe12-eb34-4437-885a-440f7623cffb" target="_blank" rel="noopener">Microsoft Copilotの会話モード（Microsoft公式サポート）</a></li>
+        <li><a href="https://forest.watch.impress.co.jp/docs/news/2068820.html" target="_blank" rel="noopener">既定モデルがGPT-5に・3つの推論モード（窓の杜）</a></li>
+        <li><a href="https://forest.watch.impress.co.jp/docs/news/2105127.html" target="_blank" rel="noopener">GPT-5.5 Thinking 導入（窓の杜）</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="hr">
+
+<!-- ============ 4. 基本的な使い方 ============ -->
+<section class="reveal">
+  <div class="wrap">
+    <p class="num">04</p>
+    <h2>基本的な使い方は？<span class="sub">「5つの動き」で、もう迷わない</span></h2>
+    <p>機能名を100個覚えるより、正しい“動き方”を1セット身につけるほうが、ずっと役に立ちます。AIとのやり取りは、次の「5つの動き」で説明できます。Copilotでも他のAIでも共通です。</p>
+  </div>
+
+  <div class="bleed fig bleed-fig">
+    <figure>
+      <!-- 5つの動き サイクル -->
+      <svg viewBox="0 0 900 300" role="img" aria-label="AIとの5つの動き：投げかける・受け取る・戻す・形にする・次へ送る">
+        <style>
+          .mv-n{font-family:"Space Mono",monospace;font-weight:700;}
+          .mv-t{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:700;}
+          .mv-s{font-family:"Noto Sans JP",sans-serif;}
+        </style>
+        <!-- arrows baseline -->
+        <g>
+          <!-- nodes -->
+          <g>
+            <circle cx="110" cy="120" r="46" fill="#fff" stroke="#E0D9CC" stroke-width="2"/>
+            <text x="110" y="112" text-anchor="middle" class="mv-n" font-size="12" fill="#D9791C">01</text>
+            <text x="110" y="134" text-anchor="middle" class="mv-t" font-size="14" fill="#1C2430">投げかける</text>
+          </g>
+          <g>
+            <circle cx="290" cy="120" r="46" fill="#fff" stroke="#E0D9CC" stroke-width="2"/>
+            <text x="290" y="112" text-anchor="middle" class="mv-n" font-size="12" fill="#D9791C">02</text>
+            <text x="290" y="134" text-anchor="middle" class="mv-t" font-size="14" fill="#1C2430">受け取る</text>
+          </g>
+          <!-- node 3 emphasized -->
+          <g>
+            <circle cx="470" cy="120" r="54" fill="#D9791C"/>
+            <text x="470" y="108" text-anchor="middle" class="mv-n" font-size="12" fill="#F7E6D0">03</text>
+            <text x="470" y="130" text-anchor="middle" class="mv-t" font-size="16" fill="#fff">戻す</text>
+            <text x="470" y="150" text-anchor="middle" class="mv-s" font-size="10" fill="#F7E6D0">★最重要</text>
+          </g>
+          <g>
+            <circle cx="650" cy="120" r="46" fill="#fff" stroke="#E0D9CC" stroke-width="2"/>
+            <text x="650" y="112" text-anchor="middle" class="mv-n" font-size="12" fill="#D9791C">04</text>
+            <text x="650" y="134" text-anchor="middle" class="mv-t" font-size="14" fill="#1C2430">形にする</text>
+          </g>
+          <g>
+            <circle cx="810" cy="120" r="46" fill="#fff" stroke="#E0D9CC" stroke-width="2"/>
+            <text x="810" y="112" text-anchor="middle" class="mv-n" font-size="12" fill="#D9791C">05</text>
+            <text x="810" y="134" text-anchor="middle" class="mv-t" font-size="14" fill="#1C2430">次へ送る</text>
+          </g>
+          <!-- connecting arrows -->
+          <g stroke="#C9C0B0" stroke-width="2" fill="none" marker-end="url(#ah)">
+            <line x1="160" y1="120" x2="238" y2="120"/>
+            <line x1="340" y1="120" x2="410" y2="120"/>
+            <line x1="528" y1="120" x2="598" y2="120"/>
+            <line x1="700" y1="120" x2="758" y2="120"/>
+          </g>
+          <!-- loop-back arrow 3->1 -->
+          <path d="M455 168 C 360 250, 200 250, 120 172" stroke="#D9791C" stroke-width="2" fill="none" stroke-dasharray="6 5" marker-end="url(#ah2)"/>
+          <text x="285" y="250" text-anchor="middle" class="mv-s" font-size="11.5" fill="#9a5310">「違う・もっと」を遠慮なく往復する</text>
+        </g>
+        <defs>
+          <marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#C9C0B0"/></marker>
+          <marker id="ah2" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#D9791C"/></marker>
+        </defs>
+      </svg>
+    </figure>
+    <figcaption>図3：AIとの「5つの動き」。差を生むのは才能ではなく、③「戻す」を遠慮なくやれるかどうか。</figcaption>
+  </div>
+
+  <div class="wrap">
+    <p>うまく使う人とそうでない人の差は、才能ではありません。<span class="ink-strong">③「戻す」を遠慮なくやれるか、ただそれだけ</span>です。一発で完璧な答えは返りません。新人に「ちょっと違う、こうして」と言うのと同じで、<strong>何度か往復して育てる</strong>もの。遠慮した瞬間に、AIの価値は半分以下になります。</p>
+    <p>そして、すべての土台が<strong>言語化</strong>。コツは「出し惜しみはしない。でも、盛らない」。たとえば「議事録まとめて」ではなく——</p>
+    <div class="note">
+      <p class="lbl">コピペで使えるプロンプトの型（議事録）</p>
+      「以下は社内会議のメモです。<strong>①決定事項 ②宿題（担当者つき）③次回までの確認事項</strong>、の3つに分けて、箇条書きでまとめてください。【ここにメモを貼る】」
+    </div>
+    <p>「何を・どんな構造で」まで言葉にする。これだけで結果は別物になります。この“型”は一度自分用に保存しておくと、毎回ゼロから考えずに済みます。</p>
+  </div>
+</section>
+
+<hr class="hr">
+
+<!-- ============ 5. 他の3大AIとの違い ============ -->
+<section class="reveal">
+  <div class="wrap">
+    <p class="num">05</p>
+    <h2>他の3大AIとの違いは？<span class="sub">「どれが最強か」は、問いの立て方が間違い</span></h2>
+    <p>「ChatGPT、Gemini、Claude、Copilot……結局どれがいちばんすごいの？」——この問いでは正解にたどり着けません。<strong>万能な1台は存在しない</strong>。それぞれ「得意な4人のアシスタント」だと思ってください。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>AI</th><th>開発元</th><th>ざっくり言うと</th><th>得意</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ChatGPT</strong></td><td>OpenAI</td><td>何でも屋・万能型</td><td>幅広い相談、画像・音声まで一台で</td></tr>
+          <tr><td><strong>Gemini</strong></td><td>Google</td><td>大量読解・調べ物</td><td>分厚いPDF/資料の一括読み、Google連携</td></tr>
+          <tr><td><strong>Claude</strong></td><td>Anthropic</td><td>文章の質・長文の正確さ</td><td>自然な日本語、議事録・文書整形、長文</td></tr>
+          <tr><td><strong>Copilot</strong></td><td>Microsoft</td><td>Office実務の相棒</td><td>Word/Excel/PowerPoint/メールの時短</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>大事なのは<strong>選び方の軸</strong>です。「性能ランキング」ではなく、<span class="ink-strong">「自社のITが、MicrosoftかGoogleか」</span>で決まります。社内の中心がMicrosoft 365ならCopilot、Google WorkspaceならGemini。Copilotの価値は「AIの性能」よりも<strong>「Officeとの統合度」</strong>にあります。</p>
+    <p>そして現場にはもう一つの現実があります。<strong>多くの企業では、セキュリティやガバナンス（統制）の観点から「社内で使えるAIはCopilotだけ」</strong>というケースが非常に多い。これは「Copilotが一番賢いから」ではなく、「Microsoft環境にすでに統制が効いていて、情シスが管理しやすいから」。だから本シリーズは、<strong>Copilotを主役</strong>に据えています。</p>
+    <div class="note">
+      <p class="lbl">豆知識</p>
+      Copilotの中身は今やマルチモデル構成になりつつあり、機能によってはAnthropicのClaudeも選べるようになってきています。ただし<strong>どのモデルが見えるかはテナント＝会社の設定しだい</strong>で、表示されない環境も多い。結論は同じ——「自分の画面に何があるか」を、まず自分で確認する。
+    </div>
+  </div>
+</section>
+
+<hr class="hr">
+
+<!-- ============ 6. 心構え ============ -->
+<section class="reveal">
+  <div class="wrap">
+    <p class="num">06</p>
+    <h2>最低限知っておきたい「考え方」<span class="sub">機能の前に押さえる、4本の“背骨”</span></h2>
+  </div>
+
+  <div class="bleed fig">
+    <figure>
+      <!-- グラウンディング図 -->
+      <svg viewBox="0 0 900 250" role="img" aria-label="無料版はWeb情報だけ、法人版は社内データにも接地する違い">
+        <style>
+          .g-t{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:700;}
+          .g-s{font-family:"Noto Sans JP",sans-serif;}
+        </style>
+        <!-- left: free -->
+        <rect x="40" y="40" width="200" height="50" rx="10" fill="#F2EDE3"/>
+        <text x="140" y="71" text-anchor="middle" class="g-t" font-size="14" fill="#5C6473">Web情報</text>
+        <path d="M240 65 L330 110" stroke="#C9C0B0" stroke-width="2.5" fill="none" marker-end="url(#ga)"/>
+        <rect x="335" y="86" width="170" height="48" rx="10" fill="#fff" stroke="#E0D9CC" stroke-width="2"/>
+        <text x="420" y="115" text-anchor="middle" class="g-t" font-size="13" fill="#5C6473">無料版の回答</text>
+        <text x="420" y="160" text-anchor="middle" class="g-s" font-size="11.5" fill="#5C6473">一般論しか言えない</text>
+
+        <!-- right: business -->
+        <rect x="40" y="150" width="200" height="50" rx="10" fill="#DEE4F1"/>
+        <text x="140" y="181" text-anchor="middle" class="g-t" font-size="14" fill="#27406f">＋ 社内データ</text>
+        <path d="M240 175 L330 130" stroke="#34508F" stroke-width="2.5" fill="none" marker-end="url(#gb)"/>
+        <rect x="560" y="86" width="300" height="48" rx="10" fill="#34508F"/>
+        <text x="710" y="115" text-anchor="middle" class="g-t" font-size="13" fill="#fff">法人版の回答（グラウンディング）</text>
+        <path d="M505 110 L555 110" stroke="#34508F" stroke-width="2.5" fill="none" marker-end="url(#gb)"/>
+        <text x="710" y="170" text-anchor="middle" class="g-s" font-size="11.5" fill="#27406f">“ウチの会社の事情”に即して答える＝法人版の正体</text>
+        <defs>
+          <marker id="ga" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#C9C0B0"/></marker>
+          <marker id="gb" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#34508F"/></marker>
+        </defs>
+      </svg>
+    </figure>
+    <figcaption>図4：「グラウンディング」＝回答を社内データに接地させる仕組み。これが法人版の価値の正体。</figcaption>
+  </div>
+
+  <div class="wrap">
+    <h3>① AIは「優秀な新人」、出力は「叩き台」</h3>
+    <p>何度でも言います。<strong>そのまま使わない。必ず人がチェックする。</strong>これだけで事故の大半は防げます。</p>
+    <h3>② 速い／じっくりの使い分け</h3>
+    <p>本記事の主題。<strong>重い作業ほど“じっくり”へ。</strong>薄い答えは切り替えの合図。</p>
+    <h3>③ ハルシネーション（もっともらしい嘘）</h3>
+    <p>AIは、<strong>間違った内容を、自信たっぷりに、もっともらしく</strong>書くことがあります。これを「ハルシネーション（幻覚）」と呼びます。性能が上がった今でもゼロにはなりません。<strong>数字・固有名詞・日付は、特に裏取りを。</strong></p>
+    <h3>④ セキュリティ（入れていいデータは「会社のルール」に従う）</h3>
+    <p>ここは一律の正解がありません。<span class="ink-strong">何を入力していいかは、会社ごとのルールで決まります。</span>一般に無料版・個人版は入力が学習に使われる可能性があり、法人版は学習されない設計のものが多い——という傾向はありますが、例外もあるため<strong>必ず自社のガイドラインを確認</strong>を。ルールが無い会社でも、<strong>顧客情報・社内の機密資料・未公開の企画は入れない</strong>のが安全です。</p>
+  </div>
+</section>
+
+<hr class="hr">
+
+<!-- ============ 7. 覚えておくべきこと ============ -->
+<section class="reveal">
+  <div class="wrap">
+    <p class="num">07</p>
+    <h2>ここで覚えておくべきこと<span class="sub">この記事の要点。これだけは持ち帰ってください</span></h2>
+    <p>ここまでを6つに圧縮します。細かい機能名は忘れても構いません。<strong>この6つだけ</strong>を覚えておけば、明日から手が動きます。</p>
+    <ul class="memo">
+      <li>
+        <span class="mn">1</span>
+        <span class="mt">Copilotは<b>「Officeの中にいるAI」</b>。出力は完成品ではなく<b>“叩き台”</b>で、自分は<b>“優秀な新人の上司”</b>。そのまま使わず、必ず人が確認する。</span>
+      </li>
+      <li>
+        <span class="mn">2</span>
+        <span class="mt">種類は<b>「繋がるデータ」</b>で見分ける。①無料版＝Web情報だけ／<b>②法人版＝社内データ＋商用保護（本命）</b>／④GitHub Copilotは完全な別物。</span>
+      </li>
+      <li class="is-key">
+        <span class="mn">3</span>
+        <span class="mt">モデルの<b>「名前」は覚えない</b>。見える名前は会社・端末でバラバラに変わる。覚えるのは<span class="q">「速い」</span>か<span class="d">「じっくり」</span>かの<b>2軸だけ</b>。</span>
+      </li>
+      <li class="is-key">
+        <span class="mn">4</span>
+        <span class="mt"><b>重い作業ほど<span class="d">「じっくり（Think Deeper）」</span>へ切り替える。</b>回答が薄い・浅いと感じたら、それが切り替えの合図。これが“別物”の正体。</span>
+      </li>
+      <li>
+        <span class="mn">5</span>
+        <span class="mt">使い方の核心は<b>「戻す」</b>。一発で完璧を求めず、<b>「違う・もっと」を遠慮なく往復</b>して育てる。土台は<b>言語化</b>——「出し惜しみはしない。でも、盛らない」。</span>
+      </li>
+      <li>
+        <span class="mn">6</span>
+        <span class="mt"><b>入れていいデータは、会社のルールに従う。</b>そして<b>数字・固有名詞・日付は必ず裏取り</b>（もっともらしい嘘＝ハルシネーションはゼロにならない）。</span>
+      </li>
+    </ul>
+    <p>この6つが頭に入っていれば、もうあなたは「去年Copilotを諦めた人」ではありません。</p>
+  </div>
+</section>
+
+<!-- ============ closing ============ -->
+<section class="reveal">
+  <div class="wrap">
+    <div class="thesis">
+      <p class="k">最後に、もう一度だけ</p>
+      <p>Copilotは<strong>"別物"</strong>になった。コツは、重い作業ほど<span class="u-q">「速い」</span>から<span class="u-d">「じっくり」</span>へ切り替えること。そして、AIは優秀な新人だから、叩き台を遠慮なく“戻して”育てること。</p>
+    </div>
+    <p>たったこれだけで、明日からの仕事の手触りが変わります。1か月で周りと差がつき、半年で「別人のように」速くなる——大げさではなく、実際に多くの方に起きていることです。いちばん大事なのは「どれを選ぶか」で悩み続けず、<strong>まず触ってみること</strong>。使って初めて「これは便利」「ここはイマイチ」の感覚が掴めます。今日、その第一歩を。</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <h4>出典・参考（2026年6月時点）</h4>
+    <p>本記事のモデル・モードに関する記述は、Microsoft公式サポート「Microsoft Copilotの会話モード」、窓の杜「『Microsoft 365 Copilot』の既定モデルが『GPT-5』に」「『GPT-5.5 Thinking』導入」、および各種解説記事（2025年12月〜2026年6月）に基づいています。AIの仕様・料金・モデル名は変化が非常に速い領域です。契約・導入の前には、必ず各社の公式ページで最新情報をご確認ください。</p>
+    <p>図版（図1〜4）はすべて本記事オリジナルの作図です。製品の実画面は、本文中の「公式リファレンス」リンクからご確認いただけます。</p>
+    <p>横糸（AIとの付き合い方・5つの動き）の土台：清水幸久『最初に知っておいてほしい、AIとの付き合い方』<br>
+    <a href="https://yorozusoudansyo.github.io/home/saisho-ni-shitte-hoshii-AI-no-tsukiaikata.html" target="_blank" rel="noopener">https://yorozusoudansyo.github.io/home/saisho-ni-shitte-hoshii-AI-no-tsukiaikata.html</a></p>
+    <p style="margin-top:24px;color:#8a8270;">AI・ITよろず相談所（清水幸久）</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    }, {threshold:0.12});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  })();
+</script>
+</body>
+</html>
