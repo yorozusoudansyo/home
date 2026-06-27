@@ -67,19 +67,52 @@
   .meta .dot{width:5px;height:5px;border-radius:50%;background:var(--rule);}
 
   .hero-figure{margin:40px auto 0;}
-  /* 画像・SVG は常に中央配置・レスポンシブ */
-  figure{margin:0 auto;text-align:center;}
+
+  /* ============================================================
+     図・SVG・画像の中央寄せ（強制）
+     ご指定の bleed-fig 容器・SVG・figcaption をすべて中央配置する。
+     親 .bleed が左寄せされる現象を防ぐため、ブロック単位で margin
+     auto を !important で適用。
+     ============================================================ */
+  .bleed,
+  .bleed-fig,
+  figure{
+    display:block;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    text-align:center;
+  }
   /* SVG はコンテナいっぱいに描画（width:100% が必須。max-width にすると
      ブラウザがデフォルト 300px で描画してしまう） */
   figure > svg,
-  svg{display:block;width:100%;height:auto;margin-left:auto;margin-right:auto;}
+  .bleed-fig svg,
+  svg{
+    display:block;
+    width:100%;
+    height:auto;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
   /* 画像は自然サイズを超えないが中央寄せ */
   figure > img,
-  img{display:block;max-width:100%;height:auto;margin-left:auto;margin-right:auto;}
+  .bleed-fig img,
+  img{
+    display:block;
+    max-width:100%;
+    height:auto;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
   .fig-img{width:100%;border:1px solid var(--rule);border-radius:14px;}
-  /* bleed パネル内のキャプションも中央へ */
-  .bleed,
-  .bleed-fig{text-align:center;}
+  /* figcaption も中央 */
+  .bleed > figcaption,
+  .bleed-fig > figcaption,
+  figure > figcaption,
+  figcaption{
+    text-align:center;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
 
   /* ---- callout: 結論 ---- */
   .thesis{
