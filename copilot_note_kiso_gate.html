@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>記事を読む前に──アンケートのお願い｜AI・ITよろず相談所</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C2430;
+    --paper:#FBF9F5;
+    --panel:#F2EDE3;
+    --rule:#E0D9CC;
+    --muted:#5C6473;
+    --quick:#D9791C;      /* アンバー */
+    --quick-soft:#F7E6D0;
+    --deep:#34508F;       /* インディゴ */
+    --deep-soft:#DEE4F1;
+    --gothic:"Zen Kaku Gothic New", sans-serif;
+    --body:"Noto Sans JP", sans-serif;
+    --mono:"Space Mono", monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--body);font-weight:400;line-height:1.95;
+    font-size:17px;letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;display:flex;flex-direction:column;
+  }
+
+  /* ---- top bar ---- */
+  .topbar{
+    border-bottom:1px solid var(--rule);background:rgba(251,249,245,.9);
+    backdrop-filter:saturate(120%) blur(6px);
+  }
+  .topbar .inner{
+    max-width:720px;margin:0 auto;padding:14px 22px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{font-family:var(--gothic);font-weight:700;font-size:14px;letter-spacing:.04em;}
+  .brand span{color:var(--deep);}
+  .tag{font-family:var(--mono);font-size:11px;color:var(--muted);
+    border:1px solid var(--rule);border-radius:999px;padding:4px 11px;}
+
+  /* ---- main ---- */
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 22px;}
+  .card{
+    width:100%;max-width:560px;background:#fff;
+    border:1px solid var(--rule);border-radius:18px;
+    padding:46px 40px 44px;text-align:center;
+    box-shadow:0 18px 48px -28px rgba(28,36,48,.35);
+  }
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+    color:var(--deep);text-transform:uppercase;margin:0 0 22px;
+  }
+  h1{
+    font-family:var(--gothic);font-weight:900;line-height:1.4;
+    font-size:clamp(22px,4.8vw,30px);letter-spacing:.005em;margin:0 0 18px;
+  }
+  h1 .hl{
+    background:linear-gradient(transparent 60%, var(--quick-soft) 60%);
+    padding:0 .05em;
+  }
+  .lead{font-size:16px;color:#33404f;margin:0 auto 8px;max-width:42ch;}
+
+  .divider{height:1px;background:var(--rule);margin:34px 0;}
+
+  .note{
+    font-size:14px;color:var(--muted);font-family:var(--gothic);
+    background:var(--panel);border:1px solid var(--rule);border-radius:12px;
+    padding:16px 18px;margin:0 0 30px;line-height:1.85;text-align:left;
+  }
+  .note b{color:var(--ink);font-weight:700;}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    width:100%;max-width:380px;
+    font-family:var(--gothic);font-weight:700;font-size:17px;letter-spacing:.02em;
+    color:#fff;background:var(--deep);
+    border:none;border-radius:12px;padding:18px 26px;cursor:pointer;
+    text-decoration:none;
+    box-shadow:0 12px 26px -12px rgba(52,80,143,.7);
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .btn:hover{background:#2c4480;transform:translateY(-1px);
+    box-shadow:0 16px 30px -12px rgba(52,80,143,.8);}
+  .btn:active{transform:translateY(0);box-shadow:0 8px 18px -12px rgba(52,80,143,.7);}
+  .btn .arrow{font-family:var(--mono);font-size:15px;}
+
+  .subtle{font-size:13px;color:var(--muted);margin:22px 0 0;font-family:var(--gothic);}
+
+  footer{
+    border-top:1px solid var(--rule);
+    text-align:center;font-size:12px;color:var(--muted);
+    font-family:var(--gothic);padding:22px;
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="inner">
+      <div class="brand">AI・IT <span>よろず相談所</span></div>
+      <div class="tag">READING&nbsp;PASS</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <p class="eyebrow">Before you read</p>
+      <h1>記事をお読みいただく前に<br><span class="hl">アンケートのお願い</span></h1>
+      <p class="lead">
+        この記事は、アンケートにご回答いただいた方への限定公開コンテンツです。
+        ご協力ありがとうございます。
+      </p>
+
+      <div class="divider"></div>
+
+      <div class="note">
+        アンケートへの回答が<b>お済みの方</b>は、下のボタンから記事ページへお進みください。
+        ボタンを押すと、Copilot 基礎記事が開きます。
+      </div>
+
+      <a class="btn" href="copilot_note_kiso_article.html">
+        アンケート回答済み <span class="arrow">→</span>
+      </a>
+
+      <p class="subtle">※ まだご回答でない方は、お手元のアンケートにご回答のうえお進みください。</p>
+    </div>
+  </main>
+
+  <footer>
+    © AI・IT よろず相談所
+  </footer>
+</body>
+</html>
