@@ -125,6 +125,43 @@
   }
   @media (max-width: 760px) { .nav-links a:not(.nav-cta) { display: none; } }
 
+  /* --- ANNOUNCEMENT BAR ---------------------------------- */
+  .announce-bar {
+    position: fixed;
+    top: var(--nav-height, 65px); left: 0; right: 0;
+    z-index: 49;
+    background: var(--color-primary-light);
+    color: var(--color-text-high);
+    border-bottom: 1px solid var(--color-border);
+    font-size: 13px;
+    padding: 10px 44px 10px 16px;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .announce-bar a {
+    color: var(--color-primary-base);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .announce-bar .announce-close {
+    position: absolute;
+    right: 10px; top: 50%;
+    transform: translateY(-50%);
+    width: 26px; height: 26px;
+    border: none; background: transparent;
+    color: var(--color-text-medium);
+    font-size: 18px; line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  .announce-bar .announce-close:hover { background: rgba(0,0,0,0.06); }
+  body.has-announce .hero { padding-top: 188px; }
+  @media (max-width: 760px) {
+    body.has-announce .hero { padding-top: 210px; }
+    .announce-bar { font-size: 12px; padding: 10px 40px 10px 12px; }
+  }
+
   /* --- HERO --------------------------------------------- */
   .hero {
     position: relative; min-height: 92vh;
@@ -485,6 +522,125 @@
     margin: 0;
   }
 
+  /* --- SEMINARS ------------------------------------------ */
+  .seminars-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  @media (max-width: 860px) { .seminars-grid { grid-template-columns: 1fr; } }
+  .seminar-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: 32px;
+    display: flex; flex-direction: column;
+    color: var(--color-text-high);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .seminar-card:hover { border-color: var(--color-text-medium); box-shadow: var(--shadow-overlay); }
+  .seminar-badge {
+    display: inline-flex; align-self: flex-start;
+    align-items: center; gap: 6px;
+    font-family: var(--font-sans); font-size: 11px;
+    letter-spacing: 0.1em; font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 16px;
+  }
+  .seminar-badge.live {
+    color: var(--color-primary-base);
+    background: var(--color-primary-light);
+    border: 1px solid var(--color-primary-base);
+  }
+  .seminar-badge.live::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--color-primary-base);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  .seminar-badge.done {
+    color: var(--color-text-medium);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+  }
+  .seminar-card h4 {
+    font-family: var(--font-sans); font-weight: 700;
+    font-size: 19px; line-height: 1.5;
+    margin: 0 0 10px;
+    color: var(--color-text-high);
+  }
+  .seminar-card .seminar-sub {
+    font-size: 13px; color: var(--color-text-medium);
+    margin: 0 0 16px;
+    font-weight: 500;
+  }
+  .seminar-card .seminar-detail {
+    font-size: 13px; color: var(--color-text-medium);
+    line-height: 1.85;
+    margin: 0 0 24px;
+    flex: 1;
+  }
+  .seminar-card .btn { align-self: flex-start; }
+  .seminars-note {
+    margin-top: 32px;
+    font-size: 14px;
+    color: var(--color-text-medium);
+    line-height: 1.8;
+  }
+  .seminars-note a { color: var(--color-primary-base); font-weight: 600; }
+
+  /* --- WORKS (timeline + case studies) -------------------- */
+  .works-timeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin: 48px 0 64px;
+    counter-reset: step;
+  }
+  .works-timeline .step .step-num { color: var(--color-primary-base); }
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .case-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: 28px;
+    display: flex; flex-direction: column;
+    gap: 12px;
+    color: var(--color-text-high);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .case-card:hover { border-color: var(--color-text-medium); box-shadow: var(--shadow-overlay); }
+  .case-card h4 {
+    font-family: var(--font-sans); font-weight: 700;
+    font-size: 16px; line-height: 1.55;
+    margin: 0;
+    color: var(--color-text-high);
+  }
+  .case-card p {
+    font-size: 13px; color: var(--color-text-medium);
+    line-height: 1.8;
+    margin: 0;
+  }
+  .case-card .case-link {
+    font-size: 12px; font-weight: 600;
+    color: var(--color-primary-base);
+    text-decoration: none;
+    margin-top: 4px;
+  }
+  .works-footnote {
+    margin-top: 32px;
+    font-size: 12px;
+    color: var(--color-text-medium);
+  }
+
   /* --- PRICING ------------------------------------------ */
   .pricing-grid {
     display: grid;
@@ -547,31 +703,6 @@
     font-family: var(--font-sans); font-weight: 700;
     font-size: 36px; letter-spacing: 0;
     color: var(--color-text-high);
-  }
-  .plan-price.tentative .amt {
-    text-decoration: line-through;
-    text-decoration-color: var(--color-text-medium);
-    text-decoration-thickness: 2px;
-    color: var(--color-text-medium);
-  }
-  .plan-price.tentative .unit {
-    text-decoration: line-through;
-    text-decoration-color: var(--color-text-medium);
-    color: var(--color-text-medium);
-  }
-  .plan-price .tentative-badge {
-    display: inline-block;
-    margin-left: auto;
-    padding: 3px 10px;
-    font-family: var(--font-sans);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: var(--color-primary-base);
-    border: 1px solid var(--color-primary-base);
-    border-radius: var(--radius-sm);
-    background: var(--color-primary-light);
-    align-self: center;
-    font-weight: 600;
   }
   .plan-price .unit { font-size: 13px; color: var(--color-text-medium); }
   .plan ul {
@@ -954,11 +1085,20 @@
   .contact-inner { max-width: 1200px; margin: 0 auto; }
   .contact-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 24px;
     margin-top: 48px;
   }
-  @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 1100px) { .contact-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px)  { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-card .qr-thumb {
+    width: 92px; height: 92px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    object-fit: contain;
+    background: var(--color-surface);
+    padding: 4px;
+  }
   .contact-card {
     display: flex; flex-direction: column; gap: 12px;
     padding: 32px;
@@ -1034,12 +1174,20 @@
     <a href="#problem">悩み</a>
     <a href="#features">特徴</a>
     <a href="#process">流れ</a>
+    <a href="#seminars">セミナー</a>
+    <a href="#works">実績</a>
     <a href="#pricing">料金</a>
     <a href="#publications">発信</a>
     <a href="#contact">連絡先</a>
     <a class="nav-cta" href="https://meetbook-booking.web.app/" target="_blank" rel="noopener noreferrer">無料で相談する</a>
   </div>
 </nav>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar" id="announce-bar">
+  <span>🔴 開催中：Copilot活用 無料Webセミナー 第2回 7/19(日)・第3回 7/26(日) 21:00〜 → <a href="copilot_webinar_lp.html">詳細・参加登録</a></span>
+  <button class="announce-close" id="announce-close" aria-label="お知らせを閉じる">&times;</button>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1165,7 +1313,7 @@
       <h3>25年のAE経験による、伴走型サポート</h3>
       <p>CAD業界のアプリケーションエンジニアとして培った「導入して、使い続けてもらう」哲学。操作の説明だけでなく、あなたのワークフローを理解して、どこにAIを差し込めば効果が最大化するかを一緒に設計します。</p>
       <div class="feature-visual" style="aspect-ratio: 1024 / 559;">
-        <img src="assets/feature-01.png" alt="25年のAE経験による伴走型サポート" style="width:100%; height:100%; object-fit: contain; display:block;"/>
+        <img src="assets/feature-01.png?v=4" alt="25年のAE経験による伴走型サポート" style="width:100%; height:100%; object-fit: contain; display:block;"/>
       </div>
     </div>
 
@@ -1174,7 +1322,7 @@
       <h3>業務プロセスを、そのまま翻訳</h3>
       <p>現在の作業フローをヒアリングし、「どの10分を、どの1分に置き換えられるか」を具体的に特定します。</p>
       <div class="feature-visual" style="aspect-ratio: 1024 / 559;">
-        <img src="assets/feature-02.png" alt="業務プロセスをそのまま翻訳" style="width:100%; height:100%; object-fit: contain; display:block;"/>
+        <img src="assets/feature-02.png?v=4" alt="業務プロセスをそのまま翻訳" style="width:100%; height:100%; object-fit: contain; display:block;"/>
       </div>
     </div>
 
@@ -1183,7 +1331,7 @@
       <h3>"わからない"を、共に切り分ける</h3>
       <p>答えが出ない時も、「何が分からないか」まで一緒に切り分け、次の一手を探します。そのプロセス自体が学習になります。</p>
       <div class="feature-visual" style="aspect-ratio: 1024 / 559;">
-        <img src="assets/feature-solving.png?v=3" alt="問題を切り分けて解決に導くプロセス" style="width:100%; height:100%; object-fit: contain; display:block;"/>
+        <img src="assets/feature-solving.png?v=4" alt="問題を切り分けて解決に導くプロセス" style="width:100%; height:100%; object-fit: contain; display:block;"/>
       </div>
     </div>
 
@@ -1192,7 +1340,7 @@
       <h3>プログラミング素養で、一歩先へ</h3>
       <p>APIや自動化の知見を活かし、単なるチャット活用を超えた"小さな業務の自動化"まで踏み込みます。</p>
       <div class="feature-visual" style="aspect-ratio: 1024 / 559;">
-        <img src="assets/feature-04.png" alt="プログラミング素養で一歩先へ" style="width:100%; height:100%; object-fit: contain; display:block;"/>
+        <img src="assets/feature-04.png?v=4" alt="プログラミング素養で一歩先へ" style="width:100%; height:100%; object-fit: contain; display:block;"/>
       </div>
     </div>
 
@@ -1201,7 +1349,7 @@
       <h3>厳重な秘匿、匿名化の徹底</h3>
       <p>相談内容は厳重に管理。事例として公開する場合も必ず匿名化・抽象化を行い、安心してお話いただけます。</p>
       <div class="feature-visual" style="aspect-ratio: 1024 / 559;">
-        <img src="assets/feature-05.png" alt="厳重な秘匿、匿名化の徹底" style="width:100%; height:100%; object-fit: contain; display:block;"/>
+        <img src="assets/feature-05.png?v=4" alt="厳重な秘匿、匿名化の徹底" style="width:100%; height:100%; object-fit: contain; display:block;"/>
       </div>
     </div>
 
@@ -1210,7 +1358,7 @@
       <h3>10分の作業を、1分に。</h3>
       <p>日々のメール、議事録、企画書の下書き。小さな解決を積み重ねることが、あなたの1日を、1週間を変えていきます。</p>
       <div class="feature-visual" style="aspect-ratio: 1024 / 559;">
-        <img src="assets/feature-06.png" alt="10分の作業を1分に" style="width:100%; height:100%; object-fit: contain; display:block;"/>
+        <img src="assets/feature-06.png?v=4" alt="10分の作業を1分に" style="width:100%; height:100%; object-fit: contain; display:block;"/>
       </div>
     </div>
 
@@ -1219,7 +1367,7 @@
       <h3>ひとつのチャットから、始められる。</h3>
       <p>まずはLINEで一言、チャットで壁打ち。Zoomで画面を共有しながら、隣で操作を教えるようにサポートします。</p>
       <div class="feature-visual" style="aspect-ratio: 1024 / 559;">
-        <img src="assets/feature-07.png" alt="ひとつのチャットから始められる" style="width:100%; height:100%; object-fit: contain; display:block;"/>
+        <img src="assets/feature-07.png?v=4" alt="ひとつのチャットから始められる" style="width:100%; height:100%; object-fit: contain; display:block;"/>
       </div>
     </div>
 
@@ -1260,10 +1408,112 @@
   </div>
 </section>
 
+<!-- SEMINARS -->
+<section class="block veil" id="seminars" style="max-width:none; margin:0;">
+  <div style="max-width:1320px; margin:0 auto;">
+  <div class="section-label reveal">04 — セミナー・ウェビナー</div>
+  <h2 class="section-title reveal">
+    学びの場も、<br/>
+    用意しています。
+  </h2>
+  <p class="section-intro reveal">
+    note で気軽に読む、ウェビナーでまとまって学ぶ、そして個別相談で自分ごととして深める——段階に合わせて選べる学びの場をご用意しています。
+  </p>
+
+  <div class="seminars-grid reveal-stagger">
+
+    <div class="seminar-card">
+      <span class="seminar-badge live">開催中・参加受付中</span>
+      <h4>「去年"使えない"と感じたCopilotは、もう別物」</h4>
+      <p class="seminar-sub">Copilot活用 全3回無料Webセミナー</p>
+      <p class="seminar-detail">
+        7/12・7/19・7/26 各回21:00–21:40／Google Meet開催。<br/>
+        一度は「使えない」と感じたCopilotが、今どこまで進化したのかを実演を交えて解説します。
+      </p>
+      <a href="copilot_webinar_lp.html" class="btn btn-primary">
+        <span>詳細・参加登録</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="seminar-card">
+      <span class="seminar-badge done">開催済み</span>
+      <h4>「AIと話すだけで仕事が変わる」</h4>
+      <p class="seminar-sub">AI活用 全3回無料Webセミナー</p>
+      <p class="seminar-detail">
+        2026年6月に全3回開催。チャットAIとの対話だけで、日々の業務がどう変わるかをお伝えしました。
+      </p>
+      <a href="webinar_lp.html" class="btn btn-ghost">内容を見る</a>
+    </div>
+
+  </div>
+
+  <p class="seminars-note reveal">
+    企業・コミュニティ向けのAI/Copilot勉強会・研修のご依頼も承っています。まずは<a href="#cta">無料相談</a>から。
+  </p>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section class="block veil-2" id="works" style="max-width:none; margin:0;">
+  <div style="max-width:1320px; margin:0 auto;">
+  <div class="section-label reveal">05 — 実績・活動</div>
+  <h2 class="section-title reveal">
+    机上の話ではなく、<br/>
+    現場で伴走しています。
+  </h2>
+
+  <div class="works-timeline reveal-stagger">
+    <div class="step">
+      <div class="step-num">2024.09</div>
+      <h4>25年のAEキャリアを経て独立</h4>
+    </div>
+    <div class="step">
+      <div class="step-num">2026.04</div>
+      <h4>「AI・ITよろず相談所」サイト公開・個別伴走を開始</h4>
+    </div>
+    <div class="step">
+      <div class="step-num">2026.06</div>
+      <h4>無料ウェビナー第1弾「AIと話すだけで仕事が変わる」全3回開催</h4>
+    </div>
+    <div class="step">
+      <div class="step-num">2026.07</div>
+      <h4>Copilot活用ウェビナー 全3回（開催中）</h4>
+    </div>
+  </div>
+
+  <div class="works-grid reveal-stagger">
+    <div class="case-card">
+      <h4>Webサイトのブランド画像を高解像度化したい（コミュニティ運営）</h4>
+      <p>作業を代行するのではなく、ご本人がAIを使えるようになる"教育込み"の伴走で対応。画像アップスケールのミニアプリを一緒に構築し、以後はご自身で運用できる形に。</p>
+    </div>
+    <div class="case-card">
+      <h4>法人設立準備×AI活用（専門コンサルタント）</h4>
+      <p>リサーチ・文書作成・デザインでAIの役割分担を設計。ノウハウを「自分の脳の外」に蓄積していくノート型AI活用の仕組みづくりを支援。</p>
+    </div>
+    <div class="case-card">
+      <h4>講座教材づくりの効率化（教室・講座運営）</h4>
+      <p>受講生向けテキスト・ワークシートづくりをAIで効率化。よくある質問に答えるAIチャットボット構想の整理まで、機能の使い分けを一緒に設計。</p>
+    </div>
+    <div class="case-card">
+      <h4>「紙の単価表2000項目」を一瞬でExcel化</h4>
+      <p>昭和から使われてきた紙の単価表をAIでデータ化。手入力なら数日の作業を数分に。</p>
+      <a class="case-link" href="https://note.com/yukisa0814/n/n2bbf5322d43b" target="_blank" rel="noopener noreferrer">note記事を読む →</a>
+    </div>
+    <div class="case-card">
+      <h4>創作コンテンツのAI展開（個人クリエイター）</h4>
+      <p>「ストーリーは自分で書けるが、動画化にどのAIを使えばいいか分からない」——ツール選定から最初の一歩まで、実演を交えて伴走。</p>
+    </div>
+  </div>
+
+  <p class="works-footnote reveal">※ 事例はご相談者が特定されないよう、内容を匿名化・抽象化して掲載しています。</p>
+  </div>
+</section>
+
 <!-- PRICING -->
 <section class="block veil" id="pricing" style="max-width:none; margin:0;">
   <div style="max-width:1320px; margin:0 auto;">
-  <div class="section-label reveal">04 — 料金</div>
+  <div class="section-label reveal">06 — 料金</div>
   <h2 class="section-title reveal">
     必要な分だけ、<br/>
     必要な時だけ。
@@ -1278,10 +1528,9 @@
       <div class="plan-tag">SPOT</div>
       <h4>スポット解決</h4>
       <p class="plan-sub">特定の課題を、その場で。</p>
-      <div class="plan-price tentative">
+      <div class="plan-price">
         <span class="amt">¥3,500</span>
         <span class="unit">/1時間</span>
-        <span class="tentative-badge">予定</span>
       </div>
       <ul>
         <li>特定のエラー解決・初期設定代行</li>
@@ -1295,10 +1544,9 @@
       <div class="plan-tag">POPULAR</div>
       <h4>よろず相談ライト</h4>
       <p class="plan-sub">いつでも聞ける"社外のAI担当者"。</p>
-      <div class="plan-price tentative">
+      <div class="plan-price">
         <span class="amt">¥11,000</span>
         <span class="unit">/月</span>
-        <span class="tentative-badge">予定</span>
       </div>
       <ul>
         <li>チャットでのQA無制限</li>
@@ -1315,10 +1563,9 @@
       <div class="plan-tag">DEEP</div>
       <h4>実践伴走メンター</h4>
       <p class="plan-sub">本気で使いこなしたい方へ。</p>
-      <div class="plan-price tentative">
+      <div class="plan-price">
         <span class="amt">¥55,000</span>
         <span class="unit">/月</span>
-        <span class="tentative-badge">予定</span>
       </div>
       <ul>
         <li>週1回のWeb面談(60分)</li>
@@ -1335,7 +1582,7 @@
 <section class="story veil-2">
   <div class="story-inner">
     <div class="reveal">
-      <div class="section-label">05 — 想い</div>
+      <div class="section-label">07 — 想い</div>
       <p class="story-quote">
         技術が一部の玄人の<em>特権</em>になっている現状を、<br/>
         ほんの少しでも変えたい。<br/>
@@ -1343,7 +1590,8 @@
       </p>
       <div class="story-meta">
         代表 / Application Engineer 経歴 25年<br/>
-        CAD導入支援 → AI活用支援へ
+        CAD導入支援 → AI活用支援へ<br/>
+        AIウェビナー主催（2026年〜）
       </div>
     </div>
     <div class="story-card reveal">
@@ -1396,6 +1644,8 @@
           <span class="skill-tag">ビジネスパーソン向けDX支援</span>
           <span class="skill-tag">ワークフロー設計</span>
           <span class="skill-tag">導入・定着支援</span>
+          <span class="skill-tag">Copilot</span>
+          <span class="skill-tag">Microsoft 365</span>
         </div>
       </div>
 
@@ -1406,13 +1656,13 @@
 <!-- PUBLICATIONS -->
 <section class="publications" id="publications">
   <div class="publications-inner">
-    <div class="section-label reveal">06 — 発信</div>
+    <div class="section-label reveal">08 — 発信</div>
     <h2 class="section-title reveal">
       現場の知見を、<br/>
       こちらでも発信中。
     </h2>
     <p class="section-intro reveal">
-      AI・IT 活用のリアルな Tips、相談現場で出会った課題と解決策を、note と X で日々お届けしています。気になるテーマがあればぜひフォローを。
+      AI・IT 活用のリアルな Tips、相談現場で出会った課題と解決策を、note・X・YouTube で日々お届けしています。気になるテーマがあればぜひフォローを。
     </p>
 
     <div class="pub-platforms reveal">
@@ -1428,6 +1678,13 @@
           <path d="M5.32 4C3.49 4 2 5.49 2 7.32v9.36C2 18.51 3.49 20 5.32 20h13.36C20.51 20 22 18.51 22 16.68V9.5L16.5 4zm0 2h10.18v3.5H19V18.68c0 .73-.59 1.32-1.32 1.32H5.32A1.32 1.32 0 0 1 4 18.68V7.32c0-.73.59-1.32 1.32-1.32m1.18 4v8h2v-5.5l4 5.5h2v-8h-2v5.5l-4-5.5z"/>
         </svg>
         <span>note で見る</span>
+        <span class="ext">↗</span>
+      </a>
+      <a class="pub-platform-btn" href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer" aria-label="YouTube で見る">
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+        <span>YouTube で見る</span>
         <span class="ext">↗</span>
       </a>
     </div>
@@ -1469,7 +1726,7 @@
 <!-- CONTACT -->
 <section class="contact" id="contact">
   <div class="contact-inner">
-    <div class="section-label reveal">07 — お問い合わせ</div>
+    <div class="section-label reveal">09 — お問い合わせ</div>
     <h2 class="section-title reveal">
       お気軽に、<br/>
       連絡できる方法を選んでください。
@@ -1512,6 +1769,18 @@
         <p>AI 活用の現場ノウハウを記事として公開。すべて無料で読めます。</p>
         <span class="arrow-link">プロフィールへ →</span>
       </a>
+
+      <a class="contact-card" href="https://line.me/ti/g2/lnqqHIx9uYLCuqKQkU2TWfGhMaTWTORnwIVPHQ?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener noreferrer">
+        <div class="icon-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+        </div>
+        <h4>LINEオープンチャットに参加</h4>
+        <p>オープンチャット『AI・ITよろず相談所』で、気軽に質問・情報収集ができます。匿名参加OK。</p>
+        <img class="qr-thumb" src="assets/line-qr.png" alt="LINEオープンチャット QRコード" loading="lazy" />
+        <span class="arrow-link">オープンチャットへ →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -1530,8 +1799,13 @@
         <path d="M5.32 4C3.49 4 2 5.49 2 7.32v9.36C2 18.51 3.49 20 5.32 20h13.36C20.51 20 22 18.51 22 16.68V9.5L16.5 4zm0 2h10.18v3.5H19V18.68c0 .73-.59 1.32-1.32 1.32H5.32A1.32 1.32 0 0 1 4 18.68V7.32c0-.73.59-1.32 1.32-1.32m1.18 4v8h2v-5.5l4 5.5h2v-8h-2v5.5l-4-5.5z"/>
       </svg>
     </a>
+    <a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+      </svg>
+    </a>
   </div>
-  <div>LAST UPDATED — 2026.04</div>
+  <div>LAST UPDATED — 2026.07</div>
 </footer>
 
 <script>
@@ -1540,6 +1814,33 @@ const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 20);
 });
+
+// === Announcement bar ===
+(() => {
+  const bar = document.getElementById('announce-bar');
+  const closeBtn = document.getElementById('announce-close');
+  if (!bar) return;
+
+  const setNavHeight = () => {
+    document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
+  };
+
+  const dismissed = sessionStorage.getItem('announceBarDismissed') === '1';
+  if (dismissed) {
+    bar.style.display = 'none';
+    return;
+  }
+
+  setNavHeight();
+  document.body.classList.add('has-announce');
+  window.addEventListener('resize', setNavHeight);
+
+  closeBtn.addEventListener('click', () => {
+    bar.style.display = 'none';
+    document.body.classList.remove('has-announce');
+    sessionStorage.setItem('announceBarDismissed', '1');
+  });
+})();
 
 // === Reveal on scroll ===
 const io = new IntersectionObserver((entries) => {
@@ -1593,11 +1894,25 @@ if (heroSection) {
 
   const fallbackThumb = (source) => {
     // Inline SVG placeholder — no external request
-    const bg = source === 'X' ? '#1F2937' : '#FFEBEE';
-    const fg = source === 'X' ? '#FFFFFF' : '#D32F2F';
-    const label = source === 'X' ? 'X' : 'note';
+    let bg, fg, label, extra = '';
+    switch (source) {
+      case 'X':
+        bg = '#1F2937'; fg = '#FFFFFF'; label = 'X';
+        break;
+      case 'YOUTUBE':
+        bg = '#1F2937'; fg = '#D32F2F'; label = '';
+        extra = '<polygon points="145,75 145,105 175,90" fill="#D32F2F"/>';
+        break;
+      case 'SITE':
+        bg = '#FFEBEE'; fg = '#D32F2F'; label = '記事';
+        break;
+      case 'NOTE':
+      default:
+        bg = '#FFEBEE'; fg = '#D32F2F'; label = 'note';
+        break;
+    }
     return `data:image/svg+xml;utf8,${encodeURIComponent(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180"><rect width="320" height="180" fill="${bg}"/><text x="50%" y="55%" font-family="Inter, sans-serif" font-size="48" font-weight="700" fill="${fg}" text-anchor="middle">${label}</text></svg>`
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180"><rect width="320" height="180" fill="${bg}"/><text x="50%" y="55%" font-family="Inter, sans-serif" font-size="48" font-weight="700" fill="${fg}" text-anchor="middle">${label}</text>${extra}</svg>`
     )}`;
   };
 
@@ -1605,9 +1920,11 @@ if (heroSection) {
     const thumb = a.thumbnail && a.thumbnail.trim()
       ? a.thumbnail
       : fallbackThumb(a.source);
-    const sourceLabel = a.source === 'X' ? 'X' : 'NOTE';
+    const sourceLabel = String(a.source || '').toUpperCase();
+    const isSite = a.source === 'SITE';
+    const targetAttr = isSite ? '' : ' target="_blank" rel="noopener noreferrer"';
     return `
-      <a class="pub-card" href="${escapeHtml(a.url)}" target="_blank" rel="noopener noreferrer">
+      <a class="pub-card" href="${escapeHtml(a.url)}"${targetAttr}>
         <div class="pub-thumb">
           <img src="${escapeHtml(thumb)}" alt="" loading="lazy" />
         </div>
