@@ -2,6 +2,13 @@
   "$schema": "Each article: { source: 'NOTE'|'X'|'YOUTUBE'|'SITE', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
   "articles": [
     {
+      "source": "YOUTUBE",
+      "title": "【Copilot活用】もう「別物」になった｜速い・じっくりモードの使い分けを実演",
+      "url": "https://www.youtube.com/watch?v=Cz8Y-6NU0hM",
+      "date": "2026.07.16",
+      "thumbnail": "https://i.ytimg.com/vi/Cz8Y-6NU0hM/hqdefault.jpg"
+    },
+    {
       "source": "NOTE",
       "title": "去年「使えない」と感じたCopilotは、もう\"別物\"になっています。",
       "url": "https://note.com/yukisa0814/n/n655b81ad2ba3",
@@ -74,12 +81,6 @@
       "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(前編)",
       "url": "https://note.com/yukisa0814/n/ncf59d2678127",
       "date": "2026.04.28"
-    },
-    {
-      "source": "NOTE",
-      "title": "「画像をきれいにして」——4つのAIに同じお願いをしたら、全員が違う答えを返してきた",
-      "url": "https://note.com/yukisa0814/n/na86e3c5d042d",
-      "date": "2026.04.23"
     }
   ]
 }
