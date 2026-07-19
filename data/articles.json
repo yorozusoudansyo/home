@@ -3,6 +3,27 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "Think Deeperで矛盾とリスクを見抜く｜Copilot実践",
+      "url": "https://www.youtube.com/watch?v=nJzT9KyKzJw",
+      "date": "2026.07.19",
+      "thumbnail": "https://i.ytimg.com/vi/nJzT9KyKzJw/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "Copilot各版の違いを解説｜無料版・会社版・個人版・GitHub版",
+      "url": "https://www.youtube.com/watch?v=rbihjKN4hi0",
+      "date": "2026.07.19",
+      "thumbnail": "https://i.ytimg.com/vi/rbihjKN4hi0/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "長い取引先メールを3行で要約｜Outlook Copilot実演",
+      "url": "https://www.youtube.com/watch?v=_Ig92f2_F7I",
+      "date": "2026.07.19",
+      "thumbnail": "https://i.ytimg.com/vi/_Ig92f2_F7I/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "【Copilot活用】もう「別物」になった｜速い・じっくりモードの使い分けを実演",
       "url": "https://www.youtube.com/watch?v=Cz8Y-6NU0hM",
       "date": "2026.07.16",
@@ -57,30 +78,11 @@
       "date": "2026.05.09"
     },
     {
-      "source": "YOUTUBE",
-      "title": "AIを最強のパートナーに：初心者のための5つの基本動作",
-      "url": "https://www.youtube.com/watch?v=hdDwFnIYbuc",
-      "date": "2026.05.05",
-      "thumbnail": "https://i.ytimg.com/vi/hdDwFnIYbuc/hqdefault.jpg"
-    },
-    {
       "source": "SITE",
       "title": "最初に知っておいてほしい、AIとの付き合い方（教材ページ）",
       "url": "saisho-ni-shitte-hoshii-AI-no-tsukiaikata.html",
       "date": "2026.04.30",
       "thumbnail": "assets/card-tsukiaikata.png"
-    },
-    {
-      "source": "NOTE",
-      "title": "【完全解説】Microsoft Copilotの基礎から神活用術まで！ビジネスパーソンのための最新AIガイド",
-      "url": "https://note.com/yukisa0814/n/n5d67dd54884a",
-      "date": "2026.04.28"
-    },
-    {
-      "source": "NOTE",
-      "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(前編)",
-      "url": "https://note.com/yukisa0814/n/ncf59d2678127",
-      "date": "2026.04.28"
     }
   ]
 }
