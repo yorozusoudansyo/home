@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "Excelの表からグラフを一瞬で作る｜Copilot実演 #Shorts",
+      "url": "https://www.youtube.com/watch?v=cVV7ETR933A",
+      "date": "2026.07.22",
+      "thumbnail": "https://i.ytimg.com/vi/cVV7ETR933A/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "Think Deeperで矛盾とリスクを見抜く｜Copilot実践",
       "url": "https://www.youtube.com/watch?v=nJzT9KyKzJw",
       "date": "2026.07.19",
@@ -70,12 +77,6 @@
       "url": "https://www.youtube.com/watch?v=92scLuQ0SoU",
       "date": "2026.06.08",
       "thumbnail": "https://i.ytimg.com/vi/92scLuQ0SoU/hqdefault.jpg"
-    },
-    {
-      "source": "NOTE",
-      "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(後編)",
-      "url": "https://note.com/yukisa0814/n/nbf3c9fe886d7",
-      "date": "2026.05.09"
     },
     {
       "source": "SITE",
