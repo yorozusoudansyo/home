@@ -3,6 +3,20 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "Excel関数はもう暗記しなくていい｜Copilot活用 #Shorts",
+      "url": "https://www.youtube.com/watch?v=3StBnPj1ztM",
+      "date": "2026.07.23",
+      "thumbnail": "https://i.ytimg.com/vi/3StBnPj1ztM/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "【無料Webセミナー】Copilot活用｜第2回 数字と文書が片付く ― Excel分析とWord",
+      "url": "https://www.youtube.com/watch?v=uPFDOnKOqpI",
+      "date": "2026.07.23",
+      "thumbnail": "https://i.ytimg.com/vi/uPFDOnKOqpI/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "Excelの表からグラフを一瞬で作る｜Copilot実演 #Shorts",
       "url": "https://www.youtube.com/watch?v=cVV7ETR933A",
       "date": "2026.07.22",
@@ -63,20 +77,6 @@
       "url": "https://www.youtube.com/watch?v=n1rmdQTcie8",
       "date": "2026.06.15",
       "thumbnail": "https://i.ytimg.com/vi/n1rmdQTcie8/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AI/IT Yorozu consultant PR movie",
-      "url": "https://www.youtube.com/watch?v=xCIe3vGWES4",
-      "date": "2026.06.14",
-      "thumbnail": "https://i.ytimg.com/vi/xCIe3vGWES4/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIに「作らせる」入門｜4大AIの使い分けと自分専用プロンプト",
-      "url": "https://www.youtube.com/watch?v=92scLuQ0SoU",
-      "date": "2026.06.08",
-      "thumbnail": "https://i.ytimg.com/vi/92scLuQ0SoU/hqdefault.jpg"
     },
     {
       "source": "SITE",
