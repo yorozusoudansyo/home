@@ -3,6 +3,20 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "長いWord資料を相手別に3行要約｜Copilot実演 #Shorts",
+      "url": "https://www.youtube.com/watch?v=2tBWYULMSOg",
+      "date": "2026.07.24",
+      "thumbnail": "https://i.ytimg.com/vi/2tBWYULMSOg/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "Copilot関数で大量データを一括処理｜Excel活用 #Shorts",
+      "url": "https://www.youtube.com/watch?v=WAl17P4KeLY",
+      "date": "2026.07.24",
+      "thumbnail": "https://i.ytimg.com/vi/WAl17P4KeLY/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "Excel関数はもう暗記しなくていい｜Copilot活用 #Shorts",
       "url": "https://www.youtube.com/watch?v=3StBnPj1ztM",
       "date": "2026.07.23",
@@ -63,20 +77,6 @@
       "url": "https://www.youtube.com/watch?v=3N5jrC9I3V8",
       "date": "2026.06.22",
       "thumbnail": "https://i.ytimg.com/vi/3N5jrC9I3V8/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AI/IT Yorozu PR Movie",
-      "url": "https://www.youtube.com/watch?v=RmKJU9aLnOs",
-      "date": "2026.06.15",
-      "thumbnail": "https://i.ytimg.com/vi/RmKJU9aLnOs/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "コピペ作業をAIに丸投げ｜議事録＆カレンダー自動化",
-      "url": "https://www.youtube.com/watch?v=n1rmdQTcie8",
-      "date": "2026.06.15",
-      "thumbnail": "https://i.ytimg.com/vi/n1rmdQTcie8/hqdefault.jpg"
     },
     {
       "source": "SITE",
