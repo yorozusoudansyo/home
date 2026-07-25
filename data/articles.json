@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "Markdownの回答をWord形式に直す方法｜Copilot活用 #Shorts",
+      "url": "https://www.youtube.com/watch?v=cNCkYlY69V0",
+      "date": "2026.07.25",
+      "thumbnail": "https://i.ytimg.com/vi/cNCkYlY69V0/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "長いWord資料を相手別に3行要約｜Copilot実演 #Shorts",
       "url": "https://www.youtube.com/watch?v=2tBWYULMSOg",
       "date": "2026.07.24",
@@ -70,13 +77,6 @@
       "url": "https://note.com/yukisa0814/n/n655b81ad2ba3",
       "date": "2026.06.27",
       "thumbnail": "https://assets.st-note.com/img/1782555942-izFgOpJX5SWIkZjn04LCq1Yy.png"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIで資料作成を効率化する方法｜NotebookLM × Claude 実践デモ",
-      "url": "https://www.youtube.com/watch?v=3N5jrC9I3V8",
-      "date": "2026.06.22",
-      "thumbnail": "https://i.ytimg.com/vi/3N5jrC9I3V8/hqdefault.jpg"
     },
     {
       "source": "SITE",
