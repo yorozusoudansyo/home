@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "【Copilot活用】種類・契約・データ保護を10分で整理｜第2回テーマ別",
+      "url": "https://www.youtube.com/watch?v=n1lgT3YnYm8",
+      "date": "2026.07.26",
+      "thumbnail": "https://i.ytimg.com/vi/n1lgT3YnYm8/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "Markdownの回答をWord形式に直す方法｜Copilot活用 #Shorts",
       "url": "https://www.youtube.com/watch?v=cNCkYlY69V0",
       "date": "2026.07.25",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=Cz8Y-6NU0hM",
       "date": "2026.07.16",
       "thumbnail": "https://i.ytimg.com/vi/Cz8Y-6NU0hM/hqdefault.jpg"
-    },
-    {
-      "source": "NOTE",
-      "title": "去年「使えない」と感じたCopilotは、もう\"別物\"になっています。",
-      "url": "https://note.com/yukisa0814/n/n655b81ad2ba3",
-      "date": "2026.06.27",
-      "thumbnail": "https://assets.st-note.com/img/1782555942-izFgOpJX5SWIkZjn04LCq1Yy.png"
     },
     {
       "source": "SITE",
