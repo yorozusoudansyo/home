@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "【Copilot活用】Excelの表を3点要約し、そのままグラフ化｜実演",
+      "url": "https://www.youtube.com/watch?v=wLlEhcrPpLs",
+      "date": "2026.07.27",
+      "thumbnail": "https://i.ytimg.com/vi/wLlEhcrPpLs/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "【Copilot活用】種類・契約・データ保護を10分で整理｜第2回テーマ別",
       "url": "https://www.youtube.com/watch?v=n1lgT3YnYm8",
       "date": "2026.07.26",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=_Ig92f2_F7I",
       "date": "2026.07.19",
       "thumbnail": "https://i.ytimg.com/vi/_Ig92f2_F7I/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【Copilot活用】もう「別物」になった｜速い・じっくりモードの使い分けを実演",
-      "url": "https://www.youtube.com/watch?v=Cz8Y-6NU0hM",
-      "date": "2026.07.16",
-      "thumbnail": "https://i.ytimg.com/vi/Cz8Y-6NU0hM/hqdefault.jpg"
     },
     {
       "source": "SITE",
