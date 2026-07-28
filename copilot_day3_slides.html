@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>第3回 作る・任せる——自分専用AIと、まるごと任せる自動化｜Copilot活用ウェビナー</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary-base: #D32F2F;
+    --color-primary-hover: #B71C1C;
+    --color-primary-light: #FFEBEE;
+    --color-red-base: #D32F2F;
+    --color-red-light: #FFEBEE;
+    --color-text-high: #1F2937;
+    --color-text-medium: #4B5563;
+    --color-border: #E5E7EB;
+    --color-background: #F9FAFB;
+    --color-surface: #FFFFFF;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-pill: 999px;
+    --shadow-card: 0 4px 6px rgba(0,0,0,0.05);
+    --shadow-overlay: 0 10px 15px rgba(0,0,0,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; overflow: hidden; background: #F9FAFB; }
+  body {
+    font-family: "Inter", "Noto Sans JP", sans-serif;
+    color: var(--color-text-high);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage { position: fixed; inset: 0; display: grid; place-items: center; background: #E5E7EB; }
+  .deck { position: relative; width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); overflow: hidden; }
+
+  .slide {
+    position: absolute; inset: 0;
+    padding: 52px 68px 72px;
+    background: var(--color-background);
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity 260ms ease;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+
+  .nav-btn {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 72px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-high); font-size: 22px;
+    transition: background 180ms ease;
+    z-index: 200; user-select: none;
+    box-shadow: var(--shadow-card);
+  }
+  .nav-btn:hover { background: var(--color-background); }
+  .nav-btn:active { background: var(--color-border); }
+  .nav-btn.prev { left: 8px; }
+  .nav-btn.next { right: 8px; }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+
+  .slide-header {
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--color-text-medium);
+    font-size: 13px; letter-spacing: 0.05em;
+    margin-bottom: 18px; flex-shrink: 0;
+  }
+  .slide-header .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--color-text-high); font-weight: 700; font-size: 14px; letter-spacing: 0.04em; }
+  .logo-mark { height: 32px; width: auto; display: block; flex-shrink: 0; }
+  .logo-full { width: 240px; height: auto; display: block; }
+
+  .slide-footer {
+    margin-top: auto; flex-shrink: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--color-text-medium);
+    font-size: 12px; letter-spacing: 0.05em;
+    padding-top: 10px;
+  }
+  .page-num { font-family: "Inter", sans-serif; font-weight: 500; }
+  .page-num strong { color: var(--color-primary-base); font-weight: 700; }
+
+  .kicker { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--color-primary-base); text-transform: uppercase; margin-bottom: 12px; }
+  .section-title { font-size: 32px; font-weight: 700; line-height: 1.4; letter-spacing: 0.02em; color: var(--color-text-high); }
+  .section-sub { font-size: 16px; line-height: 1.7; color: var(--color-text-medium); margin-top: 8px; }
+  .accent { color: var(--color-primary-base); }
+  .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 22px 26px; box-shadow: var(--shadow-card); }
+
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 700; letter-spacing: 0.06em; }
+  .badge svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; display: inline-block; }
+  .badge-red    { background: var(--color-red-base); color: #fff; }
+  .badge-red-light { background: var(--color-red-light); color: var(--color-red-base); border: 1px solid var(--color-red-base); }
+  .badge-outline { background: var(--color-surface); color: var(--color-text-medium); border: 1px solid var(--color-text-medium); }
+  .badge-neutral { background: var(--color-background); color: var(--color-text-medium); border: 1px solid var(--color-border); }
+
+  /* ===== COVER (s1) — Day1/Day2と同型：右上淡赤radial＋下部メタ行 ===== */
+  #s1 { background: radial-gradient(1100px 500px at 110% -5%, var(--color-primary-light) 0%, transparent 55%), var(--color-background); padding: 68px 80px; justify-content: space-between; }
+  #s1 .series-tag { display: inline-flex; align-items: center; gap: 14px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; color: var(--color-text-medium); }
+  #s1 .series-tag .dot { width: 6px; height: 6px; background: var(--color-primary-base); border-radius: 50%; }
+  #s1 .final-pill { display:inline-block; padding:4px 14px; background:var(--color-primary-light); color:var(--color-primary-base); border:1px solid var(--color-primary-base); border-radius:var(--radius-pill); font-size:12px; font-weight:700; letter-spacing:0.08em; margin-left:10px; text-transform: none; }
+  #s1 h1 { font-size: 50px; font-weight: 700; line-height: 1.4; letter-spacing: 0.05em; color: var(--color-text-high); margin-top: 20px; max-width: 1000px; }
+  #s1 h1 em { font-style: normal; color: var(--color-primary-base); }
+  #s1 .cover-sub { font-size: 19px; font-weight: 500; line-height: 1.65; color: var(--color-text-medium); margin-top: 20px; max-width: 820px; }
+  #s1 .cover-bar { width: 56px; height: 4px; background: var(--color-primary-base); border-radius: var(--radius-sm); margin-top: 26px; }
+  #s1 .cover-meta { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+  #s1 .cover-meta .name { font-size: 17px; font-weight: 700; color: var(--color-text-high); }
+  #s1 .cover-meta .name span { font-size: 13px; font-weight: 400; color: var(--color-text-medium); margin-left: 8px; }
+  #s1 .cover-meta .info { font-size: 13px; color: var(--color-text-medium); letter-spacing: 0.05em; }
+
+  /* ===== GOAL / TODAY ===== */
+  .goal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 16px; flex: 1; align-items: start; }
+  .goal-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 24px 20px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 10px; }
+  .goal-card .g-num { font-family: "Inter", sans-serif; font-size: 42px; font-weight: 700; color: var(--color-primary-base); line-height: 1; }
+  .goal-card .g-title { font-size: 16px; font-weight: 700; color: var(--color-text-high); line-height: 1.4; }
+  .goal-card .g-body { font-size: 14px; line-height: 1.7; color: var(--color-text-medium); }
+  .reach-box { margin-top: 18px; padding: 16px 24px; background: var(--color-text-high); color: #fff; border-radius: var(--radius-md); font-size: 18px; font-weight: 600; text-align: center; line-height: 1.6; }
+  .reach-box em { font-style: normal; font-weight: 700; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.5); text-underline-offset: 3px; }
+
+  /* ===== REVIEW ===== */
+  .review-row { display: flex; align-items: stretch; gap: 16px; margin-top: 18px; flex: 1; }
+  .review-col { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+  .review-col-title { font-size: 14px; font-weight: 700; padding: 9px 16px; border-radius: var(--radius-md); text-align: center; }
+  .review-col-title.d1 { background: var(--color-border); color: var(--color-text-medium); }
+  .review-col-title.d2 { background: var(--color-border); color: var(--color-text-medium); }
+  .review-col-title.d3 { background: var(--color-primary-base); color: #fff; }
+  .review-body { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 10px; box-shadow: var(--shadow-card); }
+  .review-body .big { font-size: 16px; font-weight: 700; color: var(--color-text-high); line-height: 1.55; }
+  .review-body .small { font-size: 12.5px; color: var(--color-text-medium); line-height: 1.6; }
+  .review-arrow { display: flex; align-items: center; justify-content: center; width: 34px; font-size: 22px; color: var(--color-primary-base); font-weight: 700; }
+  .key-msg { margin-top: 16px; padding: 14px 22px; background: var(--color-text-high); color: #fff; border-radius: var(--radius-md); font-size: 17px; font-weight: 600; text-align: center; line-height: 1.5; }
+  .key-msg em { font-style: normal; font-weight: 700; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.5); text-underline-offset: 3px; }
+
+  /* ===== ENV CHECK ===== */
+  .env-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px; margin-top: 10px; }
+  .env-q { font-size: 24px; font-weight: 700; color: var(--color-text-high); text-align: center; line-height: 1.6; }
+  .env-q em { font-style: normal; color: var(--color-primary-base); }
+  .env-cases { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .env-case { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 18px 20px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 8px; }
+  .env-case .e-who { font-size: 13px; font-weight: 700; color: var(--color-primary-base); letter-spacing: 0.04em; }
+  .env-case .e-body { font-size: 14px; line-height: 1.65; color: var(--color-text-high); }
+  .env-note { margin-top: 4px; padding: 13px 20px; background: var(--color-primary-light); border-left: 4px solid var(--color-primary-base); border-radius: 0 var(--radius-md) var(--radius-md) 0; font-size: 15px; line-height: 1.7; color: var(--color-text-high); text-align: center; }
+
+  /* ===== LADDER (main message + recap) ===== */
+  .ladder-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 16px; margin-top: 6px; }
+  .ladder-row { display: flex; gap: 14px; align-items: stretch; }
+  .ladder-step { flex: 1; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 6px; position: relative; }
+  .ladder-step.now { border-color: var(--color-primary-base); box-shadow: 0 0 0 1px var(--color-primary-base), var(--shadow-card); background: var(--color-primary-light); }
+  .ladder-step .l-num { font-family: "Inter", sans-serif; font-size: 22px; font-weight: 700; color: var(--color-primary-base); line-height: 1; }
+  .ladder-step .l-title { font-size: 14.5px; font-weight: 700; color: var(--color-text-high); line-height: 1.35; }
+  .ladder-step .l-body { font-size: 12px; line-height: 1.5; color: var(--color-text-medium); }
+  .term-box { margin-top: 6px; padding: 14px 20px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+  .term-box .t-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--color-primary-base); margin-bottom: 6px; }
+  .term-box .t-def { font-size: 15px; font-weight: 700; color: var(--color-text-high); }
+  .term-box .t-fail { font-size: 13px; color: var(--color-text-medium); margin-top: 4px; }
+
+  /* ===== 3-STEP LADDER MAP (recurring) ===== */
+  .map3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; }
+  .map3-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 18px 16px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 8px; position: relative; }
+  .map3-card.active { border-color: var(--color-primary-base); box-shadow: 0 0 0 1px var(--color-primary-base), var(--shadow-card); }
+  .map3-card .m-dan { font-family: "Inter", sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--color-text-medium); }
+  .map3-card .m-title { font-size: 17px; font-weight: 700; color: var(--color-text-high); line-height: 1.35; }
+  .map3-card .m-body { font-size: 12.5px; line-height: 1.6; color: var(--color-text-medium); }
+  .map3-card .m-arrow { position: absolute; right: -9px; top: 50%; transform: translateY(-50%); color: var(--color-text-medium); z-index: 1; display: flex; align-items: center; justify-content: center; background: var(--color-background); border: 1px solid var(--color-border); border-radius: 50%; width: 22px; height: 22px; }
+  .map3-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* ===== DEMO RELAY (common) ===== */
+  .demo-relay { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; text-align: center; }
+  .demo-relay .dr-badge-row { display: flex; align-items: center; gap: 14px; }
+  .demo-relay .dr-title { font-size: 38px; font-weight: 700; line-height: 1.5; color: var(--color-text-high); max-width: 880px; }
+  .demo-relay .dr-title em { font-style: normal; color: var(--color-red-base); }
+  .demo-relay .dr-sub { font-size: 18px; line-height: 1.7; color: var(--color-text-medium); max-width: 760px; }
+  .demo-relay .dr-fail { margin-top: 6px; padding: 12px 24px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 14.5px; color: var(--color-text-medium); box-shadow: var(--shadow-card); display: flex; align-items: flex-start; gap: 8px; text-align: left; }
+  .demo-relay .dr-fail strong { color: var(--color-text-high); }
+  .demo-relay .dr-term { margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .demo-relay .dr-term-chip { padding: 9px 18px; background: var(--color-primary-light); border: 1px solid var(--color-primary-base); border-radius: var(--radius-pill); font-size: 13px; color: var(--color-text-high); }
+  .demo-relay .dr-term-chip strong { color: var(--color-primary-base); }
+
+  /* ===== STEP CARDS (3-up procedure) ===== */
+  .demo-steps3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:14px; flex:1; align-items:start; }
+  .demo-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:18px 18px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:10px; }
+  .demo-card.hl { border-color:var(--color-primary-base); box-shadow:0 0 0 1px var(--color-primary-base), var(--shadow-card); }
+  .demo-card .d-step { font-family:"Inter",sans-serif; font-size:11px; font-weight:700; letter-spacing:0.14em; color:var(--color-text-medium); }
+  .demo-card .d-title { font-size:16px; font-weight:700; color:var(--color-text-high); line-height:1.3; }
+  .demo-card .d-body { font-size:13px; line-height:1.65; color:var(--color-text-medium); }
+  .prompt-box { background:var(--color-text-high); color:#E5E7EB; padding:11px 13px; border-radius:var(--radius-sm); font-size:12px; line-height:1.65; }
+  .result-box { background:var(--color-primary-light); border-left:3px solid var(--color-primary-base); padding:10px 12px; border-radius:0 var(--radius-sm) var(--radius-sm) 0; font-size:12px; line-height:1.6; color:var(--color-text-high); display:flex; align-items:flex-start; gap:7px; }
+  .demo-note { margin-top:14px; padding:12px 20px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); font-size:14px; color:var(--color-text-medium); line-height:1.6; display:flex; align-items:flex-start; gap:9px; }
+  .demo-note strong { color:var(--color-text-high); }
+
+  /* ---- Notebooks→エージェント 比較ストリップ ---- */
+  .cmp-strip { margin-top:14px; padding:12px 18px 14px; background:var(--color-surface); border:1px solid var(--color-primary-base); border-radius:var(--radius-md); box-shadow:var(--shadow-card); }
+  .cmp-head { font-size:12px; font-weight:700; letter-spacing:0.06em; color:var(--color-primary-base); margin-bottom:9px; }
+  .cmp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .cmp-item { display:flex; flex-direction:column; gap:4px; }
+  .cmp-label { font-size:11px; font-weight:700; letter-spacing:0.08em; color:var(--color-text-medium); }
+  .cmp-from { font-size:12px; color:var(--color-text-medium); }
+  .cmp-to { font-size:13px; font-weight:700; color:var(--color-text-high); line-height:1.5; }
+  .cmp-to::before { content:"→ "; color:var(--color-primary-base); font-weight:700; }
+  .inline-ic { width:16px; height:16px; flex-shrink:0; margin-top:2px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .inline-ic.warn { color: var(--color-primary-base); }
+  .inline-ic.ok { color: var(--color-primary-base); }
+  .inline-ic.tip { color: var(--color-text-medium); }
+
+  /* ===== AGENT BUILDER 3-TIER ===== */
+  .tier-wrap { display:flex; flex-direction:column; gap:12px; margin-top:14px; flex:1; justify-content:center; }
+  .tier-row { display:flex; gap:16px; align-items:stretch; }
+  .tier-num { width:44px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:var(--color-text-high); color:#fff; border-radius:var(--radius-md); font-family:"Inter",sans-serif; font-weight:700; font-size:18px; }
+  .tier-num.warn { background: var(--color-primary-base); }
+  .tier-body { flex:1; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:14px 20px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:4px; }
+  .tier-body .tr-title { font-size:15.5px; font-weight:700; color:var(--color-text-high); }
+  .tier-body .tr-desc { font-size:13px; line-height:1.6; color:var(--color-text-medium); }
+
+  /* ===== SHOT PLACEHOLDER ===== */
+  .shot-frame { border: 2px dashed var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; color: var(--color-text-medium); font-size: 15px; text-align: center; padding: 20px; }
+  .shot-frame .shot-icon { font-size: 30px; }
+  .shot-frame .shot-label { font-weight: 700; color: var(--color-text-high); }
+
+  /* ===== SECURITY ===== */
+  .sec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 16px; flex: 1; align-items: start; }
+  .sec-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 22px 24px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 10px; }
+  .sec-card .s-icon { font-size: 26px; }
+  .sec-card .s-title { font-size: 17px; font-weight: 700; color: var(--color-text-high); }
+  .sec-card .s-body { font-size: 13.5px; line-height: 1.75; color: var(--color-text-medium); }
+  .backbone-strip { margin-top: 14px; display: flex; gap: 10px; }
+  .backbone-chip { flex: 1; padding: 10px 12px; background: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 12px; text-align: center; color: var(--color-text-medium); line-height: 1.5; }
+  .backbone-chip strong { display: block; color: var(--color-text-high); font-size: 13px; margin-bottom: 2px; }
+
+  /* ===== SERIES SUMMARY ===== */
+  .ss-list { display:flex; flex-direction:column; gap:11px; flex:1; margin-top:10px; justify-content:center; }
+  .ss-item { display:flex; align-items:center; gap:16px; padding:14px 20px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); box-shadow:var(--shadow-card); }
+  .ss-day { font-family:"Inter",sans-serif; font-size:12px; font-weight:700; color:#fff; background:var(--color-primary-base); border-radius:var(--radius-pill); padding:5px 13px; flex-shrink:0; }
+  .ss-verb { font-size:17px; font-weight:700; color:var(--color-primary-base); min-width:62px; }
+  .ss-text { font-size:14.5px; color:var(--color-text-high); line-height:1.5; }
+  .ss-text strong { color: var(--color-text-high); }
+
+  /* ===== TAKEAWAY 5 ===== */
+  .summary-list { display: flex; flex-direction: column; gap: 11px; flex: 1; margin-top: 10px; justify-content: center; }
+  .summary-item { display: flex; align-items: center; gap: 18px; padding: 14px 22px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+  .summary-num { font-family: "Inter", sans-serif; font-size: 30px; font-weight: 700; color: var(--color-primary-base); line-height: 1; min-width: 46px; text-align: center; }
+  .summary-text { font-size: 16px; font-weight: 700; color: var(--color-text-high); line-height: 1.5; }
+  .summary-text span { color: var(--color-primary-base); }
+  .closing-msg { margin-top: 12px; padding: 13px 24px; background: var(--color-text-high); color: #fff; border-radius: var(--radius-md); font-size: 16px; font-weight: 600; text-align: center; line-height: 1.5; }
+  .closing-msg em { font-style: normal; font-weight: 700; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.5); text-underline-offset: 3px; }
+
+  /* ===== NEXT STEP ===== */
+  .ns-card { flex:1; margin-top:14px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:28px 34px; display:flex; flex-direction:column; gap:16px; }
+  .ns-lead { font-size:22px; font-weight:700; line-height:1.5; color:var(--color-text-high); }
+  .ns-lead em { font-style:normal; color:var(--color-primary-base); }
+  .ns-points { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .ns-point { display:flex; align-items:flex-start; gap:10px; padding:13px 16px; background:var(--color-background); border:1px solid var(--color-border); border-radius:var(--radius-md); font-size:14px; line-height:1.6; color:var(--color-text-high); }
+  .ns-point .ic { font-size:18px; flex-shrink:0; }
+  .ns-cta { padding:13px 22px; background:var(--color-primary-light); border:2px solid var(--color-primary-base); border-radius:var(--radius-md); font-size:15px; font-weight:700; color:var(--color-primary-base); text-align:center; line-height:1.55; }
+
+  /* ===== CONTACT / SURVEY ===== */
+  #s-survey { background: radial-gradient(1000px 500px at -10% 110%, var(--color-primary-light) 0%, transparent 55%), var(--color-background); }
+  .contact-wrap { flex: 1; display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; margin-top: 16px; align-items: center; }
+  .survey-list { display: flex; flex-direction: column; gap: 12px; }
+  .survey-row { display: flex; align-items: center; gap: 12px; padding: 13px 18px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); font-size: 15px; color: var(--color-text-high); }
+  .qr-box { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .qr-placeholder { width: 190px; height: 190px; border: 2px dashed var(--color-border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; color: var(--color-text-medium); background: var(--color-surface); padding: 10px; }
+  .next-series { margin-top: 4px; padding: 13px 20px; background: var(--color-text-high); color: #fff; border-radius: var(--radius-md); font-size: 15px; font-weight: 600; text-align: center; line-height: 1.6; }
+  .next-series em { font-style: normal; font-weight: 700; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.5); text-underline-offset: 3px; }
+
+  .nav-hint { position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--color-text-medium); letter-spacing: 0.08em; pointer-events: none; z-index: 100; }
+
+  /* ===== 一段深く（ONE STEP DEEPER）：専用スライド＋カラウト共通 ===== */
+  .deeper-pill { display: inline-flex; align-items: center; gap: 7px; padding: 4px 14px; border-radius: var(--radius-pill); font-size: 12.5px; font-weight: 700; letter-spacing: 0.03em; background: var(--color-primary-light); color: var(--color-primary-base); }
+  .deeper-pill .dk-en { font-family: "Inter", sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: var(--color-primary-base); opacity: 0.75; }
+  #s-deep3 { }
+  #s-deep3 .deep-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px; margin-top: 12px; }
+  #s-deep3 .deep-lead { font-size: 19px; line-height: 1.75; color: var(--color-text-high); }
+  #s-deep3 .deep-lead strong { color: var(--color-primary-base); }
+  .deep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .deep-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 22px 24px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 10px; }
+  .deep-card .dc-title { font-size: 16px; font-weight: 700; color: var(--color-text-high); line-height: 1.5; }
+  .deep-card .dc-body { font-size: 13.5px; line-height: 1.8; color: var(--color-text-medium); }
+  .deep-card .dc-body strong { color: var(--color-text-high); }
+  .deep-source { font-size: 11.5px; color: var(--color-text-medium); margin-top: 2px; }
+
+  /* カラウト（既存カード内に差し込む小ブロック） */
+  .callout-deeper { margin-top: 12px; padding: 14px 18px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 8px; }
+  .callout-deeper .cd-head { display: flex; align-items: center; gap: 10px; }
+  .callout-deeper .cd-title { font-size: 14.5px; font-weight: 700; color: var(--color-text-high); }
+  .callout-deeper .cd-body { font-size: 13px; line-height: 1.75; color: var(--color-text-medium); }
+  .callout-deeper .cd-body strong { color: var(--color-text-high); }
+  .callout-deeper .cd-source { font-size: 11px; color: var(--color-text-medium); }
+</style>
+</head>
+<body>
+
+<button class="nav-btn prev" id="btnPrev" aria-label="前のスライド">&#8249;</button>
+<button class="nav-btn next" id="btnNext" aria-label="次のスライド">&#8250;</button>
+
+<div class="stage">
+  <div class="deck" id="deck">
+
+    <!-- ======== S1: COVER ======== -->
+    <div class="slide active" id="s1">
+      <div class="series-tag">
+        <div class="dot"></div>
+        Copilot活用ウェビナー 全3回・無料　第3回<span class="final-pill">最終回</span>　／　2026年7月26日（日）21:00〜21:40
+      </div>
+      <div>
+        <h1>作る・任せる——<br><em>自分専用AI</em>と、まるごと任せる自動化</h1>
+        <p class="cover-sub">Copilotは"使う"だけでなく、自分仕様に「作る」・まるごと「任せる」ところまで行けます。事前アンケート上位3テーマを、今日すべて回収します。</p>
+        <div class="cover-bar"></div>
+      </div>
+      <div class="cover-meta">
+        <img class="logo-full" src="assets/logo_full.png" alt="AI・ITよろず相談所">
+        <div>
+          <div class="name">清水 幸久（Yukisa）<span>AI・ITよろず相談所</span></div>
+          <div class="info" style="margin-top:6px">Google Meet　参加無料　各回40分</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======== S3: 3回振り返り ======== -->
+    <div class="slide" id="s3">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Review — 3回シリーズの振り返り</div>
+      <div class="section-title">知る → 片付く → <span class="accent">作る・任せる</span></div>
+      <div class="review-row">
+        <div class="review-col">
+          <div class="review-col-title d1">第1回</div>
+          <div class="review-body">
+            <div class="big">速い／じっくりの使い分け</div>
+            <div class="small">重い作業ほど「じっくり」（Think Deeper）に切り替える</div>
+          </div>
+        </div>
+        <div class="review-arrow">→</div>
+        <div class="review-col">
+          <div class="review-col-title d2">第2回</div>
+          <div class="review-body">
+            <div class="big">数字と文書が片付く</div>
+            <div class="small">表を貼って要約・グラフ化、長文を目的別に要約・整形</div>
+          </div>
+        </div>
+        <div class="review-arrow">→</div>
+        <div class="review-col">
+          <div class="review-col-title d3">第3回（今日）</div>
+          <div class="review-body">
+            <div class="big">作る・任せる</div>
+            <div class="small">自分専用AIを作り、作業をまるごと任せて自動化する</div>
+          </div>
+        </div>
+      </div>
+      <div class="key-msg">最終回です。今日は<em>「作る」</em>と<em>「任せる」</em>——ここまで行きます。</div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>2</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S2: 今日のゴール・到達宣言 ======== -->
+    <div class="slide" id="s2">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Today's Goal — 到達宣言</div>
+      <div class="section-title">今日、持ち帰れること</div>
+      <div class="goal-grid">
+        <div class="goal-card">
+          <div class="g-num">01</div>
+          <div class="g-title">自分専用AIの正体が分かる</div>
+          <div class="g-body">「指示＋資料を固定した相棒」——それが自分専用AIだと、具体的な作り方とセットで理解します。</div>
+        </div>
+        <div class="goal-card">
+          <div class="g-num">02</div>
+          <div class="g-title">会社版エージェントの作り方を持ち帰る</div>
+          <div class="g-body">Agent Builderで社内資料に接地したエージェントを作り、チームに共有する流れが分かります（使えるかは情シス設定次第）。</div>
+        </div>
+        <div class="goal-card">
+          <div class="g-num">03</div>
+          <div class="g-title">「1回頼む」を超えて「使い回す」へ</div>
+          <div class="g-body">Office Agentに作業を丸ごと任せ、その指示を別の月のファイルでも使い回して繰り返し作業を減らす流れを体験します。</div>
+        </div>
+      </div>
+      <div class="reach-box">
+        今日は<em>作る</em>と<em>任せる</em>——Copilotの一番奥まで、一緒に行きます。
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>3</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S4: 環境確認コーナー ======== -->
+    <div class="slide" id="s4">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Environment Check — 環境確認コーナー（2分）</div>
+      <div class="section-title">今日いちばん大事な前提——<em>環境で全然違います</em></div>
+      <div class="env-wrap">
+        <div class="env-q">同じCopilotでも、<em>「ノートブック」「エージェント」</em>が出る人・出ない人がいます</div>
+        <div class="env-cases">
+          <div class="env-case">
+            <div class="e-who">今日の主役｜ノートブック</div>
+            <div class="e-body">2026年6月から追加ライセンス不要で職場・学校でも利用可＝対象が広い。それでも会社の設定で出ない場合はあるので、まず自分の画面を確認。</div>
+          </div>
+          <div class="env-case">
+            <div class="e-who">本格版｜エージェント</div>
+            <div class="e-body">出る人・出ない人がはっきり分かれます。ある大企業では情シスがオフに。出ないのが普通と思ってください。</div>
+          </div>
+        </div>
+        <div class="env-note">出る人・出ない人がいて当たり前です。「出ている人は真似する／出ていない人は"何を確認すればいいか"を持ち帰る」の二本立てで進めます。ご自分の画面はどうですか？——チャットで一言教えてください。</div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>4</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S5: 主役メッセージ：4段はしご ======== -->
+    <div class="slide" id="s5">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Main Message</div>
+      <div class="section-title">「作る」と「任せる」——<span class="accent">4段はしごの3〜4段目</span></div>
+      <div class="ladder-wrap">
+        <div class="ladder-row">
+          <div class="ladder-step">
+            <div class="l-num">1</div>
+            <div class="l-title">質問する</div>
+            <div class="l-body">Chatに聞く（第1回）</div>
+          </div>
+          <div class="ladder-step">
+            <div class="l-num">2</div>
+            <div class="l-title">モードを選ぶ</div>
+            <div class="l-body">速い/じっくり（第1・2回）</div>
+          </div>
+          <div class="ladder-step now">
+            <div class="l-num">3</div>
+            <div class="l-title">自分のツールを作る</div>
+            <div class="l-body">ノートブック／エージェント（今日）</div>
+          </div>
+          <div class="ladder-step now">
+            <div class="l-num">4</div>
+            <div class="l-title">任せる</div>
+            <div class="l-body">Office Agentに丸ごと→指示を使い回す（今日）</div>
+          </div>
+        </div>
+        <div class="term-box">
+          <div class="t-label">30秒用語｜エージェント</div>
+          <div class="t-def">指示＋資料を固定した自分専用AI</div>
+          <div class="t-fail">知らないと…今日の3〜4段目の話がまるごと理解できません</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>5</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S6: 3段ラダー全体図（冒頭・地図） ======== -->
+    <div class="slide" id="s6">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">今日の地図｜3段ラダー</div>
+      <div class="section-title">「作る」→「会社版」→「任せる」の<span class="accent">3段</span>で進みます</div>
+      <div class="map3-grid">
+        <div class="map3-card">
+          <div class="m-dan">第1段</div>
+          <div class="m-title">自分専用AIを「作る」</div>
+          <div class="m-body">Copilot Notebooks（ノートブック）。参考資料＋手順を固定した相棒を生デモ。</div>
+          <div class="map3-tags"><span class="badge badge-red"><span class="badge-dot"></span>ライブデモ</span></div>
+          <div class="m-arrow"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="map3-card">
+          <div class="m-dan">第2段</div>
+          <div class="m-title">会社版ならもっと</div>
+          <div class="m-body">Agent Builder＝OneDriveの社内資料に接地し、チームに共有できる会社版。生デモ。</div>
+          <div class="map3-tags"><span class="badge badge-red"><span class="badge-dot"></span>ライブデモ</span></div>
+          <div class="m-arrow"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="map3-card">
+          <div class="m-dan">第3段</div>
+          <div class="m-title">まるごと「任せる」</div>
+          <div class="m-body">Office AgentにExcel作業を任せる→同じ指示を別の月でも使い回す。</div>
+          <div class="map3-tags"><span class="badge badge-red"><span class="badge-dot"></span>ライブデモ</span></div>
+        </div>
+      </div>
+      <div class="demo-note" style="margin-top:18px;text-align:center">事前アンケート上位3テーマ——<strong>自分専用AI（1位）・Excel（2位）・ルーチン自動化（3位）</strong>——を、この3段ですべて回収します。</div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>6</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S7: デモ中継 第1段（ライブデモ）======== -->
+    <div class="slide" id="s7">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="demo-relay">
+        <div class="dr-badge-row"><span class="badge badge-red"><span class="badge-dot"></span>LIVE DEMO — 第1段</span><span class="badge badge-neutral">Copilot Notebooks（ノートブック）</span></div>
+        <div class="dr-title">「いつも参照する資料」を固定した<br><em>自分専用AI</em>を、その場で作ります</div>
+        <div class="dr-sub">見どころ：資料を1回固定すれば、毎回ゼロから説明しなくてよくなる瞬間。</div>
+        <div class="dr-term">
+          <div class="dr-term-chip"><strong>ノートブック</strong>＝指示＋資料を固定できる作業机</div>
+        </div>
+        <div class="dr-fail"><svg class="inline-ic warn" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>2026年6月から追加ライセンス無しで職場・学校でも利用可。出ない場合は情シスに「Copilotノートブックは使えますか」と確認を。</span></div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>7</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S8: 第1段 手順メモ ======== -->
+    <div class="slide" id="s8">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Live Demo — 進行メモ</div>
+      <div class="section-title">今、画面で何が起きているか</div>
+      <div class="demo-steps3">
+        <div class="demo-card">
+          <div class="d-step">STEP 1</div>
+          <div class="d-title">新しいノートブックを作る</div>
+          <div class="d-body">ナビ「ノートブック」→「＋ 新しいノートブック」。名前例「社内ルールの相談係」。テーマごとの作業机を1個作るイメージです。</div>
+        </div>
+        <div class="demo-card hl">
+          <div class="d-step">STEP 2 — ここが肝</div>
+          <div class="d-title">参考資料を固定する</div>
+          <div class="d-body">下部「参考資料」タブ／チャット欄の「＋」から社内ルールをファイルで追加。ここに置いた資料だけを見て答え、ネットの一般情報は使いません（最大300ファイル）。</div>
+        </div>
+        <div class="demo-card">
+          <div class="d-step">STEP 3</div>
+          <div class="d-title">役割を固定する</div>
+          <div class="d-body">上部「Copilotの手順を追加する」に「何を見て、どう答えるか」を入力。これが背骨です（プロンプト集参照）。</div>
+        </div>
+      </div>
+      <div class="demo-note"><svg class="inline-ic tip" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg><span>一度作れば、次からは<strong>このノートブックを開くだけ</strong>で「社内ルールの相談係」が起動します。これが自分専用AIです。</span></div>
+      <div class="callout-deeper">
+        <div class="cd-head"><span class="deeper-pill"><span class="dk-en">ONE STEP DEEPER</span>一段深く</span><span class="cd-title">中級の設計原則：AIに「わからない」と言わせる</span></div>
+        <div class="cd-body">STEP3の役割指示文に、<strong>「資料に無いことは推測せず『◯◯に確認』と答えて」</strong>の一文を入れるだけで、ハルシネーション（もっともらしい誤答）が大きく減ります。自分専用AIの品質は、賢い言い回しよりも<strong>この“逃げ道”の設計</strong>で決まります。</div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>8</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S9: 第1段 使ってみる・まとめ ======== -->
+    <div class="slide" id="s9">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Wrap-up — 第1段</div>
+      <div class="section-title">質問してみると——<span class="accent">こう答えます</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;flex:1;align-items:start">
+        <div class="card" style="display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:13px;font-weight:700;color:var(--color-text-medium)">質問例</div>
+          <div class="prompt-box">有給って何日前までに申請すればいい？<br>在宅勤務の日に必要な手続きは？</div>
+          <div class="result-box"><svg class="inline-ic ok" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>ソースの社内ルールに基づいた回答。記載が無いことは「総務にご確認を」と誘導。</span></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:13px;font-weight:700;color:var(--color-text-medium)">事前アンケート</div>
+          <div style="font-size:28px;font-weight:700;color:var(--color-primary-base)">自分専用AI＝1位（5票）</div>
+          <div style="font-size:13.5px;line-height:1.7;color:var(--color-text-medium)">最も見たいと回答されたテーマに、正面から応えました。</div>
+        </div>
+      </div>
+      <div class="demo-note" style="margin-top:14px;justify-content:center"><svg class="inline-ic warn" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>参考資料の追加が詰まった場合は、事前に作成済みのノートブックを開いて代替します。</span></div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>9</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S9b: 一段深く（専用スライド） ======== -->
+    <div class="slide" id="s-deep3">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="deeper-pill" style="margin-bottom:10px"><span class="dk-en">ONE STEP DEEPER</span>一段深く</div>
+      <div class="section-title">プロンプト職人より、<span class="accent">コンテキスト設計者</span></div>
+      <div class="deep-wrap">
+        <div class="deep-lead">うまい一文（プロンプト）を磨く時代から、<strong>AIに何を読ませるか（コンテキスト）を設計する時代</strong>へ。さっきの「ノートブック」は、その入口です。</div>
+        <div class="deep-grid">
+          <div class="deep-card">
+            <div class="dc-title">「固定化」がノートブック／エージェントの本質</div>
+            <div class="dc-body">毎回チャットに貼っていた前提資料・指示を、<strong>1回だけ設定して固定する</strong>——それだけです。属人的だった“職人芸”が、開いた瞬間に誰でも使えるチーム資産に変わります。</div>
+          </div>
+          <div class="deep-card">
+            <div class="dc-title">「AIの答えがイマイチ」の正体</div>
+            <div class="dc-body">原因の多くは、プロンプトの下手さではありません。<strong>読ませるべき資料を渡していない</strong>ことです。うまい言い回しを探すより、先に「何を読ませるか」を疑ってみてください。</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>10</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S10: 3段ラダー再掲（第1→第2） ======== -->
+    <div class="slide" id="s10">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">今日の地図｜3段ラダー（再掲）</div>
+      <div class="section-title">第1段が終わりました。次は<span class="accent">第2段</span></div>
+      <div class="map3-grid">
+        <div class="map3-card" style="opacity:0.55">
+          <div class="m-dan">第1段（完了）</div>
+          <div class="m-title">自分専用AIを「作る」</div>
+          <div class="m-body">Copilot Notebooks（ノートブック）で生デモ完了。</div>
+          <div class="m-arrow"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="map3-card active">
+          <div class="m-dan">第2段 — 今ここ</div>
+          <div class="m-title">会社版ならもっと</div>
+          <div class="m-body">Agent Builder＝OneDriveの社内資料に接地し、チームに共有できる会社版。生デモ。</div>
+          <div class="map3-tags"><span class="badge badge-red"><span class="badge-dot"></span>ライブデモ</span></div>
+          <div class="m-arrow"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="map3-card" style="opacity:0.55">
+          <div class="m-dan">第3段</div>
+          <div class="m-title">まるごと「任せる」</div>
+          <div class="m-body">Office AgentにExcel作業を任せる→指示を使い回す。</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>11</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S11: デモ中継 第2段 Agent Builder（ライブデモ）======== -->
+    <div class="slide" id="s11">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="demo-relay">
+        <div class="dr-badge-row"><span class="badge badge-red"><span class="badge-dot"></span>LIVE DEMO — 第2段</span><span class="badge badge-neutral">Agent Builder（会社版）</span></div>
+        <div class="dr-title">会社版になると、<br>これがもっと強くなる——<em>Agent Builder</em></div>
+        <div class="dr-sub">見どころ：作り方はNotebooksとそっくり（指示＋資料）。違いは<strong>できあがったものが「開いて使う場所」ではなく、Copilotから呼び出せる「相棒」になる</strong>こと。</div>
+        <div class="dr-term">
+          <div class="dr-term-chip"><strong>エージェント</strong>＝いつものCopilotから名前で呼び出せる、配布できる自分専用AI</div>
+        </div>
+        <div class="dr-fail"><svg class="inline-ic warn" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>正直にお伝えすると：この機能、<strong>出る人と出ない人がいます</strong>。私は使えるようになりましたが、皆さんは情シスの設定次第です。</span></div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>12</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S12: 第2段 手順メモ（作成→OneDrive接地→共有）======== -->
+    <div class="slide" id="s12">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Live Demo — 進行メモ（第2段）</div>
+      <div class="section-title">作って、<span class="accent">OneDriveに接地して、配る</span></div>
+      <div class="demo-steps3">
+        <div class="demo-card">
+          <div class="d-step">STEP 1</div>
+          <div class="d-title">エージェントを作る</div>
+          <div class="d-body">「エージェント」→「新しいエージェント」。名前「就業ルールBot」、指示欄にNotebooksと同じ役割文を貼る。ノーコードです。</div>
+        </div>
+        <div class="demo-card hl">
+          <div class="d-step">STEP 2</div>
+          <div class="d-title">資料に接地する</div>
+          <div class="d-body">チャット欄「＋」→クラウドファイル→OneDriveの社内ルールを選択。エージェントはSharePointのサイトやフォルダごと、まるごと接地することもできます。</div>
+        </div>
+        <div class="demo-card hl">
+          <div class="d-step">STEP 3 — 会社版の価値</div>
+          <div class="d-title">同僚に配る</div>
+          <div class="d-body">プレビューで動作確認→「…」→「共有」。受け取った人は設定を触らず、いつものCopilotから名前を呼ぶだけで使えます。</div>
+        </div>
+      </div>
+      <div class="cmp-strip">
+        <div class="cmp-head">ノートブックとの違いは「置き場所」ではなく、<strong>使われ方</strong>です</div>
+        <div class="cmp-grid">
+          <div class="cmp-item">
+            <div class="cmp-label">使い方</div>
+            <div class="cmp-from">ノートブック：そのノートを開いて、中で作業する</div>
+            <div class="cmp-to">いつものCopilotから名前で呼び出す</div>
+          </div>
+          <div class="cmp-item">
+            <div class="cmp-label">できること</div>
+            <div class="cmp-from">ノートブック：入れた資料に基づいて答える</div>
+            <div class="cmp-to">Web検索・データ分析・画像生成の能力も持たせられる</div>
+          </div>
+          <div class="cmp-item">
+            <div class="cmp-label">配ったあと</div>
+            <div class="cmp-from">ノートブック：中身を一緒に触る共同作業スペース</div>
+            <div class="cmp-to">完成品として配布。直すのは作った人だけ</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>13</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S13: Agent Builder利用条件3段階 ======== -->
+    <div class="slide" id="s13">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">「自分専用AI」の正確な前提</div>
+      <div class="section-title">Agent Builderが<span class="accent">使えるかどうかの3段階</span></div>
+      <div class="tier-wrap">
+        <div class="tier-row">
+          <div class="tier-num">1</div>
+          <div class="tier-body">
+            <div class="tr-title">無料のCopilot Chatのみ</div>
+            <div class="tr-desc">簡易なエージェントは作れるが、接地できるのは「指示＋公開Web情報」まで。社内データには繋げません。</div>
+          </div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-num">2</div>
+          <div class="tier-body">
+            <div class="tr-title">有料 Microsoft 365 Copilotライセンス</div>
+            <div class="tr-desc">SharePoint等の社内データに接地したエージェントが作れます（従量課金でも可）。</div>
+          </div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-num warn">3</div>
+          <div class="tier-body">
+            <div class="tr-title">管理者がオフにしている場合</div>
+            <div class="tr-desc">ライセンスに関わらず、メニューにエージェント作成が出ません。大企業テナントに多いパターンです。</div>
+          </div>
+        </div>
+      </div>
+      <div class="env-note">断定はしません——「使えるはず」ではなく、まずご自分の画面に出るか確認を。無ければ<strong>情シスに「Agent Builderは使えますか」</strong>と聞くのが第一歩です。</div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>14</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S14: 3段ラダー再掲（第2→第3） ======== -->
+    <div class="slide" id="s14">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">今日の地図｜3段ラダー（再掲）</div>
+      <div class="section-title">ここからは<span class="accent">最後の第3段——「任せる」</span></div>
+      <div class="map3-grid">
+        <div class="map3-card" style="opacity:0.55">
+          <div class="m-dan">第1段（完了）</div>
+          <div class="m-title">自分専用AIを「作る」</div>
+          <div class="m-body">Copilot Notebooks（ノートブック）で生デモ完了。</div>
+          <div class="m-arrow"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="map3-card" style="opacity:0.55">
+          <div class="m-dan">第2段（完了）</div>
+          <div class="m-title">会社版ならもっと</div>
+          <div class="m-body">Agent BuilderでOneDrive接地＋チーム共有まで生デモ完了。</div>
+          <div class="m-arrow"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="map3-card active">
+          <div class="m-dan">第3段 — 今ここ</div>
+          <div class="m-title">まるごと「任せる」</div>
+          <div class="m-body">Office AgentにExcel作業を任せる→同じ指示を別の月でも使い回す。</div>
+          <div class="map3-tags"><span class="badge badge-red"><span class="badge-dot"></span>ライブデモ</span></div>
+        </div>
+      </div>
+      <div class="demo-note" style="margin-top:18px;text-align:center">この回の華——Excel（2位）＋ルーチン自動化（3位）を、1つのデモで合体して回収します。</div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>15</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S15: デモ中継 第3段（ライブデモ）======== -->
+    <div class="slide" id="s15">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="demo-relay">
+        <div class="dr-badge-row"><span class="badge badge-red"><span class="badge-dot"></span>LIVE DEMO — 第3段</span><span class="badge badge-neutral">Office Agent</span></div>
+        <div class="dr-title">Excelの作業を<br><em>まるごとお願い</em>してみます</div>
+        <div class="dr-sub">見どころ：頼んだのは日本語一言だけ。Excelを開いて関数を書く作業を、丸ごと肩代わりしてくれる瞬間。</div>
+        <div class="dr-fail"><svg class="inline-ic warn" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>正直にお伝えすると：動作が重ければ、生成済みの完成物をスクショで代替します。</span></div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>16</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S16: 第3段 手順A：Excelを任せる ======== -->
+    <div class="slide" id="s16">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">手順A — Excel作業を「任せる」（約6分）</div>
+      <div class="section-title">売上データを渡して、<span class="accent">サマリーを一発生成</span></div>
+      <div class="demo-steps3">
+        <div class="demo-card">
+          <div class="d-step">STEP 1</div>
+          <div class="d-title">新しいタスクを作る</div>
+          <div class="d-body">Office Agent（stride.microsoft.com）で「新しいタスク」を開始します。</div>
+        </div>
+        <div class="demo-card hl">
+          <div class="d-step">STEP 2</div>
+          <div class="d-title">売上Excelを渡して指示</div>
+          <div class="prompt-box">この売上データ（添付）を読んで、①今月の要点3つ ②先月比 ③来月の注意点、を1枚のサマリーにまとめて。数字はデータにあるものだけ使い、無い項目は「データなし」と書いて。</div>
+        </div>
+        <div class="demo-card">
+          <div class="d-step">STEP 3</div>
+          <div class="d-title">サマリーが自動生成</div>
+          <div class="result-box"><svg class="inline-ic ok" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>表を読み取り、要点つきのサマリーが自動生成される。</span></div>
+        </div>
+      </div>
+      <div class="demo-note"><svg class="inline-ic tip" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg><span>これが「任せる」。第2回でやった「自分でCopilotに頼む」の、さらに一歩先です。</span></div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>17</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S17: 第3段 手順B：同じ指示を別ファイルで再利用 ======== -->
+    <div class="slide" id="s17">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">手順B — 同じ指示を、別の月でもう一度（約4分）</div>
+      <div class="section-title">一度うまくいった指示は、<span class="accent">使い回せる</span></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px;flex:1;align-items:start">
+        <div class="card" style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;color:var(--color-text-medium)">STEP 1</div>
+          <div style="font-size:16px;font-weight:700;color:var(--color-text-high)">別の月のファイルを渡す</div>
+          <div style="font-size:13px;line-height:1.65;color:var(--color-text-medium)">新しいタスクで、今度は7〜9月の売上ファイルを添付します。</div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:8px;border-color:var(--color-primary-base);box-shadow:0 0 0 1px var(--color-primary-base),var(--shadow-card)">
+          <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;color:var(--color-primary-base)">STEP 2</div>
+          <div style="font-size:16px;font-weight:700;color:var(--color-text-high)">さっきと同じ指示を貼る</div>
+          <div style="font-size:13px;line-height:1.65;color:var(--color-text-medium)">一字も変えません。手順Aで使った指示文を、そのままコピペします。</div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;color:var(--color-text-medium)">STEP 3</div>
+          <div style="font-size:16px;font-weight:700;color:var(--color-text-high)">新しいサマリーが出る</div>
+          <div class="result-box"><svg class="inline-ic ok" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>今度は店舗Bの落ち込みを指摘してくる。</span></div>
+        </div>
+      </div>
+      <div class="demo-note" style="margin-top:14px;justify-content:center"><svg class="inline-ic tip" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg><span>毎月ゼロから考え直す必要はありません。<strong>指示は1回作れば、あとはファイルを差し替えるだけ</strong>。これが繰り返し作業の一番現実的な減らし方です。</span></div>
+      <div class="callout-deeper">
+        <div class="cd-head"><span class="deeper-pill"><span class="dk-en">ONE STEP DEEPER</span>一段深く</span><span class="cd-title">うまくいったプロンプトは資産</span></div>
+        <div class="cd-body">1回成功した指示は使い捨てにせず、<strong>メモに残して使い回す</strong>のが中級の運用です。“いい指示を書ける”人より、<strong>“いい指示を貯められる”人</strong>が強い。<br>さらにこの先、指示を登録して<strong>スケジュールで完全自動実行する「ワークフロー」機能</strong>も来ています（現在は英語・米国から先行提供。日本語環境はこれから）。</div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>18</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S18: 著作権・セキュリティ締め＋背骨 ======== -->
+    <div class="slide" id="s18">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">背骨の再確認</div>
+      <div class="section-title">任せられる時代だからこそ——<span class="accent">最終確認は人間</span></div>
+      <div class="sec-grid">
+        <div class="sec-card">
+          <div class="s-icon"><svg viewBox="0 0 24 24" style="width:26px;height:26px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;color:var(--color-text-medium)"><circle cx="12" cy="12" r="10"/><path d="M14.83 14.83a4 4 0 1 1 0-5.66"/></svg></div>
+          <div class="s-title">著作権・数字の裏取り</div>
+          <div class="s-body">生成された文章・数字・固有名詞・日付は、必ず人間が裏取りしてください。自動化されても、最終責任は人にあります。</div>
+        </div>
+        <div class="sec-card">
+          <div class="s-icon"><svg viewBox="0 0 24 24" style="width:26px;height:26px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;color:var(--color-text-medium)"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          <div class="s-title">セキュリティ：入れていいデータは会社ルール</div>
+          <div class="s-body">社内データをノートブックやエージェント、Office Agentに入れていいかは、必ずご自分の会社のルールに従ってください。</div>
+        </div>
+      </div>
+      <div class="backbone-strip">
+        <div class="backbone-chip"><strong>①優秀な新人</strong>出力は叩き台</div>
+        <div class="backbone-chip"><strong>②速い/じっくり</strong>重い作業は切替</div>
+        <div class="backbone-chip"><strong>③ハルシネーション</strong>最終確認は人間</div>
+        <div class="backbone-chip"><strong>④セキュリティ</strong>会社ルールに従う</div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>19</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S19: シリーズ総まとめ＋4段はしご完成形 ======== -->
+    <div class="slide" id="s19">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Series Summary — 3回シリーズ総まとめ</div>
+      <div class="section-title">知る → 片付く → <span class="accent">作る・任せる</span></div>
+      <div class="ss-list">
+        <div class="ss-item"><div class="ss-day">第1回</div><div class="ss-verb">知る</div><div class="ss-text">速い／じっくりの使い分け——<strong>重い作業ほど「じっくり」</strong>に切り替える</div></div>
+        <div class="ss-item"><div class="ss-day">第2回</div><div class="ss-verb">片付く</div><div class="ss-text">Excel・Wordが自然言語で<strong>"使える素材"</strong>に変わる</div></div>
+        <div class="ss-item"><div class="ss-day">第3回</div><div class="ss-verb">作る・任せる</div><div class="ss-text">自分専用AI（ノートブック／エージェント）を作り、Office Agentで<strong>丸ごと任せて自動化</strong></div></div>
+      </div>
+      <div class="closing-msg">去年「使えない」と感じたCopilotは、もう別物。<em>1ヶ月で周りと差がつき、半年で別人のように</em>速くなります。</div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>20</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S20: 到達宣言回収＋5つの持ち帰り ======== -->
+    <div class="slide" id="s20">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Takeaways — 到達宣言の回収</div>
+      <div class="section-title">今日の<span class="accent">5つの持ち帰り</span></div>
+      <div class="summary-list">
+        <div class="summary-item"><div class="summary-num">01</div><div class="summary-text">自分専用AI＝<span>「指示＋資料を固定した相棒」</span>だと分かった</div></div>
+        <div class="summary-item"><div class="summary-num">02</div><div class="summary-text">Copilotの<span>「ノートブック」</span>で、その場で自分専用AIを作れる（追加ライセンス不要になり対象拡大）</div></div>
+        <div class="summary-item"><div class="summary-num">03</div><div class="summary-text">Agent Builderで<span>会社版エージェントを作り、社内資料に接地してチームに共有</span>できると分かった</div></div>
+        <div class="summary-item"><div class="summary-num">04</div><div class="summary-text">Office Agentに<span>「1回頼む」</span>だけで作業が丸ごと片付く</div></div>
+        <div class="summary-item"><div class="summary-num">05</div><div class="summary-text">1回成功した指示は<span>貯めて使い回す</span>——繰り返し作業はファイルを差し替えるだけになる</div></div>
+      </div>
+      <div class="closing-msg">①自分専用AIの正体 ②Agent Builderで会社版エージェントを作り共有できること ③1回の指示を使い回して繰り返し作業を減らせること——<em>3つとも到達しました</em>。</div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>21</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S21: Next Step ======== -->
+    <div class="slide" id="s21">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Next Step — シリーズの後で</div>
+      <div class="section-title">「自分の仕事でやってみたい」<span class="accent">その一歩を、隣で</span></div>
+      <div class="ns-card">
+        <div class="ns-lead">3回で「知る → 片付く → <em>作る・任せる</em>」を体験しました。次は<em>あなたの実際の仕事</em>で動かす番です。</div>
+        <div class="ns-points">
+          <div class="ns-point" style="border-color:var(--color-primary-base);background:var(--color-primary-light)"><span class="ic" style="font-weight:700;font-size:16px;font-family:Inter,sans-serif">X</span><span><strong>X（@Yorozu0519）でほぼ毎日発信中</strong>：今日からできるAIの小ネタ・最新情報をいちばん早くお届け。まずは<strong>フォロー</strong>を！</span></div>
+          <div class="ns-point"><span class="ic"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span><strong>無料相談</strong>：「自分の業務だと何から？」を一緒に整理します。Webの無料相談ボタンから。</span></div>
+          <div class="ns-point"><span class="ic"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span><strong>Note連載</strong>：「AI活用マガジン」で、じっくり読める解説を継続発信。</span></div>
+          <div class="ns-point"><span class="ic"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><path d="M14 2v6h6"/></svg></span><span><strong>3回分の資料・録画</strong>：アンケート記入者へまとめてお送りします。</span></div>
+        </div>
+        <div class="ns-cta">しつこい営業は一切ありません。「もう少し相談したい」方だけ、お気軽にどうぞ。</div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>22</strong> / 23</span>
+      </div>
+    </div>
+
+    <!-- ======== S22: アンケート案内（締め） ======== -->
+    <div class="slide" id="s-survey">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/logo_mark.png" alt="AI・ITよろず相談所">Copilot活用ウェビナー</div>
+        <span>第3回 ／ 2026.07.26</span>
+      </div>
+      <div class="kicker">Thank You — 最後にお願いです</div>
+      <div class="section-title">アンケートで<span class="accent">3回分の資料・録画リンク</span>をお受け取りください</div>
+      <div class="contact-wrap">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="font-size:17px;line-height:1.85;color:var(--color-text-high)">
+            3回シリーズ、お付き合いいただきありがとうございました。<br>
+            <strong>1分のアンケート</strong>にご記入いただいた方へ、<br>
+            <strong class="accent">第1〜3回のスライド資料</strong>と<strong class="accent">録画リンク</strong>を<br>
+            後日メールでお送りします。
+          </div>
+          <div class="survey-list">
+            <div class="survey-row"><span class="ic"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;color:var(--color-text-medium)"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span><span>チャット欄のURLからご記入ください（所要1分）</span></div>
+            <div class="survey-row"><span class="ic"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;color:var(--color-primary-base)"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span><span>記入された方限定で3回分の資料・録画をお届けします</span></div>
+          </div>
+          <!-- FORM_URL: 第1回・第2回と同一フォーム（2026-07-25確定） -->
+          <div class="survey-url-box" style="background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:10px 16px;font-size:16px;font-weight:700;color:var(--color-primary-base);text-align:center">https://forms.gle/f3rqP3BwEqQzu9qF7</div>
+          <div class="next-series">
+            「自分の仕事でも試したい」方は<em>無料相談</em>もお気軽に。X（@Yorozu0519）・Noteでも発信中です。
+          </div>
+        </div>
+        <div class="qr-box">
+          <img src="assets/form_qr.png" alt="アンケートフォームQRコード" style="width:150px;height:150px;object-fit:contain">
+          <div style="font-size:12px;color:var(--color-text-medium);text-align:center;line-height:1.6">スマホのカメラで読み取り<br>または チャット欄のURLから</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Copilot活用ウェビナー ／ 清水幸久</span>
+        <span class="page-num"><strong>23</strong> / 23</span>
+      </div>
+    </div>
+
+  </div><!-- /deck -->
+</div><!-- /stage -->
+
+<div class="nav-hint">← → キーで移動　／　F でフルスクリーン</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = Math.max(0, Math.min(total - 1, n));
+    slides[cur].classList.add('active');
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+
+  btnPrev.disabled = true;
+  btnPrev.addEventListener('click', () => go(cur - 1));
+  btnNext.addEventListener('click', () => go(cur + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (e.key >= '1' && e.key <= '9') { go(parseInt(e.key) - 1); }
+    else if (e.key === '0') { go(9); }
+  });
+</script>
+</body>
+</html>
