@@ -375,6 +375,7 @@
     max-width: 58ch;
     margin: 0 0 48px;
   }
+  .section-intro a { color: var(--color-primary-base); }
 
   /* Neutralize former dark "veil" backgrounds */
   .veil       { background: var(--color-background); color: var(--color-text-high); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); backdrop-filter: none; }
@@ -584,6 +585,8 @@
     flex: 1;
   }
   .seminar-card .btn { align-self: flex-start; }
+  .seminar-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .seminar-actions .btn { align-self: auto; }
   .seminars-note {
     margin-top: 32px;
     font-size: 14px;
@@ -1185,7 +1188,7 @@
 
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar" id="announce-bar">
-  <span>🔴 開催中：Copilot活用 無料Webセミナー 第2回 7/19(日)・第3回 7/26(日) 21:00〜 → <a href="copilot_webinar_lp.html">詳細・参加登録</a></span>
+  <span>📺 7月のCopilot無料Webセミナー（全3回）は終了しました。アーカイブ・実演動画をYouTubeで公開中 → <a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer">YouTubeで見る</a></span>
   <button class="announce-close" id="announce-close" aria-label="お知らせを閉じる">&times;</button>
 </div>
 
@@ -1417,23 +1420,26 @@
     用意しています。
   </h2>
   <p class="section-intro reveal">
-    note で気軽に読む、ウェビナーでまとまって学ぶ、そして個別相談で自分ごととして深める——段階に合わせて選べる学びの場をご用意しています。
+    note で気軽に読む、ウェビナーでまとまって学ぶ、そして個別相談で自分ごととして深める——段階に合わせて選べる学びの場をご用意しています。過去のウェビナーは、アーカイブと実演動画を<a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a>で公開中です。
   </p>
 
   <div class="seminars-grid reveal-stagger">
 
     <div class="seminar-card">
-      <span class="seminar-badge live">開催中・参加受付中</span>
+      <span class="seminar-badge done">開催終了</span>
       <h4>「去年"使えない"と感じたCopilotは、もう別物」</h4>
       <p class="seminar-sub">Copilot活用 全3回無料Webセミナー</p>
       <p class="seminar-detail">
-        7/12・7/19・7/26 各回21:00–21:40／Google Meet開催。<br/>
-        一度は「使えない」と感じたCopilotが、今どこまで進化したのかを実演を交えて解説します。
+        2026年7月に全3回開催（各回21:00–21:40／Google Meet）。一度は「使えない」と感じたCopilotが、今どこまで進化したのかを実演を交えてお伝えしました。<br/>
+        見逃した方・復習したい方へ、アーカイブと実演動画をYouTubeで公開しています。
       </p>
-      <a href="copilot_webinar_lp.html" class="btn btn-primary">
-        <span>詳細・参加登録</span>
-        <span class="arrow">→</span>
-      </a>
+      <div class="seminar-actions">
+        <a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          <span>YouTubeでアーカイブを見る</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="copilot_webinar_lp.html" class="btn btn-ghost">セミナー内容を見る</a>
+      </div>
     </div>
 
     <div class="seminar-card">
@@ -1478,7 +1484,7 @@
     </div>
     <div class="step">
       <div class="step-num">2026.07</div>
-      <h4>Copilot活用ウェビナー 全3回（開催中）</h4>
+      <h4>Copilot活用ウェビナー 全3回開催・アーカイブをYouTubeで公開</h4>
     </div>
   </div>
 
@@ -1825,7 +1831,7 @@ window.addEventListener('scroll', () => {
     document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
   };
 
-  const dismissed = sessionStorage.getItem('announceBarDismissed') === '1';
+  const dismissed = sessionStorage.getItem('announceBarDismissed_v2') === '1';
   if (dismissed) {
     bar.style.display = 'none';
     return;
@@ -1838,7 +1844,7 @@ window.addEventListener('scroll', () => {
   closeBtn.addEventListener('click', () => {
     bar.style.display = 'none';
     document.body.classList.remove('has-announce');
-    sessionStorage.setItem('announceBarDismissed', '1');
+    sessionStorage.setItem('announceBarDismissed_v2', '1');
   });
 })();
 
