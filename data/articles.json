@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "【Copilot活用】Excel関数を暗記せず、複数シートを集計する方法",
+      "url": "https://www.youtube.com/watch?v=17Z_U_9Npjs",
+      "date": "2026.07.28",
+      "thumbnail": "https://i.ytimg.com/vi/17Z_U_9Npjs/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "【Copilot活用】Excelの表を3点要約し、そのままグラフ化｜実演",
       "url": "https://www.youtube.com/watch?v=wLlEhcrPpLs",
       "date": "2026.07.27",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=rbihjKN4hi0",
       "date": "2026.07.19",
       "thumbnail": "https://i.ytimg.com/vi/rbihjKN4hi0/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "長い取引先メールを3行で要約｜Outlook Copilot実演",
-      "url": "https://www.youtube.com/watch?v=_Ig92f2_F7I",
-      "date": "2026.07.19",
-      "thumbnail": "https://i.ytimg.com/vi/_Ig92f2_F7I/hqdefault.jpg"
     },
     {
       "source": "SITE",
