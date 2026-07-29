@@ -3,6 +3,27 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "【Copilot活用】Word長文を相手別に要約し、Markdown・CSVへ整える",
+      "url": "https://www.youtube.com/watch?v=oZAeaOVvmS0",
+      "date": "2026.07.29",
+      "thumbnail": "https://i.ytimg.com/vi/oZAeaOVvmS0/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "資料を毎回添付しない。Copilot Notebooksで自分専用AIを作る #Shorts",
+      "url": "https://www.youtube.com/watch?v=v0nn13fOx7Q",
+      "date": "2026.07.29",
+      "thumbnail": "https://i.ytimg.com/vi/v0nn13fOx7Q/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "【Copilot活用 第3回】自分専用AIを作る・仕事をまるごと任せる｜Notebook・Agent・自動化",
+      "url": "https://www.youtube.com/watch?v=0YwHGdccLYM",
+      "date": "2026.07.29",
+      "thumbnail": "https://i.ytimg.com/vi/0YwHGdccLYM/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "【Copilot活用】Excel関数を暗記せず、複数シートを集計する方法",
       "url": "https://www.youtube.com/watch?v=17Z_U_9Npjs",
       "date": "2026.07.28",
@@ -56,27 +77,6 @@
       "url": "https://www.youtube.com/watch?v=uPFDOnKOqpI",
       "date": "2026.07.23",
       "thumbnail": "https://i.ytimg.com/vi/uPFDOnKOqpI/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "Excelの表からグラフを一瞬で作る｜Copilot実演 #Shorts",
-      "url": "https://www.youtube.com/watch?v=cVV7ETR933A",
-      "date": "2026.07.22",
-      "thumbnail": "https://i.ytimg.com/vi/cVV7ETR933A/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "Think Deeperで矛盾とリスクを見抜く｜Copilot実践",
-      "url": "https://www.youtube.com/watch?v=nJzT9KyKzJw",
-      "date": "2026.07.19",
-      "thumbnail": "https://i.ytimg.com/vi/nJzT9KyKzJw/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "Copilot各版の違いを解説｜無料版・会社版・個人版・GitHub版",
-      "url": "https://www.youtube.com/watch?v=rbihjKN4hi0",
-      "date": "2026.07.19",
-      "thumbnail": "https://i.ytimg.com/vi/rbihjKN4hi0/hqdefault.jpg"
     },
     {
       "source": "SITE",
