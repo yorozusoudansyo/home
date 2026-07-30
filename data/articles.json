@@ -3,6 +3,20 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "「分からない」と言えるAIを作る｜Copilot Notebooks実演 #Shorts",
+      "url": "https://www.youtube.com/watch?v=_Wzj3r6-MMg",
+      "date": "2026.07.30",
+      "thumbnail": "https://i.ytimg.com/vi/_Wzj3r6-MMg/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "【Copilot活用】Copilot関数でアンケート回答を一括分類｜Excel実演",
+      "url": "https://www.youtube.com/watch?v=tMfhPtuJnic",
+      "date": "2026.07.30",
+      "thumbnail": "https://i.ytimg.com/vi/tMfhPtuJnic/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "【Copilot活用】Word長文を相手別に要約し、Markdown・CSVへ整える",
       "url": "https://www.youtube.com/watch?v=oZAeaOVvmS0",
       "date": "2026.07.29",
@@ -63,20 +77,6 @@
       "url": "https://www.youtube.com/watch?v=WAl17P4KeLY",
       "date": "2026.07.24",
       "thumbnail": "https://i.ytimg.com/vi/WAl17P4KeLY/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "Excel関数はもう暗記しなくていい｜Copilot活用 #Shorts",
-      "url": "https://www.youtube.com/watch?v=3StBnPj1ztM",
-      "date": "2026.07.23",
-      "thumbnail": "https://i.ytimg.com/vi/3StBnPj1ztM/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【無料Webセミナー】Copilot活用｜第2回 数字と文書が片付く ― Excel分析とWord",
-      "url": "https://www.youtube.com/watch?v=uPFDOnKOqpI",
-      "date": "2026.07.23",
-      "thumbnail": "https://i.ytimg.com/vi/uPFDOnKOqpI/hqdefault.jpg"
     },
     {
       "source": "SITE",
