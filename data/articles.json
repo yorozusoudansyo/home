@@ -3,6 +3,20 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "チャットで社内AIを作る｜Copilot Agent Builder #Shorts",
+      "url": "https://www.youtube.com/watch?v=I1aNrcj-z8U",
+      "date": "2026.07.31",
+      "thumbnail": "https://i.ytimg.com/vi/I1aNrcj-z8U/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "【Copilot活用】伝わる指示の組み立て方と、安全に使うための基本",
+      "url": "https://www.youtube.com/watch?v=a4ANUoBEGrg",
+      "date": "2026.07.31",
+      "thumbnail": "https://i.ytimg.com/vi/a4ANUoBEGrg/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "「分からない」と言えるAIを作る｜Copilot Notebooks実演 #Shorts",
       "url": "https://www.youtube.com/watch?v=_Wzj3r6-MMg",
       "date": "2026.07.30",
@@ -63,20 +77,6 @@
       "url": "https://www.youtube.com/watch?v=cNCkYlY69V0",
       "date": "2026.07.25",
       "thumbnail": "https://i.ytimg.com/vi/cNCkYlY69V0/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "長いWord資料を相手別に3行要約｜Copilot実演 #Shorts",
-      "url": "https://www.youtube.com/watch?v=2tBWYULMSOg",
-      "date": "2026.07.24",
-      "thumbnail": "https://i.ytimg.com/vi/2tBWYULMSOg/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "Copilot関数で大量データを一括処理｜Excel活用 #Shorts",
-      "url": "https://www.youtube.com/watch?v=WAl17P4KeLY",
-      "date": "2026.07.24",
-      "thumbnail": "https://i.ytimg.com/vi/WAl17P4KeLY/hqdefault.jpg"
     },
     {
       "source": "SITE",
