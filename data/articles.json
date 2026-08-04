@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "CSVからWord売上レポートを自動作成｜Office Agent #Shorts",
+      "url": "https://www.youtube.com/watch?v=qDpOSfW_xZM",
+      "date": "2026.08.04",
+      "thumbnail": "https://i.ytimg.com/vi/qDpOSfW_xZM/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "チャットで社内AIを作る｜Copilot Agent Builder #Shorts",
       "url": "https://www.youtube.com/watch?v=I1aNrcj-z8U",
       "date": "2026.07.31",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=n1lgT3YnYm8",
       "date": "2026.07.26",
       "thumbnail": "https://i.ytimg.com/vi/n1lgT3YnYm8/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "Markdownの回答をWord形式に直す方法｜Copilot活用 #Shorts",
-      "url": "https://www.youtube.com/watch?v=cNCkYlY69V0",
-      "date": "2026.07.25",
-      "thumbnail": "https://i.ytimg.com/vi/cNCkYlY69V0/hqdefault.jpg"
     },
     {
       "source": "SITE",
