@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>書けなくても、作れる。｜「これ、毎回面倒」をAIで自分の道具にする（無料・全3回）</title>
+<meta name="description" content="コードを書いたことがない方へ。一行も書かずに、AIとの会話だけで自分専用の小さな道具を作ります。全3回・無料オンラインセミナー。8/16・23・30 20:00〜">
+
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --primary:#D32F2F;
+  --primary-hover:#B71C1C;
+  --primary-light:#FFEBEE;
+  --text-high:#1F2937;
+  --text-med:#4B5563;
+  --border:#E5E7EB;
+  --bg:#F9FAFB;
+  --surface:#FFFFFF;
+  --font:"Inter","Noto Sans JP",sans-serif;
+  --r-sm:4px; --r-md:8px; --r-pill:999px;
+  --shadow-card:0 4px 6px rgba(0,0,0,0.05);
+  --shadow-overlay:0 10px 15px rgba(0,0,0,0.1);
+  --s-xxs:4px; --s-xs:8px; --s-s:16px; --s-m:24px; --s-l:32px; --s-xl:64px;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--font);font-size:16px;line-height:1.7;color:var(--text-high);background:var(--bg);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+.container{max-width:800px;margin:0 auto;padding:0 var(--s-m)}
+section{padding:var(--s-xl) var(--s-m)}
+section+section{border-top:1px solid var(--border)}
+
+.sec-label{display:block;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--primary);margin-bottom:var(--s-xs)}
+.sec-title{font-size:clamp(21px,4.2vw,26px);font-weight:700;letter-spacing:.04em;line-height:1.5;padding-bottom:var(--s-xs);border-bottom:2px solid var(--primary);display:inline-block;margin-bottom:var(--s-m)}
+.sec-desc{font-size:16px;color:var(--text-med);max-width:660px;margin-bottom:var(--s-l)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.rv.on{opacity:1;transform:none}
+
+/* HERO */
+.hero{background:var(--surface);background-image:linear-gradient(135deg,var(--primary-light) 0%,var(--surface) 52%);padding:48px var(--s-m) var(--s-xl);text-align:center;border-top:4px solid var(--primary)}
+.hero-logo{display:block;width:min(240px,64vw);height:auto;margin:0 auto var(--s-m)}
+.hero-badge{display:inline-block;background:var(--primary);color:var(--surface);font-size:12px;font-weight:700;letter-spacing:.1em;padding:var(--s-xxs) var(--s-s);border-radius:var(--r-pill);margin-bottom:var(--s-m)}
+.hero-catch{font-size:clamp(30px,7.5vw,52px);font-weight:700;letter-spacing:.03em;line-height:1.28;margin-bottom:var(--s-s)}
+.hero-catch .accent{color:var(--primary)}
+.hero-catch .sub{display:block;font-size:clamp(17px,3.6vw,24px);margin-top:var(--s-s);letter-spacing:.04em}
+.hero-lead{font-size:clamp(15px,2.3vw,17px);font-weight:500;line-height:1.85;max-width:620px;margin:0 auto var(--s-l)}
+
+.hero-meta{display:flex;justify-content:center;flex-wrap:wrap;gap:var(--s-xs);font-size:13px;color:var(--text-med);margin-bottom:var(--s-l)}
+.hero-meta span{border:1px solid var(--border);background:var(--surface);border-radius:var(--r-pill);padding:var(--s-xxs) var(--s-s)}
+
+.btn{display:inline-block;background:var(--primary);color:var(--surface);font-size:17px;font-weight:700;letter-spacing:.05em;padding:var(--s-s) 40px;border-radius:var(--r-sm);box-shadow:var(--shadow-card);transition:background .15s ease,transform .15s ease}
+.btn:hover{background:var(--primary-hover);transform:translateY(-1px)}
+.btn-note{display:block;font-size:13px;color:var(--text-med);margin-top:var(--s-s)}
+
+/* TRY — live demo */
+.try{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-overlay);padding:var(--s-m);max-width:600px;margin:0 auto;text-align:left}
+.try-head{display:flex;align-items:baseline;gap:var(--s-xs);margin-bottom:var(--s-s);flex-wrap:wrap}
+.try-kicker{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--primary);background:var(--primary-light);padding:3px 12px;border-radius:var(--r-pill)}
+.try-title{font-size:15px;font-weight:500}
+.try-note{font-size:13px;color:var(--text-med);line-height:1.7;margin-bottom:var(--s-m)}
+
+.cand{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-xs);margin-bottom:var(--s-m)}
+.cand div{border:1px solid var(--border);border-radius:var(--r-md);padding:10px;font-size:12px;line-height:1.6;color:var(--text-med)}
+.cand strong{display:block;font-size:13px;font-weight:500;color:var(--text-high);margin-bottom:2px}
+
+.axis-lab{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--text-med);margin-bottom:var(--s-xs)}
+.axis{display:flex;align-items:center;gap:12px;margin:7px 0}
+.axis span.n{font-size:13px;width:96px;flex-shrink:0}
+.axis span.v{font-size:13px;font-weight:700;width:16px;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:var(--r-pill);background:var(--border);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--primary);cursor:pointer;border:3px solid var(--surface);box-shadow:var(--shadow-card)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--primary);cursor:pointer;border:3px solid var(--surface)}
+
+.res{border-top:1px solid var(--border);margin-top:var(--s-m);padding-top:var(--s-m)}
+.rank{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:var(--r-md);padding:9px 14px;margin-bottom:6px;font-size:14px;transition:border-color .2s ease,background .2s ease}
+.rank.top{border:2px solid var(--primary);background:var(--primary-light)}
+.rank .no{font-size:12px;color:var(--text-med);width:26px;flex-shrink:0}
+.rank.top .no{color:var(--primary);font-weight:700}
+.rank .nm{flex:1}
+.rank .sc{font-weight:700;font-variant-numeric:tabular-nums}
+.note{font-size:13px;line-height:1.7;color:var(--text-med);border-left:3px solid var(--primary);padding-left:12px;margin-top:12px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-s);text-align:center}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:var(--s-m) var(--s-xs)}
+.stat b{display:block;font-size:clamp(32px,7vw,46px);font-weight:700;line-height:1.1;color:var(--primary);letter-spacing:.02em}
+.stat i{display:block;font-style:normal;font-size:13px;color:var(--text-med);margin-top:var(--s-xs)}
+
+/* CHAT */
+.chat{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-card);padding:var(--s-m)}
+.bub{max-width:82%;padding:12px 16px;border-radius:14px;font-size:14px;line-height:1.75;margin-bottom:12px}
+.bub.me{background:var(--primary-light);border:1px solid var(--border);margin-left:auto;border-bottom-right-radius:4px}
+.bub.ai{background:var(--bg);border:1px solid var(--border);border-bottom-left-radius:4px}
+.bub small{display:block;font-size:11px;letter-spacing:.1em;color:var(--text-med);margin-bottom:4px}
+.built{border:2px dashed var(--border);border-radius:12px;padding:var(--s-s);text-align:center;font-size:13px;color:var(--text-med);margin-top:var(--s-xs)}
+.built b{display:block;font-size:15px;font-weight:500;color:var(--text-high);margin-bottom:4px}
+
+/* BA */
+.ba{display:grid;grid-template-columns:1fr auto 1fr;gap:var(--s-s);align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:var(--s-s) var(--s-m);margin-bottom:var(--s-xs)}
+.ba .b{font-size:14px;color:var(--text-med)}
+.ba .a{font-size:15px;font-weight:500}
+.ba .ar{font-size:14px;font-weight:700;color:var(--primary)}
+
+/* STEPS */
+.step{display:flex;gap:var(--s-m);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-card);padding:var(--s-m);margin-bottom:var(--s-s)}
+.step-n{width:52px;flex-shrink:0;text-align:center}
+.step-n b{display:block;font-size:26px;font-weight:700;color:var(--primary);line-height:1}
+.step-n i{display:block;font-style:normal;font-size:11px;color:var(--text-med);letter-spacing:.08em;margin-top:2px}
+.step-d{font-size:12px;font-weight:700;color:var(--primary);letter-spacing:.04em;margin-bottom:2px}
+.step h3{font-size:18px;font-weight:500;line-height:1.5;margin-bottom:var(--s-xs)}
+.step p{font-size:14px;color:var(--text-med);line-height:1.8}
+.step .take{display:inline-block;font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-pill);padding:3px 12px;margin-top:10px;color:var(--text-med)}
+
+/* GRID CARDS */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:var(--s-xs)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:var(--s-s) var(--s-m)}
+.card p{font-size:14px;line-height:1.8}
+.quote{border-left:4px solid var(--primary);padding:var(--s-xs) 0 var(--s-xs) var(--s-m);font-size:17px;font-weight:500;line-height:1.8;margin:var(--s-m) 0}
+
+/* CAL */
+.cal{display:flex;flex-direction:column;gap:var(--s-xs);max-width:460px;margin:0 auto var(--s-s)}
+.calb{display:flex;align-items:center;gap:var(--s-s);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);box-shadow:var(--shadow-card);padding:var(--s-s) var(--s-m);text-align:left;transition:border-color .15s ease,transform .15s ease}
+.calb:hover{border-color:var(--primary);transform:translateY(-1px)}
+.calb .s{display:block;font-size:12px;font-weight:700;color:var(--primary)}
+.calb .d{display:block;font-size:14px;font-weight:500;margin-top:2px}
+.calb .p{margin-left:auto;font-size:20px;font-weight:700;color:var(--primary)}
+
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;font-size:15px}
+th,td{padding:var(--s-s);text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{width:32%;font-weight:500;color:var(--text-med);background:var(--bg)}
+tr:last-child th,tr:last-child td{border-bottom:none}
+
+.spk{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-card);padding:var(--s-m);display:flex;gap:var(--s-m);flex-wrap:wrap}
+.spk-av{width:64px;height:64px;border-radius:var(--r-pill);background:var(--primary-light);color:var(--primary);font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.spk-tag{display:inline-block;font-size:12px;border:1px solid var(--border);color:var(--text-med);padding:2px 12px;border-radius:var(--r-pill);margin:var(--s-xs) var(--s-xxs) 0 0}
+
+.cta{background-image:linear-gradient(135deg,var(--primary-light) 0%,var(--surface) 100%);text-align:center}
+.cta h2{font-size:clamp(22px,5vw,32px);font-weight:700;letter-spacing:.04em;line-height:1.45;margin-bottom:var(--s-s)}
+.cta p{font-size:15px;color:var(--text-med);margin-bottom:var(--s-l);line-height:1.8}
+
+.faq-i{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:var(--s-xs);overflow:hidden}
+.faq-q{padding:var(--s-s) var(--s-m);font-size:15px;font-weight:500;cursor:pointer;display:flex;gap:var(--s-s);line-height:1.6}
+.faq-q b{color:var(--primary)}
+.faq-a{padding:0 var(--s-m) var(--s-s) 50px;font-size:14px;color:var(--text-med);line-height:1.8;display:none}
+.faq-i.open .faq-a{display:block}
+
+footer{padding:var(--s-l) var(--s-m) 96px;text-align:center;font-size:13px;color:var(--text-med);border-top:1px solid var(--border)}
+.f-logo{display:block;width:140px;margin:0 auto var(--s-s)}
+
+.sticky{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);box-shadow:var(--shadow-overlay);padding:var(--s-xs) var(--s-s);text-align:center;z-index:10}
+.sticky a{display:block;background:var(--primary);color:var(--surface);font-size:15px;font-weight:700;padding:14px;border-radius:var(--r-sm)}
+
+@media(min-width:801px){.sticky{display:none}footer{padding-bottom:var(--s-l)}}
+@media(max-width:560px){
+  .ba{grid-template-columns:1fr;gap:2px}
+  .cand{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr;gap:var(--s-xs)}
+  .stat{display:flex;align-items:baseline;justify-content:center;gap:12px;padding:var(--s-s)}
+  .stat b{font-size:32px}
+  .axis span.n{width:80px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <img class="hero-logo" src="assets/logo_full.png" alt="AI・ITよろず相談所">
+    <div class="hero-badge">無料 Webセミナー ｜ 全3回</div>
+
+    <h1 class="hero-catch">
+      <span class="accent">書けなくても、</span><br><span class="accent">作れる。</span>
+      <span class="sub">「これ、毎回面倒」を、自分の道具にする。</span>
+    </h1>
+
+    <p class="hero-lead">
+      コードを一行も書かずに、自分専用の小さな道具を作ります。講師も、書きません。<br>
+      AIに日本語で話しかけるだけで画面つきのアプリができていく様子を、最初から最後までご覧いただきます。
+    </p>
+
+    <div class="hero-meta">
+      <span>参加費 無料</span><span>8/16・23・30（日）20:00〜</span><span>各回45分</span><span>コード経験 不要</span>
+    </div>
+
+    <!-- LIVE DEMO -->
+    <div class="try">
+      <div class="try-head">
+        <span class="try-kicker">触ってみてください</span>
+        <span class="try-title">3回で作るのは、こういう道具です</span>
+      </div>
+      <p class="try-note">歓送迎会の店を3つから選ぶ場面。<strong>何を重く見るかを動かすと、1位が入れ替わります。</strong></p>
+
+      <div class="cand">
+        <div><strong>和食 まる屋</strong>5,000円／駅3分<br>個室あり／3日前まで変更可</div>
+        <div><strong>個室居酒屋 とり吉</strong>4,000円／駅8分<br>半個室／前日まで変更可</div>
+        <div><strong>ビストロ ラ・ペール</strong>6,500円／駅1分<br>個室あり／1週間前まで</div>
+      </div>
+
+      <div class="axis-lab">何を重く見ますか</div>
+      <div id="axes"></div>
+
+      <div class="res">
+        <div id="rank"></div>
+        <div class="note" id="note"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:var(--s-l)">
+      <a class="btn" href="#cta">カレンダーに追加する</a>
+      <span class="btn-note">各回単独でのご参加も歓迎です</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section>
+  <div class="container rv">
+    <div class="stats">
+      <div class="stat"><b>0</b><i>3回で書いたコードの行数</i></div>
+      <div class="stat"><b>45</b><i>1回あたりの分数</i></div>
+      <div class="stat"><b>0円</b><i>参加費</i></div>
+    </div>
+  </div>
+</section>
+
+<!-- 共感 -->
+<section>
+  <div class="container rv">
+    <span class="sec-label">こんなこと、ありませんか</span>
+    <h2 class="sec-title">「ソフトを作る」は、自分と関係ない話だと思っていませんか</h2>
+    <p class="sec-desc">
+      仕事の中に、毎回同じことで面倒だと感じる場面がある。専用のツールがあれば早いのに、探しても自分の仕事にぴったり合うものは見つからない。かといって、作るなんて自分には無理——。
+    </p>
+    <div class="grid2">
+      <div class="card"><p>これまで「作る」は、コードを書ける人の側にありました。書けない人は、誰かが作ったものから選んで使うしかなかった。</p></div>
+      <div class="card"><p>その前提が、いま変わりつつあります。日本語で話しかければ道具ができる。うまくいかなければ、日本語で頼み直せば直る。</p></div>
+    </div>
+    <div class="quote">この3回では、それを45分×3回で、目の前で実演します。</div>
+  </div>
+</section>
+
+<!-- 会話だけで作る -->
+<section>
+  <div class="container rv">
+    <span class="sec-label">当日の進み方</span>
+    <h2 class="sec-title">やることは、話しかけるだけです</h2>
+    <p class="sec-desc">専門用語は使いません。困っていることを日本語で伝え、出てきたものに「ここをこうしてほしい」と注文をつける。それだけで画面が育っていきます。</p>
+
+    <div class="chat">
+      <div class="bub me"><small>あなた</small>お店を3つ選んで、どれがいいか決めたいんですが、毎回迷ってしまいます。</div>
+      <div class="bub ai"><small>AI</small>候補と、比べたい観点を入力すると点数が出る画面を作りましょうか。</div>
+      <div class="built"><b>画面ができました</b>候補3つ・評価軸4つ・順位の表示</div>
+      <div class="bub me" style="margin-top:16px"><small>あなた</small>人によって重視するところが違うので、重みをつけられるようにしてください。</div>
+      <div class="bub ai"><small>AI</small>各項目にスライダーを追加しました。動かすと順位が変わります。</div>
+      <div class="built"><b>更新しました</b>重みスライダー・順位の理由・僅差の注意</div>
+    </div>
+
+    <div class="quote">うまくいかない場面も、そのままお見せします。頼み直せば直る、というところまで見ていただきたいからです。</div>
+  </div>
+</section>
+
+<!-- 見てほしいこと -->
+<section>
+  <div class="container rv">
+    <span class="sec-label">このセミナーで見てほしいこと</span>
+    <h2 class="sec-title">道具そのものより、作る側にまわれるという事実</h2>
+    <p class="sec-desc">3回を通して、ご自身が作る側に立てるかどうかを判断してください。起きてほしい変化は、次の3つです。</p>
+    <div class="ba"><div class="b">ソフトを作るのは、自分とは無関係な人の仕事</div><div class="ar">→</div><div class="a">自分にも作れる</div></div>
+    <div class="ba"><div class="b">既にあるツールから選ぶしかない</div><div class="ar">→</div><div class="a">自分の仕事に合わせて作ればいい</div></div>
+    <div class="ba"><div class="b">コードが書けないから無理</div><div class="ar">→</div><div class="a">書けなくても、頼めばいい</div></div>
+  </div>
+</section>
+
+<!-- プログラム -->
+<section id="sessions">
+  <div class="container rv">
+    <span class="sec-label">プログラム</span>
+    <h2 class="sec-title">作る → 自分の基準を入れる → 仕事に移す</h2>
+
+    <div class="step">
+      <div class="step-n"><b>1</b><i>8/16 日</i></div>
+      <div>
+        <div class="step-d">20:00〜20:45</div>
+        <h3>迷う理由を、AIと分けてみる</h3>
+        <p>「決められない」を分解します。候補が複数ある、見るところが複数ある、人によって見るところが違う。その場でAIに相談しながら、候補と評価軸を入れると点数が出る最小版を作り、実際に動かすところまで進みます。<br><br><strong>冒頭でこう宣言します——「私は今日、一行もコードを書きません」</strong></p>
+        <span class="take">持ち帰り：迷いを言語化する3つの型</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n"><b>2</b><i>8/23 日</i></div>
+      <div>
+        <div class="step-d">20:00〜20:45</div>
+        <h3>「自分の基準」を、道具に入れる</h3>
+        <p>作った最小版に、日本語で修正を頼んで機能を足します。何を重く見るかを設定できるようにする、なぜその順位なのか理由を出す、僅差のときは注意を出す。<br><br>この回の山場は、同じ3店・同じ情報でも、<strong>何を重く見るかで1位が入れ替わる</strong>ところです。ページ上部で触っていただいたあれを、その場で作ります。</p>
+        <span class="take">持ち帰り：修正を頼むときの言葉の型</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n"><b>3</b><i>8/30 日</i></div>
+      <div>
+        <div class="step-d">20:00〜20:45</div>
+        <h3>作った道具を、自分の仕事に移す</h3>
+        <p>情報が足りない候補、条件が矛盾する候補、3つとも似ている候補で試します。おかしな結果を直す流れ、人が見て分かるように書き添えること、そして<strong>軸をご自身の仕事の場面へ差し替える</strong>ところまで扱います。訪問先の優先度でも、改修の順番でも、備品の選定でも。</p>
+        <span class="take">持ち帰り：自分版のアプリ、改善用プロンプトの型</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 対象 -->
+<section>
+  <div class="container rv">
+    <span class="sec-label">対象</span>
+    <h2 class="sec-title">こんな方に</h2>
+    <div class="grid2">
+      <div class="card"><p>ソフトを作るのは自分とは無関係だと思っている</p></div>
+      <div class="card"><p>コードは書けないが、作る側にまわってみたい</p></div>
+      <div class="card"><p>ツールを探すより、自分の仕事に合ったものが欲しい</p></div>
+      <div class="card"><p>何かを選ぶたび迷って、同じことを考え直している</p></div>
+      <div class="card"><p>決めた理由を説明するのに、毎回頭を絞っている</p></div>
+      <div class="card"><p>AIを使ってはいるが、質問して答えをもらう以上の使い方を知らない</p></div>
+    </div>
+    <div class="quote">必要ないもの：プログラミングの知識、開発の経験、専門用語、事前の準備。</div>
+    <p class="sec-desc" style="margin:var(--s-m) 0 0">議事録の作成、メール文の作成、Excel集計、資料作成の自動化は扱いません。ここでは「自分の判断基準を、画面つきの道具にする」という一点に絞ります。</p>
+  </div>
+</section>
+
+<!-- 概要 -->
+<section>
+  <div class="container rv">
+    <span class="sec-label">開催概要</span>
+    <h2 class="sec-title">詳細情報</h2>
+    <table>
+      <tr><th>名称</th><td>「これ、毎回面倒」をAIで自分の道具にする<br>コード未経験から始める、仕事ミニアプリづくり</td></tr>
+      <tr><th>第1回</th><td>2026年8月16日（日）20:00〜20:45<br>迷う理由を、AIと分けてみる</td></tr>
+      <tr><th>第2回</th><td>2026年8月23日（日）20:00〜20:45<br>「自分の基準」を、道具に入れる</td></tr>
+      <tr><th>第3回</th><td>2026年8月30日（日）20:00〜20:45<br>作った道具を、自分の仕事に移す</td></tr>
+      <tr><th>形式</th><td>オンライン（Google Meet）</td></tr>
+      <tr><th>参加費</th><td>無料</td></tr>
+      <tr><th>対象</th><td>コードを書いた経験がない方。各回単独でのご参加も可能です</td></tr>
+      <tr><th>ご用意いただくもの</th><td>特にありません。当日は架空のお店3つを題材に進めますので、実際の業務情報も不要です</td></tr>
+      <tr><th>主催</th><td>AI・ITよろず相談所（清水 幸久）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 講師 -->
+<section>
+  <div class="container rv">
+    <span class="sec-label">講師紹介</span>
+    <h2 class="sec-title">セミナー講師</h2>
+    <div class="spk">
+      <div class="spk-av">Y</div>
+      <div style="flex:1;min-width:230px">
+        <div style="font-size:17px;font-weight:700">清水 幸久（Yukisa）</div>
+        <div style="font-size:13px;color:var(--text-med);margin-bottom:var(--s-xs)">AI・ITよろず相談所 代表</div>
+        <p style="font-size:15px;color:var(--text-med);line-height:1.8">「AIの最初の一歩に、隣で寄り添う。」をテーマに、ビジネスパーソン向けのAI活用サポートを提供。売ることより「使いこなしてもらう」ことを優先し、どこで止まっているのかを一緒に切り分けるところから伴走する。初めての方でも「明日から手が動く」レベルに落とし込んだ解説が好評。</p>
+        <div>
+          <span class="spk-tag">AI活用サポート</span><span class="spk-tag">プロンプト設計</span><span class="spk-tag">業務の自動化</span><span class="spk-tag">初心者伴走</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="container">
+    <div class="hero-badge">参加費 無料</div>
+    <h2>書けなくても、作れる。<br>それを、確かめに来てください。</h2>
+    <p>参加したい回のボタンを押して、カレンダーに追加するだけ。<br>3回すべて参加できなくても大丈夫です。</p>
+
+    <div class="cal">
+      <a class="calb" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%E3%80%90%E7%84%A1%E6%96%99Web%E3%82%BB%E3%83%9F%E3%83%8A%E3%83%BC%E3%80%91%E6%9B%B8%E3%81%91%E3%81%AA%E3%81%8F%E3%81%A6%E3%82%82%E3%80%81%E4%BD%9C%E3%82%8C%E3%82%8B%EF%BD%9C%E7%AC%AC1%E5%9B%9E%20%E8%BF%B7%E3%81%86%E7%90%86%E7%94%B1%E3%82%92%E3%80%81AI%E3%81%A8%E5%88%86%E3%81%91%E3%81%A6%E3%81%BF%E3%82%8B&amp;dates=20260816T110000Z/20260816T114500Z&amp;details=%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E4%B8%80%E8%A1%8C%E3%82%82%E6%9B%B8%E3%81%8B%E3%81%9A%E3%81%AB%E3%80%81AI%E3%81%A8%E3%81%AE%E4%BC%9A%E8%A9%B1%E3%81%A0%E3%81%91%E3%81%A7%E8%87%AA%E5%88%86%E5%B0%82%E7%94%A8%E3%81%AE%E5%B0%8F%E3%81%95%E3%81%AA%E9%81%93%E5%85%B7%E3%82%92%E4%BD%9C%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82%0A%0A%E5%8F%82%E5%8A%A0%E3%83%AA%E3%83%B3%E3%82%AF%EF%BC%9Ahttps%3A//meet.google.com/pie-wrph-fgi%0A%0A%E4%B8%BB%E5%82%AC%EF%BC%9AAI%E3%83%BBIT%E3%82%88%E3%82%8D%E3%81%9A%E7%9B%B8%E8%AB%87%E6%89%80%EF%BC%88%E6%B8%85%E6%B0%B4%20%E5%B9%B8%E4%B9%85%EF%BC%89&amp;location=Google%20Meet%EF%BC%88%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%EF%BC%89">
+        <span><span class="s">第1回</span><span class="d">8月16日（日）20:00〜20:45</span></span><span class="p">＋</span>
+      </a>
+      <a class="calb" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%E3%80%90%E7%84%A1%E6%96%99Web%E3%82%BB%E3%83%9F%E3%83%8A%E3%83%BC%E3%80%91%E6%9B%B8%E3%81%91%E3%81%AA%E3%81%8F%E3%81%A6%E3%82%82%E3%80%81%E4%BD%9C%E3%82%8C%E3%82%8B%EF%BD%9C%E7%AC%AC2%E5%9B%9E%20%E3%80%8C%E8%87%AA%E5%88%86%E3%81%AE%E5%9F%BA%E6%BA%96%E3%80%8D%E3%82%92%E3%80%81%E9%81%93%E5%85%B7%E3%81%AB%E5%85%A5%E3%82%8C%E3%82%8B&amp;dates=20260823T110000Z/20260823T114500Z&amp;details=%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E4%B8%80%E8%A1%8C%E3%82%82%E6%9B%B8%E3%81%8B%E3%81%9A%E3%81%AB%E3%80%81AI%E3%81%A8%E3%81%AE%E4%BC%9A%E8%A9%B1%E3%81%A0%E3%81%91%E3%81%A7%E8%87%AA%E5%88%86%E5%B0%82%E7%94%A8%E3%81%AE%E5%B0%8F%E3%81%95%E3%81%AA%E9%81%93%E5%85%B7%E3%82%92%E4%BD%9C%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82%0A%0A%E5%8F%82%E5%8A%A0%E3%83%AA%E3%83%B3%E3%82%AF%EF%BC%9Ahttps%3A//meet.google.com/dpt-hrzg-boc%0A%0A%E4%B8%BB%E5%82%AC%EF%BC%9AAI%E3%83%BBIT%E3%82%88%E3%82%8D%E3%81%9A%E7%9B%B8%E8%AB%87%E6%89%80%EF%BC%88%E6%B8%85%E6%B0%B4%20%E5%B9%B8%E4%B9%85%EF%BC%89&amp;location=Google%20Meet%EF%BC%88%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%EF%BC%89">
+        <span><span class="s">第2回</span><span class="d">8月23日（日）20:00〜20:45</span></span><span class="p">＋</span>
+      </a>
+      <a class="calb" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%E3%80%90%E7%84%A1%E6%96%99Web%E3%82%BB%E3%83%9F%E3%83%8A%E3%83%BC%E3%80%91%E6%9B%B8%E3%81%91%E3%81%AA%E3%81%8F%E3%81%A6%E3%82%82%E3%80%81%E4%BD%9C%E3%82%8C%E3%82%8B%EF%BD%9C%E7%AC%AC3%E5%9B%9E%20%E4%BD%9C%E3%81%A3%E3%81%9F%E9%81%93%E5%85%B7%E3%82%92%E3%80%81%E8%87%AA%E5%88%86%E3%81%AE%E4%BB%95%E4%BA%8B%E3%81%AB%E7%A7%BB%E3%81%99&amp;dates=20260830T110000Z/20260830T114500Z&amp;details=%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E4%B8%80%E8%A1%8C%E3%82%82%E6%9B%B8%E3%81%8B%E3%81%9A%E3%81%AB%E3%80%81AI%E3%81%A8%E3%81%AE%E4%BC%9A%E8%A9%B1%E3%81%A0%E3%81%91%E3%81%A7%E8%87%AA%E5%88%86%E5%B0%82%E7%94%A8%E3%81%AE%E5%B0%8F%E3%81%95%E3%81%AA%E9%81%93%E5%85%B7%E3%82%92%E4%BD%9C%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82%0A%0A%E5%8F%82%E5%8A%A0%E3%83%AA%E3%83%B3%E3%82%AF%EF%BC%9Ahttps%3A//meet.google.com/rfc-agnb-pwc%0A%0A%E4%B8%BB%E5%82%AC%EF%BC%9AAI%E3%83%BBIT%E3%82%88%E3%82%8D%E3%81%9A%E7%9B%B8%E8%AB%87%E6%89%80%EF%BC%88%E6%B8%85%E6%B0%B4%20%E5%B9%B8%E4%B9%85%EF%BC%89&amp;location=Google%20Meet%EF%BC%88%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%EF%BC%89">
+        <span><span class="s">第3回</span><span class="d">8月30日（日）20:00〜20:45</span></span><span class="p">＋</span>
+      </a>
+    </div>
+    <span class="btn-note">ボタンを押すとGoogleカレンダーが開きます。参加リンクは予定の説明欄に入っています</span>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container rv">
+    <span class="sec-label">よくある質問</span>
+    <h2 class="sec-title">FAQ</h2>
+    <div class="faq-i"><div class="faq-q"><b>Q</b>プログラミングの経験がまったくありませんが、参加できますか？</div><div class="faq-a">はい。経験がないことが、このセミナーの前提です。専門用語は使いませんし、講師自身も当日コードを一行も書きません。むしろ「作るのは自分とは関係ない話」と思っている方に見ていただきたい内容です。</div></div>
+    <div class="faq-i"><div class="faq-q"><b>Q</b>事前に何か準備は必要ですか？</div><div class="faq-a">不要です。当日は見ていただくだけで、作る手順が最後まで分かる構成にしています。各回の最後に、その場で試していただける短いプロンプトをお配りしますが、ご覧いただくだけでも構いません。</div></div>
+    <div class="faq-i"><div class="faq-q"><b>Q</b>「歓送迎会の店えらび」は、仕事と関係ないのでは？</div><div class="faq-a">わざと軽い題材を選んでいます。候補が複数あって、見るところも複数あって、人によって重視する点が違う——決めるのが面倒な仕事の構造が、そのまま入っているためです。最終回では、この軸をご自身の仕事の場面（訪問先の優先度、改修の順番、備品の選定など）に差し替えます。</div></div>
+    <div class="faq-i"><div class="faq-q"><b>Q</b>3回すべて参加しないといけませんか？</div><div class="faq-a">いいえ。各回の冒頭で前回を振り返りますので、途中からでも追いつけます。ただ、道具が育っていく流れをご覧いただけるため、3回通してのご参加をおすすめします。</div></div>
+    <div class="faq-i"><div class="faq-q"><b>Q</b>会社の情報を使いますか？</div><div class="faq-a">使いません。当日はすべて架空のデータで進めます。第3回では、自分用の試作と、会社のデータを扱う利用の線引きについても扱います。</div></div>
+    <div class="faq-i"><div class="faq-q"><b>Q</b>見るだけでなく、自分でも作ってみたいのですが。</div><div class="faq-a">3回のあとに、少人数の実践会（有料・定員4名・90分）を予定しています。ご自身の画面で作り、詰まったところをその場で一緒に越える会です。詳細は第3回でご案内します。</div></div>
+    <div class="faq-i"><div class="faq-q"><b>Q</b>録画はありますか？</div><div class="faq-a">現時点では未定です。できるだけリアルタイムでのご参加をおすすめします。資料はアンケートにご回答いただいた方にお送りします。</div></div>
+    <div class="faq-i"><div class="faq-q"><b>Q</b>セミナー後に何か売り込まれますか？</div><div class="faq-a">しつこい営業は一切ありません。「もっと詳しく相談したい」という方向けに、AI・ITよろず相談所への導線をご案内しますが、強制・勧誘は行いません。</div></div>
+  </div>
+</section>
+
+<footer>
+  <img class="f-logo" src="assets/logo_full.png" alt="AI・ITよろず相談所">
+  <p>© 2026 AI・ITよろず相談所（清水 幸久）</p>
+  <p style="margin-top:8px"><a href="mailto:yukisa0814@gmail.com">お問い合わせ：yukisa0814@gmail.com</a></p>
+</footer>
+
+<div class="sticky"><a href="#cta">カレンダーに追加する</a></div>
+
+<script>
+var AX=[{n:'予算の安さ',w:5},{n:'駅からの近さ',w:2},{n:'個室',w:4},{n:'直前の変更',w:3}];
+var C=[{n:'和食 まる屋',s:[3,4,5,4]},{n:'個室居酒屋 とり吉',s:[5,2,3,5]},{n:'ビストロ ラ・ペール',s:[1,5,5,1]}];
+var ax=document.getElementById('axes');
+AX.forEach(function(a,i){
+  var r=document.createElement('div');r.className='axis';
+  var l=document.createElement('span');l.className='n';l.textContent=a.n;
+  var s=document.createElement('input');s.type='range';s.min=1;s.max=5;s.step=1;s.value=a.w;
+  s.setAttribute('aria-label',a.n+'の重み');
+  var o=document.createElement('span');o.className='v';o.textContent=a.w;
+  s.addEventListener('input',function(){AX[i].w=+s.value;o.textContent=s.value;draw();});
+  r.appendChild(l);r.appendChild(s);r.appendChild(o);ax.appendChild(r);
+});
+function draw(){
+  var tw=AX.reduce(function(t,a){return t+a.w;},0);
+  var res=C.map(function(c){var v=0;for(var i=0;i<AX.length;i++){v+=c.s[i]*AX[i].w;}return {n:c.n,v:v/tw};})
+           .sort(function(a,b){return b.v-a.v;});
+  document.getElementById('rank').innerHTML=res.map(function(r,i){
+    return '<div class="rank'+(i===0?' top':'')+'"><span class="no">'+(i+1)+'位</span><span class="nm">'+r.n+'</span><span class="sc">'+r.v.toFixed(1)+'</span></div>';
+  }).join('');
+  var d=res[0].v-res[1].v;
+  document.getElementById('note').textContent = d<0.4
+    ? '1位と2位の差は'+d.toFixed(1)+'点。ほぼ互角です。重みの付け方ひとつで入れ替わります。'
+    : '1位と2位の差は'+d.toFixed(1)+'点。この基準で見るかぎり、はっきり差がついています。';
+}
+draw();
+
+document.querySelectorAll('.faq-q').forEach(function(q){
+  q.addEventListener('click',function(){q.parentElement.classList.toggle('open');});
+});
+
+if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+}else{
+  document.querySelectorAll('.rv').forEach(function(el){el.classList.add('on');});
+}
+</script>
+
+</body>
+</html>

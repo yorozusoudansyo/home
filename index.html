@@ -587,6 +587,23 @@
   .seminar-card .btn { align-self: flex-start; }
   .seminar-actions { display: flex; gap: 12px; flex-wrap: wrap; }
   .seminar-actions .btn { align-self: auto; }
+  .seminar-card.featured {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-surface) 100%);
+    border-color: var(--color-primary-base);
+    box-shadow: var(--shadow-overlay);
+  }
+  .seminar-card.featured .btn-primary { background: var(--color-primary-base); color: #FFFFFF; }
+  @media (min-width: 861px) {
+    .seminar-card.featured {
+      flex-direction: row;
+      align-items: center;
+      gap: 40px;
+    }
+    .seminar-card.featured .seminar-card-text { flex: 1; }
+    .seminar-card.featured .seminar-detail { margin-bottom: 0; }
+    .seminar-card.featured .btn { align-self: center; flex-shrink: 0; white-space: nowrap; }
+  }
   .seminars-note {
     margin-top: 32px;
     font-size: 14px;
@@ -1188,7 +1205,7 @@
 
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar" id="announce-bar">
-  <span>📺 7月のCopilot無料Webセミナー（全3回）は終了しました。アーカイブ・実演動画をYouTubeで公開中 → <a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer">YouTubeで見る</a></span>
+  <span>🔴 参加受付中：無料Webセミナー「書けなくても、作れる。」8/16・23・30(日) 20:00〜 → <a href="webinar_lp_202608.html">詳細・お申し込み</a></span>
   <button class="announce-close" id="announce-close" aria-label="お知らせを閉じる">&times;</button>
 </div>
 
@@ -1420,10 +1437,26 @@
     用意しています。
   </h2>
   <p class="section-intro reveal">
-    note で気軽に読む、ウェビナーでまとまって学ぶ、そして個別相談で自分ごととして深める——段階に合わせて選べる学びの場をご用意しています。過去のウェビナーは、アーカイブと実演動画を<a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a>で公開中です。
+    note で気軽に読む、ウェビナーでまとまって学ぶ、そして個別相談で自分ごととして深める——段階に合わせて選べる学びの場をご用意しています。現在、8月の全3回シリーズを参加受付中です。過去のウェビナーは、アーカイブと実演動画を<a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a>で公開中です。
   </p>
 
   <div class="seminars-grid reveal-stagger">
+
+    <div class="seminar-card featured">
+      <div class="seminar-card-text">
+        <span class="seminar-badge live">開催予定・参加受付中</span>
+        <h4>「書けなくても、作れる。」</h4>
+        <p class="seminar-sub">「これ、毎回面倒」をAIで自分の道具にする／全3回無料Webセミナー</p>
+        <p class="seminar-detail">
+          8/16・8/23・8/30（日）各回20:00–20:45／Google Meet開催。<br/>
+          コードを一行も書かずに、AIとの会話だけで自分専用の小さな道具を作ります。コード経験は不要、各回単独でのご参加も歓迎です。
+        </p>
+      </div>
+      <a href="webinar_lp_202608.html" class="btn btn-primary">
+        <span>詳細・お申し込み</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
 
     <div class="seminar-card">
       <span class="seminar-badge done">開催終了</span>
@@ -1831,7 +1864,7 @@ window.addEventListener('scroll', () => {
     document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
   };
 
-  const dismissed = sessionStorage.getItem('announceBarDismissed_v2') === '1';
+  const dismissed = sessionStorage.getItem('announceBarDismissed_v3') === '1';
   if (dismissed) {
     bar.style.display = 'none';
     return;
@@ -1844,7 +1877,7 @@ window.addEventListener('scroll', () => {
   closeBtn.addEventListener('click', () => {
     bar.style.display = 'none';
     document.body.classList.remove('has-announce');
-    sessionStorage.setItem('announceBarDismissed_v2', '1');
+    sessionStorage.setItem('announceBarDismissed_v3', '1');
   });
 })();
 
