@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "一度の作業をワークフロー化して再利用｜Office Agent #Shorts",
+      "url": "https://www.youtube.com/watch?v=uYjonPTOChM",
+      "date": "2026.08.05",
+      "thumbnail": "https://i.ytimg.com/vi/uYjonPTOChM/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "CSVからWord売上レポートを自動作成｜Office Agent #Shorts",
       "url": "https://www.youtube.com/watch?v=qDpOSfW_xZM",
       "date": "2026.08.04",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=wLlEhcrPpLs",
       "date": "2026.07.27",
       "thumbnail": "https://i.ytimg.com/vi/wLlEhcrPpLs/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【Copilot活用】種類・契約・データ保護を10分で整理｜第2回テーマ別",
-      "url": "https://www.youtube.com/watch?v=n1lgT3YnYm8",
-      "date": "2026.07.26",
-      "thumbnail": "https://i.ytimg.com/vi/n1lgT3YnYm8/hqdefault.jpg"
     },
     {
       "source": "SITE",
