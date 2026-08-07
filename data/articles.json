@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "ワークフローでもハルシネーションは起きる？ #Shorts",
+      "url": "https://www.youtube.com/watch?v=McNjMzNhNgo",
+      "date": "2026.08.06",
+      "thumbnail": "https://i.ytimg.com/vi/McNjMzNhNgo/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "一度の作業をワークフロー化して再利用｜Office Agent #Shorts",
       "url": "https://www.youtube.com/watch?v=uYjonPTOChM",
       "date": "2026.08.05",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=17Z_U_9Npjs",
       "date": "2026.07.28",
       "thumbnail": "https://i.ytimg.com/vi/17Z_U_9Npjs/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【Copilot活用】Excelの表を3点要約し、そのままグラフ化｜実演",
-      "url": "https://www.youtube.com/watch?v=wLlEhcrPpLs",
-      "date": "2026.07.27",
-      "thumbnail": "https://i.ytimg.com/vi/wLlEhcrPpLs/hqdefault.jpg"
     },
     {
       "source": "SITE",
