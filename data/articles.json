@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "画像を持ってくるだけ！音声入力でAIアートポスターを作る方法 #Shorts",
+      "url": "https://www.youtube.com/watch?v=7_BgBuUKXmQ",
+      "date": "2026.08.13",
+      "thumbnail": "https://i.ytimg.com/vi/7_BgBuUKXmQ/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "ワークフローでもハルシネーションは起きる？ #Shorts",
       "url": "https://www.youtube.com/watch?v=McNjMzNhNgo",
       "date": "2026.08.06",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=0YwHGdccLYM",
       "date": "2026.07.29",
       "thumbnail": "https://i.ytimg.com/vi/0YwHGdccLYM/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【Copilot活用】Excel関数を暗記せず、複数シートを集計する方法",
-      "url": "https://www.youtube.com/watch?v=17Z_U_9Npjs",
-      "date": "2026.07.28",
-      "thumbnail": "https://i.ytimg.com/vi/17Z_U_9Npjs/hqdefault.jpg"
     },
     {
       "source": "SITE",
