@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "【無料Webセミナー】コードを書かずに自分の道具を作る｜第1回 迷う理由を、AIと分けてみる",
+      "url": "https://www.youtube.com/watch?v=y1w2DyZrZrA",
+      "date": "2026.08.18",
+      "thumbnail": "https://i.ytimg.com/vi/y1w2DyZrZrA/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "画像を持ってくるだけ！音声入力でAIアートポスターを作る方法 #Shorts",
       "url": "https://www.youtube.com/watch?v=7_BgBuUKXmQ",
       "date": "2026.08.13",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=v0nn13fOx7Q",
       "date": "2026.07.29",
       "thumbnail": "https://i.ytimg.com/vi/v0nn13fOx7Q/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【Copilot活用 第3回】自分専用AIを作る・仕事をまるごと任せる｜Notebook・Agent・自動化",
-      "url": "https://www.youtube.com/watch?v=0YwHGdccLYM",
-      "date": "2026.07.29",
-      "thumbnail": "https://i.ytimg.com/vi/0YwHGdccLYM/hqdefault.jpg"
     },
     {
       "source": "SITE",
