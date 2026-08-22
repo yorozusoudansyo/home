@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "コードを書かずに、自分の道具を作る｜日本語でAIに頼む #Shorts",
+      "url": "https://www.youtube.com/watch?v=mQlfXLyDxOk",
+      "date": "2026.08.22",
+      "thumbnail": "https://i.ytimg.com/vi/mQlfXLyDxOk/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "【無料Webセミナー】コードを書かずに自分の道具を作る｜第1回 迷う理由を、AIと分けてみる",
       "url": "https://www.youtube.com/watch?v=y1w2DyZrZrA",
       "date": "2026.08.18",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=oZAeaOVvmS0",
       "date": "2026.07.29",
       "thumbnail": "https://i.ytimg.com/vi/oZAeaOVvmS0/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "資料を毎回添付しない。Copilot Notebooksで自分専用AIを作る #Shorts",
-      "url": "https://www.youtube.com/watch?v=v0nn13fOx7Q",
-      "date": "2026.07.29",
-      "thumbnail": "https://i.ytimg.com/vi/v0nn13fOx7Q/hqdefault.jpg"
     },
     {
       "source": "SITE",
