@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "AIに「作って」と頼むと何が変わる？ #Shorts",
+      "url": "https://www.youtube.com/watch?v=vdYTWXhiv4w",
+      "date": "2026.08.23",
+      "thumbnail": "https://i.ytimg.com/vi/vdYTWXhiv4w/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "コードを書かずに、自分の道具を作る｜日本語でAIに頼む #Shorts",
       "url": "https://www.youtube.com/watch?v=mQlfXLyDxOk",
       "date": "2026.08.22",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=tMfhPtuJnic",
       "date": "2026.07.30",
       "thumbnail": "https://i.ytimg.com/vi/tMfhPtuJnic/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【Copilot活用】Word長文を相手別に要約し、Markdown・CSVへ整える",
-      "url": "https://www.youtube.com/watch?v=oZAeaOVvmS0",
-      "date": "2026.07.29",
-      "thumbnail": "https://i.ytimg.com/vi/oZAeaOVvmS0/hqdefault.jpg"
     },
     {
       "source": "SITE",
