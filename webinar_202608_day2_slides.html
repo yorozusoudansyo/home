@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>第2回 「自分の基準」を、道具に入れる｜AI・ITよろず相談所</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-primary: #D32F2F;
+    --c-primary-hover: #B71C1C;
+    --c-primary-light: #FFEBEE;
+    --c-success: #0F6E56;
+    --c-success-light: #E1F5EE;
+    --c-text-high: #1F2937;
+    --c-text-med: #4B5563;
+    --c-border: #E5E7EB;
+    --c-bg: #F9FAFB;
+    --c-surface: #FFFFFF;
+    --r-sm: 4px;
+    --r-md: 8px;
+    --r-pill: 999px;
+    --sh-card: 0 4px 6px rgba(0,0,0,0.05);
+    --sh-overlay: 0 10px 15px rgba(0,0,0,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; overflow: hidden; background: var(--c-bg); }
+  body {
+    font-family: "Inter", "Noto Sans JP", sans-serif;
+    color: var(--c-text-high);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage { position: fixed; inset: 0; display: grid; place-items: center; background: #E5E7EB; }
+  .deck {
+    position: relative;
+    width: min(100vw, calc(100vh * 16 / 9));
+    height: min(100vh, calc(100vw * 9 / 16));
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    padding: 46px 62px 60px;
+    background: var(--c-bg);
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity 150ms ease;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+
+  /* ---- Nav ---- */
+  .nav-btn {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 72px;
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--c-text-high); font-size: 22px;
+    transition: background 150ms ease; z-index: 200; user-select: none;
+  }
+  .nav-btn:hover { background: var(--c-bg); }
+  .nav-btn.prev { left: 8px; }
+  .nav-btn.next { right: 8px; }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+  .nav-hint {
+    position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; color: var(--c-text-med); letter-spacing: 0.08em;
+    pointer-events: none; z-index: 100;
+  }
+
+  /* ---- Header / Footer ---- */
+  .slide-header {
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--c-text-med); font-size: 13px; letter-spacing: 0.05em;
+    margin-bottom: 16px; flex-shrink: 0;
+  }
+  .slide-header .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--c-text-high); font-weight: 700; font-size: 14px; letter-spacing: 0.04em;
+  }
+  .logo-mark { height: 32px; width: auto; display: block; flex-shrink: 0; }
+  .logo-full { width: 172px; height: auto; display: block; }
+  .slide-footer {
+    margin-top: auto; flex-shrink: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--c-text-med); font-size: 12px; letter-spacing: 0.05em; padding-top: 10px;
+  }
+  .page-num { font-family: "Inter", sans-serif; font-weight: 500; }
+  .page-num strong { color: var(--c-primary); font-weight: 700; }
+
+  /* ---- Type utilities ---- */
+  .kicker {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em;
+    color: var(--c-primary); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: 32px; font-weight: 700; line-height: 1.4; letter-spacing: 0.02em;
+    color: var(--c-text-high); display: inline-block;
+    padding-bottom: 9px; border-bottom: 2px solid var(--c-primary); align-self: flex-start;
+  }
+  .section-sub { font-size: 15px; line-height: 1.7; color: var(--c-text-med); margin-top: 10px; }
+  .accent, em.accent { font-style: normal; color: var(--c-primary); }
+
+  /* ---- Building blocks ---- */
+  .card {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); padding: 20px 24px; box-shadow: var(--sh-card);
+  }
+  .body-area { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+  .center-stage {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 22px; text-align: center;
+  }
+  .big-msg { font-size: 42px; font-weight: 700; line-height: 1.5; color: var(--c-text-high); max-width: 900px; }
+  .big-msg em { font-style: normal; color: var(--c-primary); }
+  .mid-msg { font-size: 26px; font-weight: 700; line-height: 1.6; color: var(--c-text-high); max-width: 860px; }
+  .mid-msg em { font-style: normal; color: var(--c-primary); }
+  .lead { font-size: 16px; line-height: 1.75; color: var(--c-text-med); max-width: 820px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 14px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px; }
+
+  .n-card {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md);
+    padding: 20px 20px; box-shadow: var(--sh-card);
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .n-card.on { border: 2px solid var(--c-primary); background: var(--c-primary-light); }
+  .n-num { font-family: "Inter", sans-serif; font-size: 34px; font-weight: 700; color: var(--c-primary); line-height: 1; }
+  .n-step { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--c-text-med); }
+  .n-title { font-size: 17px; font-weight: 700; color: var(--c-text-high); line-height: 1.45; }
+  .n-body { font-size: 13.5px; line-height: 1.75; color: var(--c-text-med); }
+  .n-body strong { color: var(--c-text-high); }
+  .n-quote {
+    background: var(--c-primary-light); border-left: 3px solid var(--c-primary);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0; padding: 9px 12px;
+    font-size: 13px; line-height: 1.7; color: var(--c-text-high);
+  }
+
+  .bar-accent {
+    margin-top: 16px; padding: 13px 20px; background: var(--c-primary-light);
+    border-left: 4px solid var(--c-primary); border-radius: 0 var(--r-md) var(--r-md) 0;
+    font-size: 16px; font-weight: 600; color: var(--c-text-high); line-height: 1.6;
+  }
+  .bar-accent em { font-style: normal; color: var(--c-primary); }
+  .note-bar {
+    margin-top: 14px; padding: 11px 18px; background: var(--c-surface);
+    border: 1px solid var(--c-border); border-radius: var(--r-md);
+    font-size: 13.5px; line-height: 1.7; color: var(--c-text-med);
+  }
+  .note-bar strong { color: var(--c-text-high); }
+
+  .chip-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  .chip {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-pill);
+    padding: 6px 14px; font-size: 12px; color: var(--c-text-med);
+  }
+  .chip strong { color: var(--c-text-high); font-weight: 700; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 15px; border-radius: var(--r-pill);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+  }
+  .pill-red { background: var(--c-primary); color: #fff; }
+  .pill-red .dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; display: inline-block; }
+  .pill-light { background: var(--c-primary-light); color: var(--c-primary); border: 1px solid var(--c-primary); }
+  .pill-outline { background: transparent; color: var(--c-text-med); border: 1px solid var(--c-text-med); }
+
+  /* ---- Table ---- */
+  .tbl { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 14px; }
+  .tbl th {
+    background: var(--c-bg); color: var(--c-text-high); border-bottom: 1px solid var(--c-border);
+    padding: 10px 14px; text-align: left; font-size: 12px; letter-spacing: 0.06em; font-weight: 700;
+  }
+  .tbl th:first-child { border-radius: var(--r-sm) 0 0 0; }
+  .tbl th:last-child { border-radius: 0 var(--r-sm) 0 0; }
+  .tbl td {
+    padding: 10px 14px; border-bottom: 1px solid var(--c-border);
+    background: var(--c-surface); vertical-align: middle; line-height: 1.55;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl td.k { font-weight: 700; }
+  .tbl tr.hi td { background: var(--c-primary-light); }
+  .tbl td.num { font-family: "Inter", sans-serif; font-weight: 700; text-align: right; }
+  .tbl .rank { font-family: "Inter", sans-serif; font-weight: 700; color: var(--c-primary); }
+
+  /* ---- Demo relay ---- */
+  .demo-relay {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 22px; text-align: center;
+  }
+  .demo-relay .dr-title { font-size: 38px; font-weight: 700; color: var(--c-text-high); line-height: 1.5; max-width: 860px; }
+  .demo-relay .dr-title em { font-style: normal; color: var(--c-primary); }
+  .demo-relay .dr-high {
+    font-size: 17px; font-weight: 600; color: var(--c-text-high);
+    background: var(--c-primary-light); border-radius: var(--r-md);
+    padding: 13px 26px; max-width: 760px; line-height: 1.7;
+  }
+  .demo-relay .dr-note {
+    font-size: 14px; color: var(--c-text-med); background: var(--c-surface);
+    border: 1px solid var(--c-border); border-radius: var(--r-md);
+    padding: 10px 22px; max-width: 760px; line-height: 1.7;
+  }
+  .demo-relay .dr-note strong { color: var(--c-primary); }
+
+  /* ---- Prompt / template box ---- */
+  .tpl-box {
+    background: var(--c-surface); color: var(--c-text-high); border: 1px solid var(--c-border);
+    box-shadow: var(--sh-card); padding: 15px 20px; border-radius: var(--r-md);
+    font-size: 14.5px; line-height: 1.85; margin-top: 12px; text-align: left;
+  }
+  .tpl-box .label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--c-primary); margin-bottom: 7px;
+  }
+  .tpl-box em { font-style: normal; font-weight: 700; color: var(--c-primary); }
+
+  /* ---- Screenshot placeholder ---- */
+  .ss-holder {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; border: 1px dashed var(--c-border); border-radius: var(--r-md);
+    background: var(--c-surface); margin-top: 12px; min-height: 120px;
+  }
+  .ss-label { font-size: 19px; font-weight: 700; color: var(--c-text-high); }
+  .ss-sub { font-size: 13.5px; color: var(--c-text-med); }
+
+  /* ---- Summary list ---- */
+  .sum-list { display: flex; flex-direction: column; gap: 11px; flex: 1; margin-top: 14px; justify-content: center; }
+  .sum-item {
+    display: flex; align-items: center; gap: 18px; padding: 14px 22px;
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); box-shadow: var(--sh-card);
+  }
+  .sum-num { font-family: "Inter", sans-serif; font-size: 30px; font-weight: 700; color: var(--c-primary); line-height: 1; min-width: 46px; text-align: center; }
+  .sum-text { font-size: 17px; font-weight: 700; color: var(--c-text-high); line-height: 1.5; }
+  .sum-text em { font-style: normal; color: var(--c-primary); }
+  .sum-sub { font-size: 13px; font-weight: 400; color: var(--c-text-med); margin-top: 3px; line-height: 1.6; }
+
+  /* ---- Next card ---- */
+  .next-card {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md);
+    box-shadow: var(--sh-card); padding: 24px 28px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .next-date { font-size: 14px; font-weight: 600; color: var(--c-text-med); letter-spacing: 0.05em; }
+  .next-title { font-size: 26px; font-weight: 700; line-height: 1.4; color: var(--c-text-high); }
+  .next-title em { font-style: normal; color: var(--c-primary); }
+  .next-point { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.65; color: var(--c-text-high); }
+  .next-point::before { content: ''; width: 6px; height: 6px; background: var(--c-primary); border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
+
+  /* ---- Before / After ---- */
+  .ba-grid { display: grid; grid-template-columns: 1fr 46px 1fr; align-items: stretch; margin-top: 16px; flex: 1; }
+  .ba-side { display: flex; flex-direction: column; }
+  .ba-head { padding: 10px 18px; border-radius: var(--r-md) var(--r-md) 0 0; font-size: 16px; font-weight: 700; text-align: center; }
+  .ba-head.before { background: var(--c-border); color: var(--c-text-med); }
+  .ba-head.after { background: var(--c-primary); color: #fff; }
+  .ba-body {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: 0 0 var(--r-md) var(--r-md); padding: 14px 18px; flex: 1;
+  }
+  .ba-item {
+    font-size: 14.5px; line-height: 1.65; padding: 11px 0;
+    border-bottom: 1px solid var(--c-border); color: var(--c-text-high);
+  }
+  .ba-item:last-child { border-bottom: none; }
+  .ba-sep { display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: var(--c-primary); }
+
+  /* ---- 用語カード（その場で言葉を説明する） ---- */
+  .term {
+    margin-top: 12px; background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); box-shadow: var(--sh-card); padding: 13px 18px; text-align: left;
+  }
+  .term .t-head { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
+  .term .t-word { font-size: 16px; font-weight: 700; color: var(--c-text-high); }
+  .term .t-en { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 500; color: var(--c-text-med); letter-spacing: 0.06em; }
+  .term .t-def { font-size: 13.5px; line-height: 1.75; color: var(--c-text-med); }
+  .term .t-def strong { color: var(--c-text-high); }
+
+  /* ---- 今日出てきた言葉 ---- */
+  .term-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-top: 12px; }
+  .term-row {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); padding: 11px 16px;
+  }
+  .term-row .w { font-size: 15px; font-weight: 700; color: var(--c-text-high); display: flex; align-items: center; gap: 8px; }
+  .term-row .d { font-size: 12.5px; line-height: 1.65; color: var(--c-text-med); margin-top: 3px; }
+  .tag-new {
+    font-family: "Inter", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--c-primary); background: var(--c-primary-light);
+    border-radius: var(--r-pill); padding: 2px 9px;
+  }
+  .tag-old {
+    font-family: "Inter", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--c-text-med); background: var(--c-bg); border: 1px solid var(--c-border);
+    border-radius: var(--r-pill); padding: 2px 9px;
+  }
+
+  /* ---- 語彙のはしご（3回の積み上がり） ---- */
+  .ladder { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; flex: 1; }
+  .ladder-col {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md);
+    box-shadow: var(--sh-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .ladder-col .l-head { font-family: "Inter", sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--c-primary); }
+  .ladder-col .l-sub { font-size: 13px; color: var(--c-text-med); line-height: 1.6; padding-bottom: 8px; border-bottom: 1px solid var(--c-border); }
+  .ladder-col .l-item { font-size: 14.5px; font-weight: 700; color: var(--c-text-high); line-height: 1.6; }
+
+  /* ---- Cover ---- */
+  .cover {
+    background:
+      radial-gradient(1100px 500px at 110% -5%, var(--c-primary-light) 0%, transparent 55%),
+      var(--c-bg);
+    padding: 62px 74px; justify-content: space-between;
+  }
+  .cover .series-tag {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.1em; color: var(--c-text-med);
+  }
+  .cover .series-tag .dot { width: 6px; height: 6px; background: var(--c-primary); border-radius: 50%; }
+  .cover .series-name {
+    font-size: 26px; font-weight: 700; color: var(--c-text-high);
+    letter-spacing: 0.02em; line-height: 1.5;
+  }
+  .cover .series-name em { font-style: normal; color: var(--c-primary); }
+  .cover h1 {
+    font-size: 52px; font-weight: 700; line-height: 1.4; letter-spacing: 0.02em;
+    color: var(--c-text-high); margin-top: 16px; max-width: 940px;
+  }
+  .cover h1 em { font-style: normal; color: var(--c-primary); }
+  .cover .cover-sub { font-size: 19px; font-weight: 500; line-height: 1.7; color: var(--c-text-med); margin-top: 18px; max-width: 840px; }
+  .cover .cover-bar { width: 56px; height: 4px; background: var(--c-primary); border-radius: var(--r-sm); margin-top: 24px; }
+  .cover .cover-meta { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
+  .cover .cover-meta .name { font-size: 17px; font-weight: 700; color: var(--c-text-high); }
+  .cover .cover-meta .name span { font-size: 13px; font-weight: 400; color: var(--c-text-med); margin-left: 8px; }
+  .cover .cover-meta .info { font-size: 13px; color: var(--c-text-med); letter-spacing: 0.05em; }
+
+  /* ---- 最終ページ：アンケートQR＋連絡先 ---- */
+  .end-grid { display: grid; gap: 16px; flex: 1; align-items: stretch; }
+  .qr-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .qr { width: 100%; max-width: 190px; height: auto; display: block; background: #fff; padding: 6px; border-radius: var(--r-sm); box-shadow: var(--sh-card); margin: 6px auto 8px; }
+  .qr-url { font-size: 10.5px; line-height: 1.5; color: var(--c-text-med); word-break: break-all; }
+  .link-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin-top: 6px; }
+  .li-row { font-size: 12px; line-height: 1.5; color: var(--c-text-med); }
+  .li-row strong { display: block; color: var(--c-text-high); font-weight: 700; font-size: 11.5px; line-height: 1.35; }
+  .li-row a { color: var(--c-primary); font-size: 11.5px; word-break: break-all; text-decoration: none; }
+  .li-row a:hover { text-decoration: underline; }
+
+  /* ---- s18: Base44比較表の縦方向の間延び対策（他スライドの .tbl には影響しない） ---- */
+  #s18 .tbl { margin-top: 20px; font-size: 15.5px; }
+  #s18 .tbl th, #s18 .tbl td { padding: 17px 14px; }
+</style>
+</head>
+<body>
+
+<button class="nav-btn prev" id="btnPrev" aria-label="前のスライド">&#8249;</button>
+<button class="nav-btn next" id="btnNext" aria-label="次のスライド">&#8250;</button>
+
+<div class="stage">
+  <div class="deck" id="deck">
+
+    <div class="slide cover active" id="s1">
+      <div>
+        <div class="series-tag">
+          <div class="dot"></div>
+          3回シリーズ 無料Webセミナー　第2回　／　2026年8月23日（日）20:00〜20:45
+        </div>
+        <div class="series-name" style="margin-top:14px">「これ、毎回面倒」をAIで自分の道具にする。</div>
+      </div>
+      <div>
+        <h1>「自分の基準」を、<em>道具に入れる</em></h1>
+        <p class="cover-sub">同じ3つの候補でも、何を重く見るかで答えは変わります。<br>その「重さ」を、日本語で頼んで足していきます。</p>
+        <div class="cover-bar"></div>
+      </div>
+      <div class="cover-meta">
+        <img class="logo-full" src="assets/webinar_202608_logo_official.png" alt="AI・ITよろず相談所">
+        <div>
+          <div class="name">清水 幸久（Yukisa）<span>AI・ITよろず相談所</span></div>
+          <div class="info" style="margin-top:6px">Google Meet　参加無料　各回45分</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="slide" id="s2">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">Recap</div>
+      <div class="section-title">第1回の振り返り　／　「1行だけ試す」の回収</div>
+      <div class="grid-2" style="flex:1;align-items:stretch">
+        <div class="n-card">
+          <div class="n-step">前回やったこと</div>
+          <div class="n-title">困りごとを3つに分けて、最小版を作った</div>
+          <div class="n-body"><strong>入力</strong>　候補3つと、見るところ（軸）4つ<br><strong>考えるルール</strong>　軸ごとに0〜5点をつけて合計する<br><strong>出力</strong>　順位と総合点</div>
+          <div class="n-quote">前回の言葉：バイブコーディング／アーティファクト／プロンプト</div>
+          <div class="n-quote">前回書いたコード：0行</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">お聞きします</div>
+          <div class="n-title">やってみた方、どこで止まりましたか</div>
+          <div class="n-body">うまくいった方も、途中で止まった方も、そのままチャット欄に入れてください。止まった場所こそ、今日いちばん役に立つ材料です。</div>
+          <div class="n-quote">「何を書けばいいか分からなかった」</div>
+          <div class="n-quote">「出てきた画面が思っていたものと違った」</div>
+          <div class="n-quote">「そもそも開けなかった」</div>
+        </div>
+      </div>
+      <div class="bar-accent">止まるのは普通のことです。<em>止まった場所を言葉にできれば、AIに直してもらえます。</em></div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>2</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s3">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">Problem</div>
+      <div class="section-title">最小版を使うと見えてくる、<span class="accent">3つの不足</span></div>
+      <div class="section-sub">前回の道具は、動きます。ですが、そのままでは人に見せられません。</div>
+      <div class="grid-3" style="flex:1;align-items:stretch">
+        <div class="n-card">
+          <div class="n-num">1</div>
+          <div class="n-title">どの軸も、同じ重さで計算される</div>
+          <div class="n-body">予算も、駅からの近さも、同じ扱い。実際には、そんな決め方はしていません。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-num">2</div>
+          <div class="n-title">なぜその順位なのか、分からない</div>
+          <div class="n-body">点数だけ出ても、上司に聞かれたときに答えられません。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-num">3</div>
+          <div class="n-title">僅差でも、1位だと言い切ってしまう</div>
+          <div class="n-body">4.0と3.9は、ほぼ同じです。それを「1位です」とだけ言うのは、危ない道具です。</div>
+        </div>
+      </div>
+      <div class="bar-accent">今日は、この3つを<em>日本語で頼んで</em>足します。</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>3</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s4">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="center-stage">
+        <div class="kicker">Why Weights</div>
+        <div class="big-msg">同じ3店を見ていても、<br><em>見ているところが違う</em></div>
+        <div class="grid-4" style="width:100%;margin-top:4px">
+          <div class="n-card"><div class="n-title">上司</div><div class="n-body">まず予算。<br>いくらかかるか。</div></div>
+          <div class="n-card"><div class="n-title">若手</div><div class="n-body">個室かどうか。<br>話しやすいか。</div></div>
+          <div class="n-card"><div class="n-title">遠方の人</div><div class="n-body">駅から何分か。</div></div>
+          <div class="n-card"><div class="n-title">幹事</div><div class="n-body">直前に人数が変わっても大丈夫か。</div></div>
+        </div>
+        <div class="lead">「決められない」のではありません。<strong>見ているところが違うだけ</strong>です。<br>その違いを、画面の上に出します。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>4</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s5">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">Today's Build</div>
+      <div class="section-title">今日、道具に足す<span class="accent">3つ</span></div>
+      <div class="grid-3" style="margin-top:12px">
+        <div class="n-card">
+          <div class="n-step" style="color:#D32F2F">ADD 1</div>
+          <div class="n-title">重みのスライダー</div>
+          <div class="n-body">軸ごとに1〜5で「どれくらい重く見るか」を決められるようにします。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step" style="color:#D32F2F">ADD 2</div>
+          <div class="n-title">順位の理由</div>
+          <div class="n-body">「予算を重く見たので、とり吉が1位です」——そのまま報告に使える言葉で出します。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step" style="color:#D32F2F">ADD 3</div>
+          <div class="n-title">僅差の警告</div>
+          <div class="n-body">1位と2位の差が小さいとき、「ほぼ互角です」と注意を出します。</div>
+        </div>
+      </div>
+      <div class="term">
+        <div class="t-head">
+          <span class="pill pill-light">今日の言葉</span>
+          <span class="t-word">評価軸　と　重み</span>
+          <span class="t-en">criteria / weight</span>
+        </div>
+        <div class="t-def"><strong>評価軸</strong>は「何を見て決めるか」。<strong>重み</strong>は「それをどれくらい重く見るか」。<strong>この2つを合わせたものが、あなたの判断基準そのものです。</strong>頭の中にしかなかったものを、画面の上に出します。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>5</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s6">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="demo-relay">
+        <div class="pill pill-red"><span class="dot"></span>ライブデモ 1</div>
+        <div class="dr-title">重みを、<em>足す</em></div>
+        <div class="tpl-box" style="max-width:820px">
+          <div class="label">頼む言葉</div>
+          いまは4つの軸が同じ重さで計算されています。軸ごとに<em>1〜5の重み</em>をスライダーで決められるようにして、重みをかけた合計点で順位を出すように直してください。
+        </div>
+        <div class="dr-high">「スライダー」という言葉を知っていれば十分です。作り方は知らなくて構いません。</div>
+        <div class="dr-note">重みを動かすと、その場で順位が変わる。ここが今日いちばん面白いところです。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>6</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s7">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="demo-relay">
+        <div class="pill pill-red"><span class="dot"></span>ライブデモ 2</div>
+        <div class="dr-title">なぜその順位なのか、<em>理由を出す</em></div>
+        <div class="tpl-box" style="max-width:820px">
+          <div class="label">頼む言葉</div>
+          順位のとなりに、<em>なぜその順位になったのかの理由</em>を、日本語の一文で表示してください。どの軸で点を稼いだか、どの軸で落としたかが分かるようにしてください。
+        </div>
+        <div class="dr-high">「予算の重みが高いため、一人4,000円のとり吉が1位です。ただし駅から徒歩8分の点で落としています。」</div>
+        <div class="dr-note"><strong>ここが、この道具の中心です。</strong>順位ではなく、説明できる形が手に入ります。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>7</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s8">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="demo-relay">
+        <div class="pill pill-red"><span class="dot"></span>ライブデモ 3</div>
+        <div class="dr-title">僅差のときは、<em>言い切らない</em></div>
+        <div class="tpl-box" style="max-width:820px">
+          <div class="label">頼む言葉</div>
+          1位と2位の総合点の差が<em>0.3点以内</em>のときは、「この2つはほぼ互角です。次の点を確認してください」という注意文を、結果の上に出してください。
+        </div>
+        <div class="dr-high">道具に「自信がないときは、そう言う」という性格を持たせます。</div>
+        <div class="dr-note">言い切る道具は、使う人の判断を奪います。<strong>迷いを残す道具のほうが、仕事では信用されます。</strong></div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>8</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s9">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">The Point</div>
+      <div class="section-title">同じ3店、同じ情報。それでも<span class="accent">1位が入れ替わる</span></div>
+      <div class="grid-2" style="margin-top:14px">
+        <div class="n-card">
+          <div class="n-step">上司の重み</div>
+          <div class="n-title">予算5　近さ2　個室4　変更3</div>
+          <table class="tbl" style="margin-top:10px;font-size:13.5px">
+            <thead><tr><th style="width:18%">順位</th><th>候補</th><th style="width:24%">総合点</th></tr></thead>
+            <tbody>
+              <tr class="hi"><td class="rank">1</td><td class="k">とり吉</td><td class="num">4.0</td></tr>
+              <tr><td class="rank">2</td><td>まる屋</td><td class="num">3.9</td></tr>
+              <tr><td class="rank">3</td><td>ラ・ペール</td><td class="num">2.7</td></tr>
+            </tbody>
+          </table>
+          <div class="n-quote">差は0.1点。僅差の警告が出ます。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">幹事・若手の重み</div>
+          <div class="n-title">予算2　近さ4　個室5　変更5</div>
+          <table class="tbl" style="margin-top:10px;font-size:13.5px">
+            <thead><tr><th style="width:18%">順位</th><th>候補</th><th style="width:24%">総合点</th></tr></thead>
+            <tbody>
+              <tr class="hi"><td class="rank">1</td><td class="k">まる屋</td><td class="num">4.2</td></tr>
+              <tr><td class="rank">2</td><td>とり吉</td><td class="num">3.6</td></tr>
+              <tr><td class="rank">3</td><td>ラ・ペール</td><td class="num">3.3</td></tr>
+            </tbody>
+          </table>
+          <div class="n-quote">1位が入れ替わりました。</div>
+        </div>
+      </div>
+      <div class="bar-accent">あなたが幹事なら、<em>何を一番重く見ますか</em>。チャット欄に軸の名前をひとつ、入れてください。その場で反映します。</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>9</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s10">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">Template</div>
+      <div class="section-title">修正を頼む言葉の<span class="accent">型</span></div>
+      <div class="grid-3" style="margin-top:12px">
+        <div class="n-card">
+          <div class="n-step">1</div>
+          <div class="n-title">いまどうなっているか</div>
+          <div class="n-quote">「いまは、どの軸も同じ重さで計算されています」</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">2</div>
+          <div class="n-title">どうなってほしいか</div>
+          <div class="n-quote">「軸ごとに1〜5の重みをつけられるようにしてください」</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">3</div>
+          <div class="n-title">どう見えてほしいか</div>
+          <div class="n-quote">「スライダーで動かせて、動かすとその場で順位が変わるようにしてください」</div>
+        </div>
+      </div>
+      <div class="term">
+        <div class="t-head">
+          <span class="pill pill-light">今日の言葉</span>
+          <span class="t-word">反復</span>
+          <span class="t-en">iteration ／ イテレーション</span>
+        </div>
+        <div class="t-def">一度で完成させず、<strong>出す → 見る → 直す</strong>を繰り返して育てること。AIと作るときの基本のやり方です。<strong>「一発で正解を出させる」より、「3回直す」ほうが速い。</strong>この言葉を知っていると、うまくいかないときに焦らなくなります。</div>
+      </div>
+      <div class="note-bar"><strong>「うまくいきません」だけでは直りません。</strong>いまの状態と、望む状態。この2つを書くだけで、通り方が変わります。</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>10</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s11">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">FAQ</div>
+      <div class="section-title">「毎回AIに聞けばいいのでは？」への<span class="accent">4つの答え</span></div>
+      <div class="grid-4" style="margin-top:12px">
+        <div class="n-card">
+          <div class="n-title">ブレない</div>
+          <div class="n-body">チャットで毎回聞くと、その日の聞き方で答えの観点が変わります。道具は毎回同じ軸で採点します。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-title">打たなくていい</div>
+          <div class="n-body">長い前提説明を毎回書き直しません。候補だけ差し替えます。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-title">比べられる</div>
+          <div class="n-body">前回と同じ軸で判断するので、判断が積み上がります。</div>
+        </div>
+        <div class="n-card on">
+          <div class="n-title">渡せる</div>
+          <div class="n-body">軸ごと他の人に渡せます。「うちはこう選ぶ」が、言葉ではなく形になります。</div>
+        </div>
+      </div>
+      <div class="term">
+        <div class="t-head">
+          <span class="pill pill-light">今日の言葉</span>
+          <span class="t-word">再現性</span>
+          <span class="t-en">reproducibility</span>
+        </div>
+        <div class="t-def"><strong>同じ条件で、いつも同じ結果が出ること。</strong>チャットは聞くたびに少しずつ違う答えが返りますが、道具にすると基準が固定されます。仕事で信用されるかどうかは、ここで決まります。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>11</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s12">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">Keep It</div>
+      <div class="section-title">残すのは道具ではなく、<span class="accent">入力と出力</span></div>
+      <div class="section-sub">今週ご自分で試すときに、いちばん不安になるところです。先にお答えしておきます。</div>
+      <div class="grid-3" style="flex:1;align-items:stretch">
+        <div class="n-card">
+          <div class="n-num">1</div>
+          <div class="n-title">入力 ── 何を渡すか</div>
+          <div class="n-body">候補3つと、その候補について分かっていること。評価軸4つと、重み。<strong>これが決まっていれば、画面は何度でも作れます。</strong></div>
+        </div>
+        <div class="n-card on">
+          <div class="n-num">2</div>
+          <div class="n-title">出力 ── 何が出てほしいか</div>
+          <div class="n-body">順位、総合点、なぜその順位かの理由、僅差のときの注意。<strong>今日足した3つは、全部ここの言い直しでした。</strong></div>
+        </div>
+        <div class="n-card">
+          <div class="n-num">3</div>
+          <div class="n-title">だから、どこでも作り直せる</div>
+          <div class="n-body">ClaudeでもChatGPTでもGeminiでも。<strong>道具が消えても、この2つが言葉になっていれば戻せます。</strong></div>
+        </div>
+      </div>
+      <div class="note-bar">実務の保険：画面はファイルとして保存できます／会話に名前をつけると開き直せます／頼んだ文章を控えておくと早いです</div>
+      <div class="bar-accent">作り直せるのは、道具のほうです。<em>作り直せないのは、「何を入れて、何が欲しいか」のほう。</em></div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>12</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s13">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="center-stage">
+        <div class="kicker">Important</div>
+        <div class="big-msg">これは「AIの答え」ではなく、<br><em>あなたの判断</em>です</div>
+        <div class="grid-2" style="width:100%;max-width:900px">
+          <div class="n-card">
+            <div class="n-title">AIに毎回聞く場合</div>
+            <div class="n-body">その日の聞き方で、見る観点が変わります。前回とくらべることができません。</div>
+          </div>
+          <div class="n-card on">
+            <div class="n-title">道具にした場合</div>
+            <div class="n-body">軸と重みは、あなたが決めたものです。毎回同じ基準で採点され、判断が積み上がります。</div>
+          </div>
+        </div>
+        <div class="lead">上司に「なぜこれにした？」と聞かれたとき、答えるのはAIではありません。<br><strong>答えるのはあなたで、その根拠がこの画面に出ています。</strong></div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>13</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s14">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">Words</div>
+      <div class="section-title">今日、出てきた言葉</div>
+      <div class="section-sub">前回の3つに、4つ足して7つになりました。</div>
+      <div class="term-grid">
+        <div class="term-row">
+          <div class="w">評価軸<span class="tag-new">NEW</span></div>
+          <div class="d">何を見て決めるか。人によって違うもの。これを書き出すのが、道具づくりの最初の一歩です。</div>
+        </div>
+        <div class="term-row">
+          <div class="w">重み<span class="tag-new">NEW</span></div>
+          <div class="d">その軸をどれくらい重く見るか。ここに、あなたの判断基準がそのまま入ります。</div>
+        </div>
+        <div class="term-row">
+          <div class="w">反復（イテレーション）<span class="tag-new">NEW</span></div>
+          <div class="d">出す・見る・直すを繰り返して育てること。一発で正解を出させるより速い。</div>
+        </div>
+        <div class="term-row">
+          <div class="w">再現性<span class="tag-new">NEW</span></div>
+          <div class="d">同じ条件なら、いつも同じ結果が出ること。チャットと道具の決定的な違い。</div>
+        </div>
+        <div class="term-row">
+          <div class="w">バイブコーディング<span class="tag-old">第1回</span></div>
+          <div class="d">コードを書かず、日本語で頼んで作るやり方。</div>
+        </div>
+        <div class="term-row">
+          <div class="w">アーティファクト／プロンプト<span class="tag-old">第1回</span></div>
+          <div class="d">動く画面として返ってくるもの／AIに出すお願いの文章。</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>14</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s15">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">Take Away</div>
+      <div class="section-title">持ち帰り　／　「1行だけ試す」　／　次回</div>
+      <div class="grid-2" style="flex:1;align-items:stretch">
+        <div class="n-card">
+          <div class="n-step">今週やること</div>
+          <div class="n-title">自分の道具に、直しを1つ頼む</div>
+          <div class="n-body">今日の型で書いて送るだけです。</div>
+          <div class="n-quote">1　どこが使いにくいか</div>
+          <div class="n-quote">2　どんな場面で困るか</div>
+          <div class="n-quote">3　どう表示してほしいか</div>
+          <div class="n-body">直らなくても構いません。<strong>どう頼んで、どう返ってきたか</strong>を次回教えてください。</div>
+        </div>
+        <div class="next-card">
+          <div class="next-date">第3回　2026年8月30日（日）20:00〜20:45</div>
+          <div class="next-title">作った道具を、<em>自分の仕事に移す</em></div>
+          <div class="next-point">変な候補を入れて、道具を試す</div>
+          <div class="next-point">おかしな結果を見つけて直す</div>
+          <div class="next-point">軸を、ご自分の仕事の場面に差し替える</div>
+          <div class="next-point">この先に進む道具も、名前と役割をご紹介します</div>
+        </div>
+      </div>
+      <div class="bar-accent">今日の要点。<em>基準を入れたとたん、道具はあなたのものになる。</em></div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>15</strong> / 16</span>
+      </div>
+    </div>
+
+
+
+    <div class="slide" id="s16">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.08.23</span>
+      </div>
+      <div class="kicker">Thank You</div>
+      <div class="section-title">アンケートのお願い　／　<span class="accent">ご連絡先</span></div>
+      <div class="section-sub">本日はありがとうございました。次回は8月30日（日）20:00〜、最終回です。</div>
+      <div class="end-grid" style="grid-template-columns: 0.85fr 1.15fr; margin-top:12px">
+        <div class="n-card qr-card">
+          <div class="n-title">アンケート（3分）</div>
+          <svg class="qr" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" role="img" aria-label="アンケートQRコード"><rect width="45" height="45" fill="#fff"/><path fill="#111" d="M2 2h7v1h-7zM10 2h1v1h-1zM12 2h1v1h-1zM17 2h2v1h-2zM24 2h1v1h-1zM27 2h1v1h-1zM31 2h2v1h-2zM36 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h1v1h-1zM13 3h1v1h-1zM19 3h1v1h-1zM21 3h2v1h-2zM24 3h1v1h-1zM27 3h1v1h-1zM31 3h1v1h-1zM33 3h2v1h-2zM36 3h1v1h-1zM42 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM17 4h1v1h-1zM19 4h3v1h-3zM23 4h1v1h-1zM26 4h4v1h-4zM33 4h1v1h-1zM36 4h1v1h-1zM38 4h3v1h-3zM42 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM11 5h4v1h-4zM17 5h1v1h-1zM21 5h2v1h-2zM24 5h1v1h-1zM26 5h2v1h-2zM30 5h1v1h-1zM34 5h1v1h-1zM36 5h1v1h-1zM38 5h3v1h-3zM42 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h1v1h-1zM15 6h1v1h-1zM17 6h2v1h-2zM20 6h1v1h-1zM23 6h1v1h-1zM25 6h1v1h-1zM29 6h3v1h-3zM36 6h1v1h-1zM38 6h3v1h-3zM42 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM13 7h2v1h-2zM16 7h1v1h-1zM22 7h1v1h-1zM25 7h1v1h-1zM27 7h2v1h-2zM31 7h1v1h-1zM34 7h1v1h-1zM36 7h1v1h-1zM42 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h1v1h-1zM30 8h1v1h-1zM32 8h1v1h-1zM34 8h1v1h-1zM36 8h7v1h-7zM18 9h1v1h-1zM21 9h2v1h-2zM24 9h4v1h-4zM32 9h3v1h-3zM2 10h1v1h-1zM5 10h6v1h-6zM12 10h5v1h-5zM18 10h2v1h-2zM21 10h1v1h-1zM24 10h1v1h-1zM26 10h1v1h-1zM28 10h4v1h-4zM33 10h1v1h-1zM35 10h1v1h-1zM38 10h1v1h-1zM40 10h3v1h-3zM3 11h5v1h-5zM9 11h1v1h-1zM11 11h1v1h-1zM13 11h1v1h-1zM18 11h1v1h-1zM20 11h6v1h-6zM27 11h3v1h-3zM32 11h2v1h-2zM37 11h2v1h-2zM42 11h1v1h-1zM6 12h3v1h-3zM10 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM16 12h1v1h-1zM20 12h1v1h-1zM23 12h1v1h-1zM25 12h2v1h-2zM29 12h1v1h-1zM38 12h1v1h-1zM40 12h1v1h-1zM3 13h1v1h-1zM5 13h2v1h-2zM9 13h1v1h-1zM11 13h2v1h-2zM14 13h1v1h-1zM18 13h2v1h-2zM22 13h1v1h-1zM25 13h1v1h-1zM29 13h1v1h-1zM31 13h6v1h-6zM38 13h2v1h-2zM41 13h2v1h-2zM8 14h2v1h-2zM11 14h1v1h-1zM13 14h2v1h-2zM17 14h2v1h-2zM26 14h2v1h-2zM30 14h2v1h-2zM36 14h2v1h-2zM41 14h1v1h-1zM2 15h1v1h-1zM4 15h3v1h-3zM10 15h1v1h-1zM12 15h1v1h-1zM14 15h1v1h-1zM16 15h1v1h-1zM21 15h2v1h-2zM24 15h2v1h-2zM27 15h1v1h-1zM29 15h2v1h-2zM32 15h1v1h-1zM35 15h2v1h-2zM38 15h1v1h-1zM42 15h1v1h-1zM2 16h1v1h-1zM7 16h4v1h-4zM12 16h1v1h-1zM17 16h7v1h-7zM26 16h1v1h-1zM29 16h1v1h-1zM33 16h1v1h-1zM35 16h2v1h-2zM38 16h1v1h-1zM42 16h1v1h-1zM5 17h3v1h-3zM9 17h2v1h-2zM12 17h3v1h-3zM17 17h1v1h-1zM20 17h1v1h-1zM22 17h1v1h-1zM24 17h3v1h-3zM30 17h1v1h-1zM32 17h4v1h-4zM37 17h6v1h-6zM2 18h1v1h-1zM7 18h5v1h-5zM14 18h2v1h-2zM17 18h1v1h-1zM19 18h1v1h-1zM24 18h2v1h-2zM30 18h2v1h-2zM33 18h1v1h-1zM35 18h1v1h-1zM39 18h1v1h-1zM41 18h1v1h-1zM2 19h3v1h-3zM6 19h2v1h-2zM9 19h1v1h-1zM12 19h3v1h-3zM16 19h4v1h-4zM21 19h1v1h-1zM23 19h1v1h-1zM29 19h1v1h-1zM31 19h5v1h-5zM38 19h2v1h-2zM2 20h4v1h-4zM8 20h1v1h-1zM13 20h5v1h-5zM19 20h4v1h-4zM25 20h2v1h-2zM29 20h5v1h-5zM37 20h4v1h-4zM42 20h1v1h-1zM5 21h1v1h-1zM9 21h1v1h-1zM11 21h1v1h-1zM14 21h1v1h-1zM17 21h1v1h-1zM22 21h2v1h-2zM26 21h2v1h-2zM29 21h1v1h-1zM33 21h1v1h-1zM35 21h2v1h-2zM38 21h3v1h-3zM42 21h1v1h-1zM4 22h6v1h-6zM12 22h1v1h-1zM14 22h4v1h-4zM20 22h4v1h-4zM25 22h1v1h-1zM28 22h1v1h-1zM31 22h4v1h-4zM36 22h1v1h-1zM40 22h3v1h-3zM2 23h4v1h-4zM7 23h1v1h-1zM11 23h4v1h-4zM16 23h2v1h-2zM21 23h4v1h-4zM27 23h2v1h-2zM31 23h4v1h-4zM37 23h4v1h-4zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h4v1h-4zM14 24h3v1h-3zM18 24h1v1h-1zM22 24h1v1h-1zM24 24h4v1h-4zM29 24h1v1h-1zM35 24h1v1h-1zM37 24h3v1h-3zM4 25h1v1h-1zM9 25h3v1h-3zM13 25h3v1h-3zM17 25h1v1h-1zM19 25h3v1h-3zM24 25h2v1h-2zM28 25h1v1h-1zM30 25h2v1h-2zM33 25h7v1h-7zM41 25h1v1h-1zM2 26h2v1h-2zM7 26h2v1h-2zM10 26h1v1h-1zM13 26h1v1h-1zM15 26h4v1h-4zM21 26h2v1h-2zM25 26h2v1h-2zM29 26h2v1h-2zM34 26h1v1h-1zM36 26h2v1h-2zM41 26h2v1h-2zM5 27h1v1h-1zM11 27h1v1h-1zM15 27h4v1h-4zM20 27h1v1h-1zM23 27h1v1h-1zM25 27h1v1h-1zM27 27h3v1h-3zM32 27h1v1h-1zM34 27h1v1h-1zM37 27h2v1h-2zM40 27h1v1h-1zM2 28h8v1h-8zM11 28h1v1h-1zM13 28h2v1h-2zM17 28h1v1h-1zM19 28h4v1h-4zM24 28h1v1h-1zM29 28h1v1h-1zM32 28h4v1h-4zM37 28h1v1h-1zM39 28h1v1h-1zM42 28h1v1h-1zM4 29h2v1h-2zM7 29h1v1h-1zM12 29h2v1h-2zM15 29h1v1h-1zM21 29h1v1h-1zM24 29h2v1h-2zM29 29h2v1h-2zM33 29h1v1h-1zM37 29h4v1h-4zM2 30h2v1h-2zM5 30h2v1h-2zM8 30h1v1h-1zM10 30h1v1h-1zM13 30h2v1h-2zM17 30h3v1h-3zM21 30h5v1h-5zM27 30h1v1h-1zM29 30h1v1h-1zM31 30h1v1h-1zM33 30h2v1h-2zM37 30h1v1h-1zM39 30h1v1h-1zM41 30h1v1h-1zM2 31h1v1h-1zM5 31h1v1h-1zM9 31h1v1h-1zM12 31h1v1h-1zM15 31h3v1h-3zM19 31h2v1h-2zM22 31h1v1h-1zM24 31h1v1h-1zM29 31h1v1h-1zM32 31h3v1h-3zM38 31h1v1h-1zM41 31h1v1h-1zM2 32h2v1h-2zM5 32h4v1h-4zM13 32h2v1h-2zM16 32h2v1h-2zM19 32h2v1h-2zM22 32h4v1h-4zM28 32h3v1h-3zM33 32h1v1h-1zM35 32h1v1h-1zM41 32h2v1h-2zM2 33h2v1h-2zM7 33h1v1h-1zM10 33h1v1h-1zM13 33h1v1h-1zM18 33h1v1h-1zM20 33h1v1h-1zM25 33h1v1h-1zM27 33h1v1h-1zM29 33h2v1h-2zM32 33h2v1h-2zM36 33h2v1h-2zM39 33h4v1h-4zM2 34h2v1h-2zM5 34h4v1h-4zM13 34h3v1h-3zM17 34h1v1h-1zM22 34h2v1h-2zM25 34h6v1h-6zM33 34h8v1h-8zM42 34h1v1h-1zM10 35h1v1h-1zM14 35h2v1h-2zM19 35h3v1h-3zM24 35h2v1h-2zM29 35h1v1h-1zM31 35h2v1h-2zM34 35h1v1h-1zM38 35h4v1h-4zM2 36h7v1h-7zM10 36h3v1h-3zM14 36h2v1h-2zM18 36h1v1h-1zM23 36h1v1h-1zM25 36h3v1h-3zM29 36h2v1h-2zM34 36h1v1h-1zM36 36h1v1h-1zM38 36h3v1h-3zM2 37h1v1h-1zM8 37h1v1h-1zM10 37h1v1h-1zM12 37h1v1h-1zM14 37h1v1h-1zM17 37h2v1h-2zM20 37h1v1h-1zM25 37h2v1h-2zM30 37h2v1h-2zM33 37h2v1h-2zM38 37h2v1h-2zM41 37h1v1h-1zM2 38h1v1h-1zM4 38h3v1h-3zM8 38h1v1h-1zM10 38h1v1h-1zM12 38h4v1h-4zM19 38h1v1h-1zM23 38h2v1h-2zM26 38h1v1h-1zM33 38h6v1h-6zM2 39h1v1h-1zM4 39h3v1h-3zM8 39h1v1h-1zM10 39h5v1h-5zM16 39h1v1h-1zM18 39h3v1h-3zM22 39h1v1h-1zM24 39h1v1h-1zM28 39h3v1h-3zM37 39h1v1h-1zM39 39h2v1h-2zM42 39h1v1h-1zM2 40h1v1h-1zM4 40h3v1h-3zM8 40h1v1h-1zM11 40h1v1h-1zM13 40h1v1h-1zM16 40h2v1h-2zM21 40h2v1h-2zM24 40h1v1h-1zM28 40h2v1h-2zM31 40h2v1h-2zM34 40h2v1h-2zM37 40h4v1h-4zM42 40h1v1h-1zM2 41h1v1h-1zM8 41h1v1h-1zM11 41h1v1h-1zM13 41h1v1h-1zM17 41h5v1h-5zM30 41h1v1h-1zM35 41h2v1h-2zM38 41h1v1h-1zM40 41h1v1h-1zM42 41h1v1h-1zM2 42h7v1h-7zM10 42h1v1h-1zM12 42h2v1h-2zM16 42h2v1h-2zM19 42h2v1h-2zM22 42h1v1h-1zM24 42h4v1h-4zM30 42h1v1h-1zM34 42h1v1h-1zM38 42h2v1h-2z"/></svg>
+          <div class="n-body" style="margin-top:2px">次のシリーズの内容は、<strong>ここに書かれたこと</strong>で決まります。</div>
+          <div class="qr-url">https://docs.google.com/forms/d/e/1FAIpQLSeDSIzG21CsG1d5weaOEpdNIjtsCXhqdpIr0rPBIGr0ezejwQ/viewform</div>
+        </div>
+        <div class="n-card">
+          <div class="n-title">AI・ITよろず相談所　清水 幸久（Yukisa）</div>
+          <div class="link-list">
+            <div class="li-row"><strong>ホームページ</strong><a href="https://yorozusoudansyo.github.io/home/" target="_blank" rel="noopener">yorozusoudansyo.github.io/home/</a></div>
+            <div class="li-row"><strong>無料相談（30分・オンライン）</strong><a href="https://meetbook-booking.web.app/" target="_blank" rel="noopener">予約フォームへ</a></div>
+            <div class="li-row"><strong>X（ほぼ毎日発信中）</strong><a href="https://x.com/Yorozu0519" target="_blank" rel="noopener">@Yorozu0519</a></div>
+            <div class="li-row"><strong>note（AI活用マガジン）</strong><a href="https://note.com/yukisa0814" target="_blank" rel="noopener">note.com/yukisa0814</a></div>
+            <div class="li-row"><strong>YouTube（過去シリーズの録画）</strong><a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener">YouTubeチャンネル</a></div>
+            <div class="li-row"><strong>Facebookページ（よろず相談所）</strong><a href="https://www.facebook.com/profile.php?id=61592837639364" target="_blank" rel="noopener">ページを見る</a></div>
+            <div class="li-row"><strong>Facebook（清水 幸久）</strong><a href="https://www.facebook.com/profile.php?id=61592919445694" target="_blank" rel="noopener">プロフィールへ</a></div>
+            <div class="li-row"><strong>Facebookグループ</strong><a href="https://www.facebook.com/groups/1079724861154015" target="_blank" rel="noopener">グループに参加</a></div>
+          </div>
+        </div>
+      </div>
+      <div class="bar-accent" style="margin-top:12px">「自分の仕事でも試したい」方は<em>無料相談</em>からお気軽に。しつこい営業は一切ありません。</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>16</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s17">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ Appendix</span>
+      </div>
+      <div style="flex:1;min-height:0;display:flex;gap:40px">
+        <div style="width:480px;flex-shrink:0;display:flex;flex-direction:column">
+          <div class="kicker">Appendix</div>
+          <div class="section-title">頼むときに使う、<span class="accent">部品の名前</span></div>
+          <div class="section-sub">作り方は知らなくて構いません。名前を知っていると、指示が一発で通ります。</div>
+          <div class="bar-accent" style="margin-top:auto">「あの、つまみを動かすやつ」でも通じます。ただ、<em>「スライダー」と言えば一発です。</em></div>
+        </div>
+        <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center">
+          <img src="assets/webinar_202608_ui_parts_cheatsheet.svg" alt="バイブコーディングのための UI部品 早見表" style="height:100%;width:auto;max-width:100%;object-fit:contain;display:block">
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>Appendix</strong> 1 / 2</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s18">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202608_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ Appendix</span>
+      </div>
+      <div class="kicker">Appendix</div>
+      <div class="section-title">Base44 は、<span class="accent">どこが違うのか</span></div>
+      <div class="section-sub">第1回で、参加者の方から出てきた道具です。同じ「話して作る」でも、置き場所が違います。</div>
+      <table class="tbl">
+        <thead><tr><th></th><th>チャット＋アーティファクト<br>Claude・ChatGPT・Gemini</th><th>Base44</th></tr></thead>
+        <tbody>
+          <tr><td class="k">返ってくるもの</td><td>動く画面が1枚</td><td>アプリ一式（画面＋裏側）</td></tr>
+          <tr><td class="k">入力を貯める</td><td>貯まらない。閉じると消える</td><td><strong>貯まる</strong>（データベースが最初から付く）</td></tr>
+          <tr><td class="k">ログイン</td><td>なし</td><td><strong>あり</strong>（誰が使ったかが分かる）</td></tr>
+          <tr><td class="k">人に渡す</td><td>リンク、またはHTMLファイルで渡せる</td><td>公開URLで渡せる</td></tr>
+          <tr><td class="k">費用</td><td>使っているプランの中で試せる</td><td>無料枠あり。続けるなら有料</td></tr>
+          <tr><td class="k">向いていること</td><td>ひとりの判断を、道具にする</td><td>皆で使う、記録が残る仕組み</td></tr>
+        </tbody>
+      </table>
+      <div class="note-bar" style="margin-top:26px;padding:16px 18px">前回うかがったドラマ管理ツール。<strong>チェックを入れる／見逃しそうになるとリマインドが上がる</strong>——これは「覚えておく必要がある」道具です。だからBase44でした。</div>
+      <div class="bar-accent" style="margin-top:26px;padding:18px 20px"><em>今日の道具は、上の左側で足ります。</em>　右側が要るのは、「入力を貯めたい」と思ったときです。</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>Appendix</strong> 2 / 2</span>
+      </div>
+    </div>
+
+  </div><!-- /deck -->
+</div><!-- /stage -->
+
+<div class="nav-hint">← → キーで移動　／　クリック左右で移動　／　F でフルスクリーン</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = Math.max(0, Math.min(total - 1, n));
+    slides[cur].classList.add('active');
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+  btnPrev.addEventListener('click', function (e) { e.stopPropagation(); go(cur - 1); });
+  btnNext.addEventListener('click', function (e) { e.stopPropagation(); go(cur + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(total - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) { document.exitFullscreen(); }
+      else { document.documentElement.requestFullscreen(); }
+    }
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.nav-btn') || e.target.closest('a') || e.target.closest('button')) return;
+    if (e.clientX < window.innerWidth / 2) { go(cur - 1); } else { go(cur + 1); }
+  });
+  go(0);
+</script>
+</body>
+</html>
