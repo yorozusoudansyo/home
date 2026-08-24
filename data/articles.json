@@ -3,6 +3,20 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "【無料Webセミナー】「自分の基準」をAIの道具に入れる｜第2回",
+      "url": "https://www.youtube.com/watch?v=YIHXeD_-geE",
+      "date": "2026.08.24",
+      "thumbnail": "https://i.ytimg.com/vi/YIHXeD_-geE/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "候補を比べて決める道具をAIで作る #Shorts",
+      "url": "https://www.youtube.com/watch?v=y2gVZTzmQec",
+      "date": "2026.08.24",
+      "thumbnail": "https://i.ytimg.com/vi/y2gVZTzmQec/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "AIに「作って」と頼むと何が変わる？ #Shorts",
       "url": "https://www.youtube.com/watch?v=vdYTWXhiv4w",
       "date": "2026.08.23",
@@ -63,20 +77,6 @@
       "url": "https://www.youtube.com/watch?v=a4ANUoBEGrg",
       "date": "2026.07.31",
       "thumbnail": "https://i.ytimg.com/vi/a4ANUoBEGrg/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "「分からない」と言えるAIを作る｜Copilot Notebooks実演 #Shorts",
-      "url": "https://www.youtube.com/watch?v=_Wzj3r6-MMg",
-      "date": "2026.07.30",
-      "thumbnail": "https://i.ytimg.com/vi/_Wzj3r6-MMg/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【Copilot活用】Copilot関数でアンケート回答を一括分類｜Excel実演",
-      "url": "https://www.youtube.com/watch?v=tMfhPtuJnic",
-      "date": "2026.07.30",
-      "thumbnail": "https://i.ytimg.com/vi/tMfhPtuJnic/hqdefault.jpg"
     },
     {
       "source": "SITE",
