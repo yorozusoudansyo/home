@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "日本語だけで○×ゲームを作る｜バイブコーディング #Shorts",
+      "url": "https://www.youtube.com/watch?v=r-I14dMA5I4",
+      "date": "2026.08.25",
+      "thumbnail": "https://i.ytimg.com/vi/r-I14dMA5I4/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "【無料Webセミナー】「自分の基準」をAIの道具に入れる｜第2回",
       "url": "https://www.youtube.com/watch?v=YIHXeD_-geE",
       "date": "2026.08.24",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=I1aNrcj-z8U",
       "date": "2026.07.31",
       "thumbnail": "https://i.ytimg.com/vi/I1aNrcj-z8U/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【Copilot活用】伝わる指示の組み立て方と、安全に使うための基本",
-      "url": "https://www.youtube.com/watch?v=a4ANUoBEGrg",
-      "date": "2026.07.31",
-      "thumbnail": "https://i.ytimg.com/vi/a4ANUoBEGrg/hqdefault.jpg"
     },
     {
       "source": "SITE",
