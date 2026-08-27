@@ -3,6 +3,34 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "判断基準は「評価軸×重み」で見える化する #Shorts",
+      "url": "https://www.youtube.com/watch?v=Ui5eScAg7RA",
+      "date": "2026.08.26",
+      "thumbnail": "https://i.ytimg.com/vi/Ui5eScAg7RA/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "迷う理由は3つに分けられる #Shorts",
+      "url": "https://www.youtube.com/watch?v=J8B_C8OMrtk",
+      "date": "2026.08.26",
+      "thumbnail": "https://i.ytimg.com/vi/J8B_C8OMrtk/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "AIは一発で完成しなくて普通 #Shorts",
+      "url": "https://www.youtube.com/watch?v=rwckTAXQXm8",
+      "date": "2026.08.26",
+      "thumbnail": "https://i.ytimg.com/vi/rwckTAXQXm8/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "歓迎会のお店選びをAIで整理する #Shorts",
+      "url": "https://www.youtube.com/watch?v=tuO9jDqPTso",
+      "date": "2026.08.26",
+      "thumbnail": "https://i.ytimg.com/vi/tuO9jDqPTso/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "日本語だけで○×ゲームを作る｜バイブコーディング #Shorts",
       "url": "https://www.youtube.com/watch?v=r-I14dMA5I4",
       "date": "2026.08.25",
@@ -49,34 +77,6 @@
       "url": "https://www.youtube.com/watch?v=7_BgBuUKXmQ",
       "date": "2026.08.13",
       "thumbnail": "https://i.ytimg.com/vi/7_BgBuUKXmQ/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "ワークフローでもハルシネーションは起きる？ #Shorts",
-      "url": "https://www.youtube.com/watch?v=McNjMzNhNgo",
-      "date": "2026.08.06",
-      "thumbnail": "https://i.ytimg.com/vi/McNjMzNhNgo/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "一度の作業をワークフロー化して再利用｜Office Agent #Shorts",
-      "url": "https://www.youtube.com/watch?v=uYjonPTOChM",
-      "date": "2026.08.05",
-      "thumbnail": "https://i.ytimg.com/vi/uYjonPTOChM/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "CSVからWord売上レポートを自動作成｜Office Agent #Shorts",
-      "url": "https://www.youtube.com/watch?v=qDpOSfW_xZM",
-      "date": "2026.08.04",
-      "thumbnail": "https://i.ytimg.com/vi/qDpOSfW_xZM/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "チャットで社内AIを作る｜Copilot Agent Builder #Shorts",
-      "url": "https://www.youtube.com/watch?v=I1aNrcj-z8U",
-      "date": "2026.07.31",
-      "thumbnail": "https://i.ytimg.com/vi/I1aNrcj-z8U/hqdefault.jpg"
     },
     {
       "source": "SITE",
