@@ -2,17 +2,81 @@
   "$schema": "Each article: { source: 'NOTE'|'X'|'YOUTUBE'|'SITE', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
   "articles": [
     {
-      "source": "NOTE",
-      "title": "去年「使えない」と感じたCopilotは、もう\"別物\"になっています。",
-      "url": "https://note.com/yukisa0814/n/n655b81ad2ba3",
-      "date": "2026.06.27",
-      "thumbnail": "https://assets.st-note.com/img/1782555942-izFgOpJX5SWIkZjn04LCq1Yy.png"
+      "source": "YOUTUBE",
+      "title": "毎回AIに聞くと、答えがぶれる理由 #Shorts",
+      "url": "https://www.youtube.com/watch?v=gAbqmHcf_5I",
+      "date": "2026.08.29",
+      "thumbnail": "https://i.ytimg.com/vi/gAbqmHcf_5I/hqdefault.jpg"
     },
     {
-      "source": "NOTE",
-      "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(後編)",
-      "url": "https://note.com/yukisa0814/n/nbf3c9fe886d7",
-      "date": "2026.05.09"
+      "source": "YOUTUBE",
+      "title": "完璧な指示より、出して直すほうが早い #Shorts",
+      "url": "https://www.youtube.com/watch?v=2raoHta5n5o",
+      "date": "2026.08.29",
+      "thumbnail": "https://i.ytimg.com/vi/2raoHta5n5o/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "AIへ修正を頼むときの3つの型 #Shorts",
+      "url": "https://www.youtube.com/watch?v=5TI3a0JxVrU",
+      "date": "2026.08.28",
+      "thumbnail": "https://i.ytimg.com/vi/5TI3a0JxVrU/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "AI時代に必要なのは「言語化」 #Shorts",
+      "url": "https://www.youtube.com/watch?v=TWcAV0VLQFw",
+      "date": "2026.08.28",
+      "thumbnail": "https://i.ytimg.com/vi/TWcAV0VLQFw/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "同じ3店でも、重みを変えると1位が変わる #Shorts",
+      "url": "https://www.youtube.com/watch?v=chT2zNZ7tHY",
+      "date": "2026.08.28",
+      "thumbnail": "https://i.ytimg.com/vi/chT2zNZ7tHY/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "プロンプト技術より大事なこと #Shorts",
+      "url": "https://www.youtube.com/watch?v=DqJWUAHtgVc",
+      "date": "2026.08.28",
+      "thumbnail": "https://i.ytimg.com/vi/DqJWUAHtgVc/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "1位と2位が僅差なら、注意を出す #Shorts",
+      "url": "https://www.youtube.com/watch?v=Ab2jzF1YRuM",
+      "date": "2026.08.27",
+      "thumbnail": "https://i.ytimg.com/vi/Ab2jzF1YRuM/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "実際に使ったアプリ作成プロンプト #Shorts",
+      "url": "https://www.youtube.com/watch?v=8Pnzxg__4wg",
+      "date": "2026.08.27",
+      "thumbnail": "https://i.ytimg.com/vi/8Pnzxg__4wg/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "順位だけでなく、理由を日本語で出す #Shorts",
+      "url": "https://www.youtube.com/watch?v=lItECAiWVYQ",
+      "date": "2026.08.27",
+      "thumbnail": "https://i.ytimg.com/vi/lItECAiWVYQ/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "アプリ設計は「入力・ルール・出力」 #Shorts",
+      "url": "https://www.youtube.com/watch?v=xymFjYlMtCQ",
+      "date": "2026.08.27",
+      "thumbnail": "https://i.ytimg.com/vi/xymFjYlMtCQ/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "判断基準は「評価軸×重み」で見える化する #Shorts",
+      "url": "https://www.youtube.com/watch?v=Ui5eScAg7RA",
+      "date": "2026.08.26",
+      "thumbnail": "https://i.ytimg.com/vi/Ui5eScAg7RA/hqdefault.jpg"
     },
     {
       "source": "SITE",
@@ -20,60 +84,6 @@
       "url": "saisho-ni-shitte-hoshii-AI-no-tsukiaikata.html",
       "date": "2026.04.30",
       "thumbnail": "assets/card-tsukiaikata.png"
-    },
-    {
-      "source": "NOTE",
-      "title": "【完全解説】Microsoft Copilotの基礎から神活用術まで！ビジネスパーソンのための最新AIガイド",
-      "url": "https://note.com/yukisa0814/n/n5d67dd54884a",
-      "date": "2026.04.28"
-    },
-    {
-      "source": "NOTE",
-      "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(前編)",
-      "url": "https://note.com/yukisa0814/n/ncf59d2678127",
-      "date": "2026.04.28"
-    },
-    {
-      "source": "NOTE",
-      "title": "「画像をきれいにして」——4つのAIに同じお願いをしたら、全員が違う答えを返してきた",
-      "url": "https://note.com/yukisa0814/n/na86e3c5d042d",
-      "date": "2026.04.23"
-    },
-    {
-      "source": "NOTE",
-      "title": "究極のビジネスプロンプト大全〜階層別・部署別 120選〜 ここからダウンロード！！",
-      "url": "https://note.com/yukisa0814/n/n24c9907e18cf",
-      "date": "2026.04.14"
-    },
-    {
-      "source": "NOTE",
-      "title": "昭和の「紙の単価表」2000項目を、AIで一瞬にしてExcel化する最強の仕事術",
-      "url": "https://note.com/yukisa0814/n/n2bbf5322d43b",
-      "date": "2026.04.11"
-    },
-    {
-      "source": "NOTE",
-      "title": "3大AIのカスタム設定完全ガイド——Claude・ChatGPT・Geminiを「自分専用AI」に育てる",
-      "url": "https://note.com/yukisa0814/n/n7e4242f37059",
-      "date": "2026.04.09"
-    },
-    {
-      "source": "NOTE",
-      "title": "【完全保存版】Gemini × NotebookLMの最強連携！「もっともらしい嘘」を許さない最新AI活用術",
-      "url": "https://note.com/yukisa0814/n/n6cf7a474b4dc",
-      "date": "2026.04.08"
-    },
-    {
-      "source": "NOTE",
-      "title": "AIガチャを卒業！Gemini Canvasで実現する『爆速』ビジネス文書作成術",
-      "url": "https://note.com/yukisa0814/n/na64f9a2bebd6",
-      "date": "2026.04.08"
-    },
-    {
-      "source": "NOTE",
-      "title": "AIの「もっともらしい嘘」を防ぐ——3大AIのカスタム設定ハレーション防止ガイド",
-      "url": "https://note.com/yukisa0814/n/n2940df3dd84d",
-      "date": "2026.04.07"
     }
   ]
 }
