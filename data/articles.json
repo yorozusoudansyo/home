@@ -3,6 +3,20 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "AIの答えを「自分の道具」にする方法 #Shorts",
+      "url": "https://www.youtube.com/watch?v=oN8Qek04Toc",
+      "date": "2026.08.30",
+      "thumbnail": "https://i.ytimg.com/vi/oN8Qek04Toc/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "自分の道具に必要なのは「再現性」 #Shorts",
+      "url": "https://www.youtube.com/watch?v=w0RFfG6817E",
+      "date": "2026.08.30",
+      "thumbnail": "https://i.ytimg.com/vi/w0RFfG6817E/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "毎回AIに聞くと、答えがぶれる理由 #Shorts",
       "url": "https://www.youtube.com/watch?v=gAbqmHcf_5I",
       "date": "2026.08.29",
@@ -63,20 +77,6 @@
       "url": "https://www.youtube.com/watch?v=lItECAiWVYQ",
       "date": "2026.08.27",
       "thumbnail": "https://i.ytimg.com/vi/lItECAiWVYQ/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "アプリ設計は「入力・ルール・出力」 #Shorts",
-      "url": "https://www.youtube.com/watch?v=xymFjYlMtCQ",
-      "date": "2026.08.27",
-      "thumbnail": "https://i.ytimg.com/vi/xymFjYlMtCQ/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "判断基準は「評価軸×重み」で見える化する #Shorts",
-      "url": "https://www.youtube.com/watch?v=Ui5eScAg7RA",
-      "date": "2026.08.26",
-      "thumbnail": "https://i.ytimg.com/vi/Ui5eScAg7RA/hqdefault.jpg"
     },
     {
       "source": "SITE",
