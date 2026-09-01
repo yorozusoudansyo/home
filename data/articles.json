@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "【無料Webセミナー】書けなくても、使える｜第3回 作った道具を、自分の仕事に移す",
+      "url": "https://www.youtube.com/watch?v=6YWSX8xY7Ck",
+      "date": "2026.09.01",
+      "thumbnail": "https://i.ytimg.com/vi/6YWSX8xY7Ck/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "AIの答えを「自分の道具」にする方法 #Shorts",
       "url": "https://www.youtube.com/watch?v=oN8Qek04Toc",
       "date": "2026.08.30",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=8Pnzxg__4wg",
       "date": "2026.08.27",
       "thumbnail": "https://i.ytimg.com/vi/8Pnzxg__4wg/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "順位だけでなく、理由を日本語で出す #Shorts",
-      "url": "https://www.youtube.com/watch?v=lItECAiWVYQ",
-      "date": "2026.08.27",
-      "thumbnail": "https://i.ytimg.com/vi/lItECAiWVYQ/hqdefault.jpg"
     },
     {
       "source": "SITE",
