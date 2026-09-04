@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatGPT、去年の使い方のままになっていませんか｜無料Webセミナー全3回</title>
+<meta name="description" content="ChatGPTはこの1年で別物になりました。しかも、無料のままで。Claude・Gemini・Copilotとの使い分けも整理します。9月13日・20日・27日（日）21:00〜21:45、全3回・参加費無料。AI・ITよろず相談所。">
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="ChatGPT、去年の使い方のままになっていませんか。">
+<meta property="og:description" content="この1年で、別物になりました。しかも、無料のままで。Claude・Gemini・Copilotとの使い分けも整理します。9/13・20・27（日）21:00〜21:45／全3回・参加費無料。">
+<meta property="og:url" content="https://yorozusoudansyo.github.io/home/webinar_lp_202609.html">
+<meta property="og:image" content="https://yorozusoudansyo.github.io/home/assets/webinar-202609-ogp.png">
+<meta property="og:site_name" content="AI・ITよろず相談所">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ChatGPT、去年の使い方のままになっていませんか。">
+<meta name="twitter:description" content="この1年で、別物になりました。しかも、無料のままで。9/13・20・27（日）21:00〜21:45／全3回・参加費無料。">
+<meta name="twitter:image" content="https://yorozusoudansyo.github.io/home/assets/webinar-202609-ogp.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+:root{
+  --color-primary-base:#D32F2F;
+  --color-primary-hover:#B71C1C;
+  --color-primary-light:#FFEBEE;
+  --color-text-high:#1F2937;
+  --color-text-medium:#4B5563;
+  --color-border:#E5E7EB;
+  --color-background:#F9FAFB;
+  --color-surface:#FFFFFF;
+
+  --font-family:"Inter","Noto Sans JP",sans-serif;
+  --radius-sm:4px; --radius-md:8px; --radius-pill:999px;
+  --shadow-card:0 4px 6px rgba(0,0,0,.05);
+  --shadow-overlay:0 10px 15px rgba(0,0,0,.1);
+
+  --space-xxs:4px; --space-xs:8px; --space-s:16px;
+  --space-m:24px;  --space-l:32px; --space-xl:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-family);
+  background:var(--color-background);
+  color:var(--color-text-high);
+  font-size:1rem;line-height:1.8;-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%}
+.wrap{max-width:768px;margin:0 auto;padding:0 var(--space-m)}
+.icon{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ============ header ============ */
+.site-head{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--color-border);padding:var(--space-s) 0}
+.site-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--space-s)}
+.brand{display:flex;align-items:center;text-decoration:none;flex:none}
+.brand img{height:32px;width:auto;display:block}
+.head-cta{font-size:.8125rem;font-weight:700;text-decoration:none;
+  color:var(--color-primary-base);border:1px solid var(--color-primary-base);
+  padding:var(--space-xs) var(--space-s);border-radius:var(--radius-sm);white-space:nowrap;
+  transition:background .15s ease}
+.head-cta:hover,.head-cta:focus-visible{background:var(--color-primary-light)}
+
+/* ============ hero ============ */
+.hero{position:relative;overflow:hidden;background:var(--color-surface);
+  border-bottom:1px solid var(--color-border);padding:var(--space-xl) 0}
+.hero::before{
+  content:"";position:absolute;top:-160px;right:-160px;width:420px;height:420px;
+  border-radius:var(--radius-pill);
+  background:radial-gradient(circle,var(--color-primary-light) 0%,rgba(255,235,238,0) 70%);
+  pointer-events:none;
+}
+.hero .wrap{position:relative;z-index:1}
+.hero-mark{position:absolute;top:var(--space-l);right:calc(50% - 384px + var(--space-m));
+  width:120px;height:auto;opacity:.10;pointer-events:none;user-select:none}
+@media (max-width:840px){.hero-mark{right:var(--space-m);width:88px}}
+.kicker{display:inline-flex;align-items:center;gap:var(--space-xs);
+  font-size:.75rem;font-weight:700;letter-spacing:.05em;
+  color:var(--color-primary-base);background:var(--color-primary-light);
+  padding:var(--space-xs) var(--space-s);border-radius:var(--radius-pill);
+  margin-bottom:var(--space-m)}
+.kicker .icon{width:14px;height:14px}
+h1{font-size:2rem;font-weight:700;line-height:1.4;letter-spacing:.05em;
+  margin-bottom:var(--space-s);text-wrap:balance}
+h1 .em{color:var(--color-primary-base)}
+.hero .sub{font-size:1.25rem;font-weight:500;line-height:1.6;
+  color:var(--color-text-medium);margin-bottom:var(--space-m)}
+.hero .sub b{color:var(--color-primary-base);font-weight:700}
+.toolstrip{display:flex;flex-wrap:wrap;gap:var(--space-xs);margin-bottom:var(--space-l)}
+.chip{font-size:.75rem;font-weight:500;padding:var(--space-xxs) var(--space-s);
+  border:1px solid var(--color-border);border-radius:var(--radius-pill);
+  background:var(--color-background);color:var(--color-text-medium)}
+.chip.on{border-color:var(--color-primary-base);color:var(--color-primary-base);
+  background:var(--color-primary-light);font-weight:700}
+
+.statbar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--color-border);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);overflow:hidden;margin-bottom:var(--space-l)}
+.statbar div{background:var(--color-surface);padding:var(--space-s);text-align:center}
+.statbar .n{display:block;font-size:1.5rem;font-weight:700;line-height:1.3;
+  letter-spacing:.05em;color:var(--color-text-high)}
+.statbar .n em{font-style:normal;color:var(--color-primary-base)}
+.statbar .l{display:block;font-size:.6875rem;color:var(--color-text-medium);margin-top:var(--space-xxs)}
+
+.btn{display:inline-flex;align-items:center;gap:var(--space-xs);
+  background:var(--color-primary-base);color:#fff;font-weight:700;font-size:1rem;
+  text-decoration:none;padding:var(--space-s) var(--space-l);
+  border-radius:var(--radius-sm);box-shadow:var(--shadow-card);transition:background .15s ease}
+.btn:hover,.btn:focus-visible{background:var(--color-primary-hover)}
+.btn:focus-visible{outline:2px solid var(--color-text-high);outline-offset:2px}
+.btn-note{font-size:.75rem;color:var(--color-text-medium);margin-top:var(--space-xs)}
+
+/* ============ sections ============ */
+section{padding:var(--space-xl) 0}
+section.alt{background:var(--color-surface);border-top:1px solid var(--color-border);
+  border-bottom:1px solid var(--color-border)}
+.sec-label{display:flex;align-items:center;gap:var(--space-xs);
+  font-size:.75rem;font-weight:700;letter-spacing:.1em;
+  color:var(--color-primary-base);margin-bottom:var(--space-xs)}
+.sec-label::after{content:"";flex:1;height:1px;background:var(--color-border)}
+h2{font-size:1.5rem;font-weight:700;line-height:1.5;letter-spacing:.05em;
+  margin-bottom:var(--space-m);text-wrap:balance}
+h3{font-size:1.25rem;font-weight:500;line-height:1.5;margin-bottom:var(--space-xs)}
+p{margin-bottom:var(--space-s)}
+p:last-child{margin-bottom:0}
+
+/* pains */
+.pains{list-style:none;display:flex;flex-direction:column;gap:var(--space-s)}
+.pains li{display:flex;gap:var(--space-s);align-items:flex-start;
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-s) var(--space-m);
+  box-shadow:var(--shadow-card);line-height:1.7}
+.pains li .icon{color:var(--color-primary-base);margin-top:.35em;width:18px;height:18px}
+.pain-after{margin-top:var(--space-m);color:var(--color-text-medium)}
+.pain-after b{color:var(--color-text-high)}
+
+/* before/after */
+.ba{display:grid;grid-template-columns:1fr auto 1fr;gap:var(--space-s);
+  align-items:stretch;margin:var(--space-m) 0}
+.ba .box{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-m);box-shadow:var(--shadow-card)}
+.ba .box.now{border-color:var(--color-primary-base);background:var(--color-primary-light)}
+.ba .tag{display:block;font-size:.6875rem;font-weight:700;letter-spacing:.1em;
+  color:var(--color-text-medium);margin-bottom:var(--space-xs)}
+.ba .box.now .tag{color:var(--color-primary-base)}
+.ba ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-xs);
+  font-size:.875rem;line-height:1.7}
+.ba .arrow{display:flex;align-items:center;color:var(--color-primary-base)}
+.ba .arrow .icon{width:24px;height:24px}
+
+/* program timeline */
+.program{position:relative;padding-left:var(--space-l);
+  display:flex;flex-direction:column;gap:var(--space-m)}
+.program::before{content:"";position:absolute;left:11px;top:12px;bottom:12px;
+  width:2px;background:var(--color-border)}
+.card{position:relative;background:var(--color-surface);
+  border:1px solid var(--color-border);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-card);overflow:hidden}
+.card::before{content:"";position:absolute;left:calc(var(--space-l) * -1 + 4px);top:var(--space-m);
+  width:16px;height:16px;border-radius:var(--radius-pill);
+  background:var(--color-surface);border:3px solid var(--color-primary-base)}
+.card > .head{padding:var(--space-m);border-bottom:1px solid var(--color-border)}
+.badge{display:inline-block;font-size:.75rem;font-weight:700;
+  color:var(--color-primary-base);background:var(--color-primary-light);
+  padding:var(--space-xxs) var(--space-s);border-radius:var(--radius-pill);
+  margin-bottom:var(--space-xs)}
+.card .date{font-size:.875rem;color:var(--color-text-medium);margin-bottom:var(--space-xs)}
+.card .date b{color:var(--color-text-high);font-weight:700}
+.card > .body{padding:var(--space-m)}
+.card ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-xs)}
+.card ul li{padding-left:var(--space-m);position:relative;font-size:.9375rem;
+  color:var(--color-text-medium);line-height:1.7}
+.card ul li::before{content:"";position:absolute;left:var(--space-xs);top:.7em;
+  width:6px;height:6px;border-radius:var(--radius-pill);background:var(--color-primary-base)}
+.deeper{margin-top:var(--space-s);padding-top:var(--space-s);
+  border-top:1px dashed var(--color-border);font-size:.875rem;color:var(--color-text-medium)}
+.deeper b{color:var(--color-text-high);display:block;margin-bottom:var(--space-xxs);font-size:.8125rem}
+
+/* afters */
+.afters{display:flex;flex-direction:column;gap:var(--space-s)}
+.after{display:flex;gap:var(--space-m);align-items:flex-start;
+  background:linear-gradient(135deg,var(--color-primary-light) 0%,var(--color-surface) 100%);
+  border:1px solid var(--color-border);border-left:4px solid var(--color-primary-base);
+  border-radius:var(--radius-md);padding:var(--space-m)}
+.after .d{font-size:.75rem;font-weight:700;color:var(--color-primary-base);
+  white-space:nowrap;padding-top:.2em}
+.after p{font-weight:500;margin:0;line-height:1.7}
+
+/* vote */
+.vote{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-m);box-shadow:var(--shadow-card)}
+.vote ol{list-style:none;counter-reset:v;display:grid;
+  grid-template-columns:repeat(2,1fr);gap:var(--space-xs);margin:var(--space-s) 0}
+.vote ol li{counter-increment:v;padding:var(--space-s) var(--space-s) var(--space-s) var(--space-l);
+  position:relative;font-size:.9375rem;background:var(--color-background);
+  border:1px solid var(--color-border);border-radius:var(--radius-sm);line-height:1.5}
+.vote ol li::before{content:counter(v,upper-alpha);position:absolute;left:var(--space-xs);
+  top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:var(--radius-pill);
+  background:var(--color-primary-light);color:var(--color-primary-base);
+  font-size:.6875rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* advanced */
+.advanced{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-m);box-shadow:var(--shadow-card)}
+.advanced ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-s);
+  margin-top:var(--space-s)}
+.advanced li{display:flex;gap:var(--space-s);align-items:flex-start;line-height:1.7;
+  font-size:.9375rem}
+.advanced li .icon{color:var(--color-primary-base);margin-top:.3em;width:18px;height:18px}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-s)}
+.step{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-m);box-shadow:var(--shadow-card);
+  text-align:center}
+.step .n{display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:var(--radius-pill);
+  background:var(--color-primary-base);color:#fff;font-weight:700;font-size:.875rem;
+  margin-bottom:var(--space-xs)}
+.step h3{font-size:1rem;font-weight:700;margin-bottom:var(--space-xxs)}
+.step p{font-size:.8125rem;color:var(--color-text-medium);line-height:1.7}
+
+/* target */
+.target{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-m);box-shadow:var(--shadow-card)}
+.target ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-xs)}
+.target li{padding-left:var(--space-m);position:relative;line-height:1.7}
+.target li::before{content:"→";position:absolute;left:0;color:var(--color-primary-base);font-weight:700}
+.target .not{margin-top:var(--space-m);padding-top:var(--space-s);
+  border-top:1px solid var(--color-border);font-size:.875rem;color:var(--color-text-medium)}
+
+/* table */
+.tablewrap{overflow-x:auto;background:var(--color-surface);
+  border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card)}
+table{border-collapse:collapse;width:100%;min-width:440px;font-size:.9375rem}
+th,td{padding:var(--space-s) var(--space-m);text-align:left;
+  border-bottom:1px solid var(--color-border);line-height:1.7;vertical-align:top}
+th{width:9.5em;font-weight:700;color:var(--color-text-medium);white-space:nowrap;
+  background:var(--color-background)}
+tr:last-child th,tr:last-child td{border-bottom:none}
+
+/* speaker */
+.speaker{display:flex;gap:var(--space-m);background:var(--color-surface);
+  border:1px solid var(--color-border);border-radius:var(--radius-md);
+  padding:var(--space-m);box-shadow:var(--shadow-card)}
+.speaker .ph{flex:none;width:72px;height:72px;border-radius:var(--radius-pill);
+  background:var(--color-primary-light);display:flex;align-items:center;justify-content:center;
+  color:var(--color-primary-base)}
+.speaker .ph .icon{width:32px;height:32px}
+.speaker .name{font-size:1.25rem;font-weight:700;margin-bottom:var(--space-xxs)}
+.speaker .role{font-size:.875rem;color:var(--color-primary-base);
+  font-weight:500;margin-bottom:var(--space-s)}
+.speaker p{font-size:.9375rem;color:var(--color-text-medium)}
+
+/* faq */
+.faq{display:flex;flex-direction:column;gap:var(--space-s)}
+details{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-card)}
+details[open]{border-color:var(--color-primary-base)}
+summary{padding:var(--space-s) var(--space-m);font-weight:500;cursor:pointer;
+  list-style:none;display:flex;gap:var(--space-s);align-items:flex-start;line-height:1.7}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"Q";color:var(--color-primary-base);font-weight:700;flex:none}
+summary:focus-visible{outline:2px solid var(--color-primary-base);
+  outline-offset:-2px;border-radius:var(--radius-md)}
+details > p{padding:0 var(--space-m) var(--space-m) calc(var(--space-m) + var(--space-s) + 1ch);
+  font-size:.9375rem;color:var(--color-text-medium)}
+
+/* final */
+.final{background:var(--color-surface);border-top:1px solid var(--color-border);
+  text-align:center;padding:var(--space-xl) 0}
+.final p{color:var(--color-text-medium);margin-bottom:var(--space-l)}
+.dates{display:flex;flex-direction:column;gap:var(--space-s);
+  max-width:420px;margin:0 auto var(--space-m)}
+.dates a{display:flex;justify-content:space-between;align-items:center;gap:var(--space-s);
+  background:var(--color-surface);border:1px solid var(--color-primary-base);
+  color:var(--color-primary-base);font-weight:700;text-decoration:none;
+  padding:var(--space-s) var(--space-m);border-radius:var(--radius-sm);
+  font-size:.9375rem;transition:background .15s ease;text-align:left}
+.dates a:hover,.dates a:focus-visible{background:var(--color-primary-light)}
+.dates a:focus-visible{outline:2px solid var(--color-primary-base);outline-offset:2px}
+.dates a span{font-weight:400;font-size:.8125rem;color:var(--color-text-medium)}
+
+footer{padding:var(--space-xl) 0 var(--space-l);text-align:center;
+  font-size:.75rem;color:var(--color-text-medium);
+  border-top:1px solid var(--color-border);background:var(--color-surface)}
+footer .foot-logo{height:40px;width:auto;margin-bottom:var(--space-s);opacity:.9}
+footer p{margin-bottom:var(--space-xxs)}
+footer a{color:var(--color-text-medium);text-decoration:none}
+footer a:hover{color:var(--color-primary-base)}
+footer .copy{color:var(--color-text-medium);opacity:.7}
+
+@media (max-width:640px){
+  h1{font-size:1.625rem}
+  .hero .sub{font-size:1.125rem}
+  section{padding:var(--space-l) 0}
+  .hero{padding:var(--space-l) 0}
+  .statbar{grid-template-columns:repeat(2,1fr)}
+  .ba{grid-template-columns:1fr}
+  .ba .arrow{justify-content:center;transform:rotate(90deg)}
+  .vote ol{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .speaker{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ============ 装飾パーツ（Codex CLI 生成 → ブランド仕様に合わせて調整） ============ */
+
+/* (1) セクション区切り：8pxグリッドに乗った斜線 */
+.deco-divider{position:relative;height:var(--space-l);margin:0 auto;max-width:768px;
+  padding:0 var(--space-m)}
+.deco-divider::before{content:"";position:absolute;top:50%;left:var(--space-m);right:var(--space-m);
+  height:var(--space-xs);transform:translateY(-50%);
+  background-image:repeating-linear-gradient(135deg,transparent 0,transparent 7px,
+    var(--color-border) 7px,var(--color-border) 8px)}
+
+/* (2) ヒーロー背景の薄い方眼（32px）。下へフェードアウト */
+.deco-gridbg{
+  background-color:var(--color-surface);
+  background-image:
+    linear-gradient(to bottom,rgba(255,255,255,0) 0%,var(--color-surface) 88%),
+    linear-gradient(to right,var(--color-border) 1px,transparent 1px),
+    linear-gradient(to bottom,var(--color-border) 1px,transparent 1px);
+  background-size:100% 100%,var(--space-l) var(--space-l),var(--space-l) var(--space-l);
+}
+
+/* (3) 3回の背骨ステップ */
+.deco-steps{display:flex;margin:0 0 var(--space-m);padding:0;list-style:none}
+.deco-steps__item{position:relative;display:flex;flex:1 1 0;flex-direction:column;
+  align-items:center;min-width:0;padding-inline:var(--space-xs);text-align:center}
+.deco-steps__item:not(:last-child)::after{content:"";position:absolute;
+  top:calc(var(--space-l) / 2);left:calc(50% + var(--space-m));z-index:0;
+  width:calc(100% - var(--space-l));height:2px;background:var(--color-border)}
+.deco-steps__number{position:relative;z-index:1;display:grid;
+  width:var(--space-l);height:var(--space-l);place-items:center;
+  border:2px solid var(--color-border);border-radius:var(--radius-pill);
+  background:var(--color-surface);color:var(--color-text-medium);
+  font-weight:700;line-height:1;font-size:.875rem}
+.deco-steps__content{display:grid;gap:var(--space-xxs);margin-top:var(--space-xs)}
+.deco-steps__label{color:var(--color-primary-base);font-weight:700;font-size:1rem}
+.deco-steps__text{color:var(--color-text-medium);font-size:.8125rem;line-height:1.6}
+.deco-steps__item.is-current .deco-steps__number{border-color:var(--color-primary-base);
+  background:var(--color-primary-base);color:var(--color-surface)}
+@media (max-width:600px){
+  .deco-steps{flex-direction:column;gap:var(--space-s)}
+  .deco-steps__item{flex-direction:row;align-items:flex-start;padding:0;text-align:left}
+  .deco-steps__item:not(:last-child)::after{top:var(--space-l);
+    left:calc(var(--space-l) / 2);width:2px;height:var(--space-s)}
+  .deco-steps__number{flex:0 0 var(--space-l)}
+  .deco-steps__content{margin:0 0 0 var(--space-s)}
+}
+
+/* (6) 下線マーカー：文字の下半分だけに薄赤。折り返し対応 */
+.deco-marker{color:var(--color-text-high);font-weight:700;
+  background-image:linear-gradient(to bottom,transparent 56%,var(--color-primary-light) 56%,
+    var(--color-primary-light) 94%,transparent 94%);
+  background-repeat:repeat;background-size:100% 1.8em;background-position:0 0;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* (7) FAQ：2px線のシェブロンが開閉で回転 */
+.faq details summary{position:relative;padding-right:calc(var(--space-m) + var(--space-s))}
+.faq details summary::after{content:"";position:absolute;top:50%;right:var(--space-m);
+  width:var(--space-xs);height:var(--space-xs);
+  border-right:2px solid var(--color-primary-base);
+  border-bottom:2px solid var(--color-primary-base);
+  transform:translateY(-70%) rotate(45deg);transition:transform .2s ease}
+.faq details[open] summary::after{transform:translateY(-30%) rotate(225deg)}
+@media (prefers-reduced-motion:reduce){.faq details summary::after{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="https://yorozusoudansyo.github.io/home/">
+      <img src="assets/logo.png" alt="AI・ITよろず相談所">
+    </a>
+    <a class="head-cta" href="#apply">無料で申し込む</a>
+  </div>
+</header>
+
+<div class="hero deco-gridbg">
+  <img class="hero-mark" src="assets/brand-mark.png" alt="" aria-hidden="true">
+  <div class="wrap">
+    <span class="kicker">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M2 12h4M18 12h4M4.9 19.1l2.9-2.9M16.2 7.8l2.9-2.9"/></svg>
+      無料Webセミナー／全3回
+    </span>
+    <h1>ChatGPT、<span class="em">去年の使い方</span>のままになっていませんか。</h1>
+    <p class="sub">この1年で、別物になりました。<br>しかも<b>、無料のままで。</b></p>
+
+    <div class="toolstrip">
+      <span class="chip on">ChatGPT</span>
+      <span class="chip">Claude</span>
+      <span class="chip">Gemini</span>
+      <span class="chip">Copilot</span>
+      <span class="chip">4つの使い分けも整理します</span>
+    </div>
+
+    <div class="statbar">
+      <div><span class="n">全<em>3</em>回</span><span class="l">9/13・20・27（日）</span></div>
+      <div><span class="n"><em>21</em>:00</span><span class="l">日曜の夜</span></div>
+      <div><span class="n"><em>45</em>分</span><span class="l">1回あたり</span></div>
+      <div><span class="n"><em>0</em>円</span><span class="l">参加費</span></div>
+    </div>
+
+    <a class="btn" href="#apply">
+      参加を申し込む（30秒）
+      <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <p class="btn-note">1回だけの参加でも大丈夫です。カメラ・マイクはオフのままで構いません。</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="sec-label">はじめに</p>
+    <h2>こんなこと、ありませんか</h2>
+    <ul class="pains">
+      <li>
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.3-4.3"/></svg>
+        ChatGPTは開いてみたけれど、結局「検索の代わり」で終わっている。
+      </li>
+      <li>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        同じことを聞いたのに、昨日と違う答えが返ってくる。何が悪いのか分からない。
+      </li>
+      <li>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l2.6 6.3 6.8.5-5.2 4.4 1.6 6.6L12 16.3 6.2 19.8l1.6-6.6L2.6 8.8l6.8-.5z"/></svg>
+        「AIで仕事が変わる」と聞くたび、自分だけ置いていかれている気がする。
+      </li>
+      <li>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        有料にすれば違うのだろうか。でも月額を払う理由が、自分で説明できない。
+      </li>
+      <li>
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>
+        周りが使いこなしている話は聞くが、自分の仕事のどこに入れればいいのか分からない。
+      </li>
+    </ul>
+    <p class="pain-after">どれも、<span class="deco-marker">使い方が去年で止まっているだけ</span>です。ChatGPTはこの1年で作りそのものが変わりました。新しく覚え直すことは、驚くほど少ないです。</p>
+  </div>
+</section>
+
+<div class="deco-divider"></div>
+
+<section class="alt">
+  <div class="wrap">
+    <p class="sec-label">この1年で起きたこと</p>
+    <h2>入力欄が1つだった頃と、いま</h2>
+    <div class="ba">
+      <div class="box">
+        <span class="tag">〜 去年</span>
+        <ul>
+          <li>入力欄が1つ。聞いて、答えが返る</li>
+          <li>会話を閉じると、前提は忘れられる</li>
+          <li>込み入った調べものは自分でやる</li>
+          <li>無料だと、正直あまりできない</li>
+        </ul>
+      </div>
+      <div class="arrow">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+      <div class="box now">
+        <span class="tag">いま</span>
+        <ul>
+          <li>用途で入口が分かれ、「考える」も選べる</li>
+          <li>前提を置いておけば、毎回説明しなくていい</li>
+          <li>調べものを任せて、まとめまで出させられる</li>
+          <li><b>無料のままで、かなりの部分が動く</b></li>
+        </ul>
+      </div>
+    </div>
+    <p class="pain-after">3回とも、この「いま」を実際の画面で見ていただきます。<span class="deco-marker">スライドを眺めて終わり、にはしません。</span></p>
+  </div>
+</section>
+
+<div class="deco-divider"></div>
+
+<section>
+  <div class="wrap">
+    <p class="sec-label">プログラム</p>
+    <h2>3回で、話し相手から仕事仲間に</h2>
+
+    <ol class="deco-steps" aria-label="全3回の流れ">
+      <li class="deco-steps__item is-current">
+        <span class="deco-steps__number">1</span>
+        <div class="deco-steps__content">
+          <span class="deco-steps__label">気づく</span>
+          <span class="deco-steps__text">去年のままの使い方に気づく</span>
+        </div>
+      </li>
+      <li class="deco-steps__item">
+        <span class="deco-steps__number">2</span>
+        <div class="deco-steps__content">
+          <span class="deco-steps__label">効かせる</span>
+          <span class="deco-steps__text">狙った答えが返るようにする</span>
+        </div>
+      </li>
+      <li class="deco-steps__item">
+        <span class="deco-steps__number">3</span>
+        <div class="deco-steps__content">
+          <span class="deco-steps__label">任せる</span>
+          <span class="deco-steps__text">作業そのものを渡す</span>
+        </div>
+      </li>
+    </ol>
+
+    <div class="program">
+
+      <article class="card">
+        <div class="head">
+          <span class="badge">第1回</span>
+          <p class="date"><b>9月13日（日）</b>21:00〜21:45</p>
+          <h3>入力欄が1つだった頃で、止まっていませんか</h3>
+        </div>
+        <div class="body">
+          <ul>
+            <li>同じ依頼を投げ分けて、速さと答えがどう変わるかをその場で比べます</li>
+            <li>無料のままで、いまどこまでできるようになったか</li>
+            <li>有料に上げたほうがいい人／上げなくていい人の判断のしかた</li>
+            <li>ChatGPT・Claude・Gemini・Copilot、どれを何に使うかの地図</li>
+          </ul>
+          <p class="deeper"><b>すでに使っている方へ</b>後半は「どれにお金を払うべきか」の判断材料に踏み込みます。4つを横に並べて比べる機会は、意外とありません。</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="head">
+          <span class="badge">第2回</span>
+          <p class="date"><b>9月20日（日）</b>21:00〜21:45</p>
+          <h3>同じことを聞いたのに、昨日と違う答えが返ってくる</h3>
+        </div>
+        <div class="body">
+          <ul>
+            <li>指示のしかたを変えるだけで、答えがどう変わるかを並べて実演します</li>
+            <li>毎回いちから説明するのを、やめる方法</li>
+            <li>その場で、参加者の方の指示文を直します（3本ほど）</li>
+          </ul>
+          <p class="deeper"><b>すでに使っている方へ</b>「答えが揺らぐ」の原因は、たいてい指示文ではありません。うまくいっていない指示文をそのままお持ちください。目の前で直します。</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="head">
+          <span class="badge">第3回</span>
+          <p class="date"><b>9月27日（日）</b>21:00〜21:45</p>
+          <h3>「調べる・書く」は、もう卒業していい</h3>
+        </div>
+        <div class="body">
+          <ul>
+            <li>「毎週この曜日にこれをやっておいて」を、目の前で1本だけ作ります</li>
+            <li>いくつもの手順を、一度の依頼でまとめて渡す</li>
+            <li>この先にある「自分専用の道具をつくる」世界も、少しだけお見せします</li>
+          </ul>
+          <p class="deeper"><b>すでに使っている方へ</b>最後の5分は、コードを書かずに自分用のアプリを作る話です。8月にお伝えした内容の入口を、あらためてここに置きます。</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <p class="sec-label">扱う範囲</p>
+    <h2>ChatGPTだけの話には、しません</h2>
+    <div class="advanced">
+      <p>タイトルはChatGPTですが、当日扱うのはそれだけではありません。いま日本のビジネスの現場で実際に使われている4つを、同じ画面に並べて比べます。</p>
+      <ul>
+        <li>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          <span><b>ChatGPT</b>　もっとも使われている入口。この1年での変わりようを軸に据えます</span>
+        </li>
+        <li>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          <span><b>Claude</b>　長い文章や資料の読み込みで評価が高い一方、日本ではまだ使っている人が少ない道具</span>
+        </li>
+        <li>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          <span><b>Gemini</b>　Googleアカウントがあれば、そのまま使えます。使っていることに気づいていない方も多いところ</span>
+        </li>
+        <li>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          <span><b>Copilot</b>　会社から配られている方向け。Excelやメールと地続きで使えるのが強みです</span>
+        </li>
+      </ul>
+      <p style="margin-top:var(--space-m)">「結局どれを使えばいいのか」は、いちばん多くいただくご質問です。<span class="deco-marker">用途ごとに1つずつ、はっきり答えます。</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="deco-divider"></div>
+
+<section>
+  <div class="wrap">
+    <p class="sec-label">受講後のイメージ</p>
+    <h2>その日の夜、あなたはこうなっています</h2>
+    <div class="afters">
+      <div class="after">
+        <span class="d">9/13</span>
+        <p>目の前の作業を、どのAIのどこに投げればいいか、迷わず判断できるようになっています。</p>
+      </div>
+      <div class="after">
+        <span class="d">9/20</span>
+        <p>自分の仕事用の指示文を、1本、手元に持って帰っています。明日からそのまま使えます。</p>
+      </div>
+      <div class="after">
+        <span class="d">9/27</span>
+        <p>あなたが寝ている間に勝手に動く仕組みを、1つ、自分のアカウントに残しています。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <p class="sec-label">参加者が決めます</p>
+    <h2>当日その場で実演する題材を、投票で決めます</h2>
+    <div class="vote">
+      <h3>いま、いちばん面倒だと思っている作業はどれですか</h3>
+      <p>お申し込みのときに1つだけ選んでください。<span class="deco-marker">いちばん票が多かったものを、当日その場で実演します。</span></p>
+      <ol>
+        <li>資料・企画書をつくる</li>
+        <li>メール・報告書を書く</li>
+        <li>調べもの・情報収集</li>
+        <li>数字や表を整理する</li>
+      </ol>
+      <p>「その他」の欄もあります。ご自身の作業をそのまま書いていただければ、それを扱う可能性もあります。</p>
+    </div>
+  </div>
+</section>
+
+<div class="deco-divider"></div>
+
+<section>
+  <div class="wrap">
+    <p class="sec-label">申し込みから当日まで</p>
+    <h2>やることは3つだけです</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="n">1</span>
+        <h3>フォームに記入</h3>
+        <p>お名前・メールアドレス・参加したい回・面倒な作業を1つ。30秒で終わります。</p>
+      </div>
+      <div class="step">
+        <span class="n">2</span>
+        <h3>参加リンクが届く</h3>
+        <p>送信するとその場でGoogle Meetのリンクが表示され、同じ内容をメールでもお送りします。</p>
+      </div>
+      <div class="step">
+        <span class="n">3</span>
+        <h3>当日クリックするだけ</h3>
+        <p>3日前と当日の朝にリマインドをお送りします。うっかり忘れる心配はありません。</p>
+      </div>
+    </div>
+    <p class="pain-after">アプリのインストールも、アカウント登録も不要です。<span class="deco-marker">届いたリンクを押すだけで入れます。</span></p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <p class="sec-label">対象</p>
+    <h2>こんな方に向いています</h2>
+    <div class="target">
+      <ul>
+        <li>ChatGPTは使っているけれど、使い方が去年から変わっていない方</li>
+        <li>無料のまま使っていて、有料にすべきか決めかねている方</li>
+        <li>会社でCopilotを使っているが、他とどう違うのか分かっていない方</li>
+        <li>AIの話題にはついていけるが、自分の仕事に入れられていない方</li>
+        <li>一度学んだが、そのあと触らないまま止まっている方</li>
+      </ul>
+      <p class="not">プログラミングの知識、事前準備、顔出しはいずれも不要です。マウスとキーボードが使えれば大丈夫です。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="sec-label">開催概要</p>
+    <h2>開催概要</h2>
+    <div class="tablewrap">
+      <table>
+        <tbody>
+          <tr><th>日程</th><td>第1回 9月13日（日）／第2回 9月20日（日）／第3回 9月27日（日）</td></tr>
+          <tr><th>時間</th><td>各回 21:00〜21:45（45分）</td></tr>
+          <tr><th>形式</th><td>Google Meet によるオンライン開催</td></tr>
+          <tr><th>参加費</th><td>無料</td></tr>
+          <tr><th>定員</th><td>なし</td></tr>
+          <tr><th>持ち物</th><td>パソコンまたはスマートフォン。ChatGPTのアカウント（無料で構いません）をお持ちいただくと、その場で一緒に手を動かせます。</td></tr>
+          <tr><th>主催</th><td>AI・ITよろず相談所</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <p class="sec-label">講師</p>
+    <h2>お話しする人</h2>
+    <div class="speaker">
+      <div class="ph">
+        <!-- ▼ 写真を使う場合は、この div ごと <img src="..." alt="清水幸久"> に置き換えてください -->
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </div>
+      <div>
+        <p class="name">清水 幸久（Yukisa）</p>
+        <p class="role">AI・ITよろず相談所 代表</p>
+        <p>CADメーカーのアプリケーションエンジニアとして約25年。売るための説明ではなく、「導入したあと、その人が本当に使えるようになるか」を仕事にしてきました。手書きの製図から始まった世代なので、新しい道具を前に手が止まる感覚はよく分かります。検索するキーワードすら思いつかない、という状態から一緒に始めます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="sec-label">よくある質問</p>
+    <h2>よくある質問</h2>
+    <div class="faq">
+      <details>
+        <summary>3回とも参加しないといけませんか？</summary>
+        <p>いいえ。1回だけのご参加でも大丈夫です。ただし3回は「気づく → 効かせる → 任せる」でつながっているので、通していただくといちばん身につきます。</p>
+      </details>
+      <details>
+        <summary>無料のアカウントでも参加する意味はありますか？</summary>
+        <p>あります。第1回は「無料のままで、いまどこまでできるか」が中心です。有料に上げるかどうかを判断する材料をお持ち帰りいただけます。</p>
+      </details>
+      <details>
+        <summary>ChatGPT以外のAIを使っているのですが。</summary>
+        <p>問題ありません。第1回でChatGPT・Claude・Gemini・Copilotを並べて比べます。指示のしかたや任せ方の考え方は、どのAIでも共通です。</p>
+      </details>
+      <details>
+        <summary>もうそこそこ使えているのですが、物足りませんか？</summary>
+        <p>各回の後半を、一段深いところまで持っていきます。とくに第2回でご自身の指示文をその場で直す時間と、第3回の後半は、すでに使っている方ほど持ち帰るものが多いはずです。「知っているつもりだった」が一番出やすいのは、実は使い慣れた方です。</p>
+      </details>
+      <details>
+        <summary>プログラミングの知識は必要ですか？</summary>
+        <p>不要です。3回とも、文章で指示するところから先には行きません。</p>
+      </details>
+      <details>
+        <summary>質問はできますか？</summary>
+        <p>はい。毎回、最後に質問の時間を必ず取ります。ここは削りません。うまくいかなかった画面をそのまま見せていただいても構いません。</p>
+      </details>
+      <details>
+        <summary>顔や名前は出ますか？</summary>
+        <p>カメラもマイクもオフのままで大丈夫です。ご質問はチャットでも受け付けます。</p>
+      </details>
+      <details>
+        <summary>当日参加できなくなったら？</summary>
+        <p>ご連絡は不要です。次の回からご参加いただけます。<!-- ▼ 録画の配布方針が決まったら、ここに追記してください --></p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<div class="final" id="apply">
+  <div class="wrap">
+    <p class="sec-label" style="justify-content:center">お申し込み</p>
+    <h2>30秒で終わります</h2>
+    <p>お名前とメールアドレス、それに「いちばん面倒な作業」を1つ選ぶだけです。</p>
+
+    <div class="dates">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfpp1RHSwV4SYNoMlbpag9qChSa2A8yIF90bDhJeef5oZJBEw/viewform" target="_blank" rel="noopener">第1回　9月13日（日）<span>21:00〜21:45</span></a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfpp1RHSwV4SYNoMlbpag9qChSa2A8yIF90bDhJeef5oZJBEw/viewform" target="_blank" rel="noopener">第2回　9月20日（日）<span>21:00〜21:45</span></a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfpp1RHSwV4SYNoMlbpag9qChSa2A8yIF90bDhJeef5oZJBEw/viewform" target="_blank" rel="noopener">第3回　9月27日（日）<span>21:00〜21:45</span></a>
+    </div>
+
+    <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfpp1RHSwV4SYNoMlbpag9qChSa2A8yIF90bDhJeef5oZJBEw/viewform" target="_blank" rel="noopener">
+      3回まとめて申し込む
+      <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <p class="btn-note">開催3日前と当日の朝に、リマインドをお送りします。</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <img class="foot-logo" src="assets/logo.png" alt="AI・ITよろず相談所">
+    <p><a href="https://yorozusoudansyo.github.io/home/">AI・ITよろず相談所</a></p>
+    <p class="copy">© 2026 AI・ITよろず相談所</p>
+  </div>
+</footer>
+
+</body>
+</html>
