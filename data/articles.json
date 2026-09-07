@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "コードを一行も書かず、画面のあるアプリを作る #Shorts",
+      "url": "https://www.youtube.com/watch?v=UuDhdWoB8IU",
+      "date": "2026.09.07",
+      "thumbnail": "https://i.ytimg.com/vi/UuDhdWoB8IU/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "同じ仕組みを、営業や開発の判断へ移す #Shorts",
       "url": "https://www.youtube.com/watch?v=1yoLsoKEVaw",
       "date": "2026.09.06",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=gAbqmHcf_5I",
       "date": "2026.08.29",
       "thumbnail": "https://i.ytimg.com/vi/gAbqmHcf_5I/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "完璧な指示より、出して直すほうが早い #Shorts",
-      "url": "https://www.youtube.com/watch?v=2raoHta5n5o",
-      "date": "2026.08.29",
-      "thumbnail": "https://i.ytimg.com/vi/2raoHta5n5o/hqdefault.jpg"
     },
     {
       "source": "SITE",
