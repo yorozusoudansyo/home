@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "AIで仕事が速くなる人、ならない人｜「40％時短」の条件",
+      "url": "https://www.youtube.com/watch?v=Z1aE8hChK50",
+      "date": "2026.09.09",
+      "thumbnail": "https://i.ytimg.com/vi/Z1aE8hChK50/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "コードを一行も書かず、画面のあるアプリを作る #Shorts",
       "url": "https://www.youtube.com/watch?v=UuDhdWoB8IU",
       "date": "2026.09.07",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=w0RFfG6817E",
       "date": "2026.08.30",
       "thumbnail": "https://i.ytimg.com/vi/w0RFfG6817E/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "毎回AIに聞くと、答えがぶれる理由 #Shorts",
-      "url": "https://www.youtube.com/watch?v=gAbqmHcf_5I",
-      "date": "2026.08.29",
-      "thumbnail": "https://i.ytimg.com/vi/gAbqmHcf_5I/hqdefault.jpg"
     },
     {
       "source": "SITE",
