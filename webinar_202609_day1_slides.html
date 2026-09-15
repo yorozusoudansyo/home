@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>第1回 入力欄が1つだった頃で、止まっていませんか｜AI・ITよろず相談所</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-primary: #D32F2F;
+    --c-primary-hover: #B71C1C;
+    --c-primary-light: #FFEBEE;
+    --c-success: #0F6E56;
+    --c-success-light: #E1F5EE;
+    --c-text-high: #1F2937;
+    --c-text-med: #4B5563;
+    --c-border: #E5E7EB;
+    --c-bg: #F9FAFB;
+    --c-surface: #FFFFFF;
+    --r-sm: 4px;
+    --r-md: 8px;
+    --r-pill: 999px;
+    --sh-card: 0 4px 6px rgba(0,0,0,0.05);
+    --sh-overlay: 0 10px 15px rgba(0,0,0,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; overflow: hidden; background: var(--c-bg); }
+  body {
+    font-family: "Inter", "Noto Sans JP", sans-serif;
+    color: var(--c-text-high);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage { position: fixed; inset: 0; display: grid; place-items: center; background: #E5E7EB; }
+  .deck {
+    position: relative;
+    width: min(100vw, calc(100vh * 16 / 9));
+    height: min(100vh, calc(100vw * 9 / 16));
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    padding: 46px 62px 60px;
+    background: var(--c-bg);
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity 150ms ease;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+
+  /* ---- Nav ---- */
+  .nav-btn {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 72px;
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--c-text-high); font-size: 22px;
+    transition: background 150ms ease; z-index: 200; user-select: none;
+  }
+  .nav-btn:hover { background: var(--c-bg); }
+  .nav-btn.prev { left: 8px; }
+  .nav-btn.next { right: 8px; }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+  .nav-hint {
+    position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; color: var(--c-text-med); letter-spacing: 0.08em;
+    pointer-events: none; z-index: 100;
+  }
+
+  /* ---- Header / Footer ---- */
+  .slide-header {
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--c-text-med); font-size: 13px; letter-spacing: 0.05em;
+    margin-bottom: 16px; flex-shrink: 0;
+  }
+  .slide-header .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--c-text-high); font-weight: 700; font-size: 14px; letter-spacing: 0.04em;
+  }
+  .logo-mark { height: 32px; width: auto; display: block; flex-shrink: 0; }
+  .logo-full { width: 172px; height: auto; display: block; }
+  .slide-footer {
+    margin-top: auto; flex-shrink: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--c-text-med); font-size: 12px; letter-spacing: 0.05em; padding-top: 10px;
+  }
+  .page-num { font-family: "Inter", sans-serif; font-weight: 500; }
+  .page-num strong { color: var(--c-primary); font-weight: 700; }
+
+  /* ---- Type utilities ---- */
+  .kicker {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em;
+    color: var(--c-primary); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: 32px; font-weight: 700; line-height: 1.4; letter-spacing: 0.02em;
+    color: var(--c-text-high); display: inline-block;
+    padding-bottom: 9px; border-bottom: 2px solid var(--c-primary); align-self: flex-start;
+  }
+  .section-sub { font-size: 15px; line-height: 1.7; color: var(--c-text-med); margin-top: 10px; }
+  .accent, em.accent { font-style: normal; color: var(--c-primary); }
+
+  /* ---- Building blocks ---- */
+  .card {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); padding: 20px 24px; box-shadow: var(--sh-card);
+  }
+  .body-area { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+  .center-stage {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 22px; text-align: center;
+  }
+  .big-msg { font-size: 42px; font-weight: 700; line-height: 1.5; color: var(--c-text-high); max-width: 900px; }
+  .big-msg em { font-style: normal; color: var(--c-primary); }
+  .mid-msg { font-size: 26px; font-weight: 700; line-height: 1.6; color: var(--c-text-high); max-width: 860px; }
+  .mid-msg em { font-style: normal; color: var(--c-primary); }
+  .lead { font-size: 16px; line-height: 1.75; color: var(--c-text-med); max-width: 820px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 14px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px; }
+
+  .n-card {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md);
+    padding: 20px 20px; box-shadow: var(--sh-card);
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .n-card.on { border: 2px solid var(--c-primary); background: var(--c-primary-light); }
+  .n-num { font-family: "Inter", sans-serif; font-size: 34px; font-weight: 700; color: var(--c-primary); line-height: 1; }
+  .n-step { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--c-text-med); }
+  .n-title { font-size: 17px; font-weight: 700; color: var(--c-text-high); line-height: 1.45; }
+  .n-body { font-size: 13.5px; line-height: 1.75; color: var(--c-text-med); }
+  .n-body strong { color: var(--c-text-high); }
+  .n-quote {
+    background: var(--c-primary-light); border-left: 3px solid var(--c-primary);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0; padding: 9px 12px;
+    font-size: 13px; line-height: 1.7; color: var(--c-text-high);
+  }
+
+  .bar-accent {
+    margin-top: 16px; padding: 13px 20px; background: var(--c-primary-light);
+    border-left: 4px solid var(--c-primary); border-radius: 0 var(--r-md) var(--r-md) 0;
+    font-size: 16px; font-weight: 600; color: var(--c-text-high); line-height: 1.6;
+  }
+  .bar-accent em { font-style: normal; color: var(--c-primary); }
+  .note-bar {
+    margin-top: 14px; padding: 11px 18px; background: var(--c-surface);
+    border: 1px solid var(--c-border); border-radius: var(--r-md);
+    font-size: 13.5px; line-height: 1.7; color: var(--c-text-med);
+  }
+  .note-bar strong { color: var(--c-text-high); }
+
+  .chip-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  .chip {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-pill);
+    padding: 6px 14px; font-size: 12px; color: var(--c-text-med);
+  }
+  .chip strong { color: var(--c-text-high); font-weight: 700; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 15px; border-radius: var(--r-pill);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+  }
+  .pill-red { background: var(--c-primary); color: #fff; }
+  .pill-red .dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; display: inline-block; }
+  .pill-light { background: var(--c-primary-light); color: var(--c-primary); border: 1px solid var(--c-primary); }
+  .pill-outline { background: transparent; color: var(--c-text-med); border: 1px solid var(--c-text-med); }
+
+  /* ---- Table ---- */
+  .tbl { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 14px; }
+  .tbl th {
+    background: var(--c-bg); color: var(--c-text-high); border-bottom: 1px solid var(--c-border);
+    padding: 10px 14px; text-align: left; font-size: 12px; letter-spacing: 0.06em; font-weight: 700;
+  }
+  .tbl th:first-child { border-radius: var(--r-sm) 0 0 0; }
+  .tbl th:last-child { border-radius: 0 var(--r-sm) 0 0; }
+  .tbl td {
+    padding: 10px 14px; border-bottom: 1px solid var(--c-border);
+    background: var(--c-surface); vertical-align: middle; line-height: 1.55;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl td.k { font-weight: 700; }
+  .tbl tr.hi td { background: var(--c-primary-light); }
+  .tbl td.num { font-family: "Inter", sans-serif; font-weight: 700; text-align: right; }
+  .tbl .rank { font-family: "Inter", sans-serif; font-weight: 700; color: var(--c-primary); }
+
+  /* ---- Demo relay ---- */
+  .demo-relay {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 22px; text-align: center;
+  }
+  .demo-relay .dr-title { font-size: 38px; font-weight: 700; color: var(--c-text-high); line-height: 1.5; max-width: 860px; }
+  .demo-relay .dr-title em { font-style: normal; color: var(--c-primary); }
+  .demo-relay .dr-high {
+    font-size: 17px; font-weight: 600; color: var(--c-text-high);
+    background: var(--c-primary-light); border-radius: var(--r-md);
+    padding: 13px 26px; max-width: 760px; line-height: 1.7;
+  }
+  .demo-relay .dr-note {
+    font-size: 14px; color: var(--c-text-med); background: var(--c-surface);
+    border: 1px solid var(--c-border); border-radius: var(--r-md);
+    padding: 10px 22px; max-width: 760px; line-height: 1.7;
+  }
+  .demo-relay .dr-note strong { color: var(--c-primary); }
+
+  /* ---- Prompt / template box ---- */
+  .tpl-box {
+    background: var(--c-surface); color: var(--c-text-high); border: 1px solid var(--c-border);
+    box-shadow: var(--sh-card); padding: 15px 20px; border-radius: var(--r-md);
+    font-size: 14.5px; line-height: 1.85; margin-top: 12px; text-align: left;
+  }
+  .tpl-box .label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--c-primary); margin-bottom: 7px;
+  }
+  .tpl-box em { font-style: normal; font-weight: 700; color: var(--c-primary); }
+
+  /* ---- Screenshot placeholder ---- */
+  .ss-holder {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; border: 1px dashed var(--c-border); border-radius: var(--r-md);
+    background: var(--c-surface); margin-top: 12px; min-height: 120px;
+  }
+  .ss-label { font-size: 19px; font-weight: 700; color: var(--c-text-high); }
+  .ss-sub { font-size: 13.5px; color: var(--c-text-med); }
+
+  /* ---- Summary list ---- */
+  .sum-list { display: flex; flex-direction: column; gap: 11px; flex: 1; margin-top: 14px; justify-content: center; }
+  .sum-item {
+    display: flex; align-items: center; gap: 18px; padding: 14px 22px;
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); box-shadow: var(--sh-card);
+  }
+  .sum-num { font-family: "Inter", sans-serif; font-size: 30px; font-weight: 700; color: var(--c-primary); line-height: 1; min-width: 46px; text-align: center; }
+  .sum-text { font-size: 17px; font-weight: 700; color: var(--c-text-high); line-height: 1.5; }
+  .sum-text em { font-style: normal; color: var(--c-primary); }
+  .sum-sub { font-size: 13px; font-weight: 400; color: var(--c-text-med); margin-top: 3px; line-height: 1.6; }
+
+  /* ---- Next card ---- */
+  .next-card {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md);
+    box-shadow: var(--sh-card); padding: 24px 28px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .next-date { font-size: 14px; font-weight: 600; color: var(--c-text-med); letter-spacing: 0.05em; }
+  .next-title { font-size: 26px; font-weight: 700; line-height: 1.4; color: var(--c-text-high); }
+  .next-title em { font-style: normal; color: var(--c-primary); }
+  .next-point { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.65; color: var(--c-text-high); }
+  .next-point::before { content: ''; width: 6px; height: 6px; background: var(--c-primary); border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
+
+  /* ---- Before / After ---- */
+  .ba-grid { display: grid; grid-template-columns: 1fr 46px 1fr; align-items: stretch; margin-top: 16px; flex: 1; }
+  .ba-side { display: flex; flex-direction: column; }
+  .ba-head { padding: 10px 18px; border-radius: var(--r-md) var(--r-md) 0 0; font-size: 16px; font-weight: 700; text-align: center; }
+  .ba-head.before { background: var(--c-border); color: var(--c-text-med); }
+  .ba-head.after { background: var(--c-primary); color: #fff; }
+  .ba-body {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: 0 0 var(--r-md) var(--r-md); padding: 14px 18px; flex: 1;
+  }
+  .ba-item {
+    font-size: 14.5px; line-height: 1.65; padding: 11px 0;
+    border-bottom: 1px solid var(--c-border); color: var(--c-text-high);
+  }
+  .ba-item:last-child { border-bottom: none; }
+  .ba-sep { display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: var(--c-primary); }
+
+  /* ---- 用語カード（その場で言葉を説明する） ---- */
+  .term {
+    margin-top: 12px; background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); box-shadow: var(--sh-card); padding: 13px 18px; text-align: left;
+  }
+  .term .t-head { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
+  .term .t-word { font-size: 16px; font-weight: 700; color: var(--c-text-high); }
+  .term .t-en { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 500; color: var(--c-text-med); letter-spacing: 0.06em; }
+  .term .t-def { font-size: 13.5px; line-height: 1.75; color: var(--c-text-med); }
+  .term .t-def strong { color: var(--c-text-high); }
+
+  /* ---- 今日出てきた言葉 ---- */
+  .term-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-top: 12px; }
+  .term-row {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); padding: 11px 16px;
+  }
+  .term-row .w { font-size: 15px; font-weight: 700; color: var(--c-text-high); display: flex; align-items: center; gap: 8px; }
+  .term-row .d { font-size: 12.5px; line-height: 1.65; color: var(--c-text-med); margin-top: 3px; }
+  .tag-new {
+    font-family: "Inter", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--c-primary); background: var(--c-primary-light);
+    border-radius: var(--r-pill); padding: 2px 9px;
+  }
+  .tag-old {
+    font-family: "Inter", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--c-text-med); background: var(--c-bg); border: 1px solid var(--c-border);
+    border-radius: var(--r-pill); padding: 2px 9px;
+  }
+
+  /* ---- 語彙のはしご（3回の積み上がり） ---- */
+  .ladder { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; flex: 1; }
+  .ladder-col {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md);
+    box-shadow: var(--sh-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .ladder-col .l-head { font-family: "Inter", sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--c-primary); }
+  .ladder-col .l-sub { font-size: 13px; color: var(--c-text-med); line-height: 1.6; padding-bottom: 8px; border-bottom: 1px solid var(--c-border); }
+  .ladder-col .l-item { font-size: 14.5px; font-weight: 700; color: var(--c-text-high); line-height: 1.6; }
+
+  /* ---- Cover ---- */
+  .cover {
+    background:
+      radial-gradient(1100px 500px at 110% -5%, var(--c-primary-light) 0%, transparent 55%),
+      var(--c-bg);
+    padding: 62px 74px; justify-content: space-between;
+  }
+  .cover .series-tag {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.1em; color: var(--c-text-med);
+  }
+  .cover .series-tag .dot { width: 6px; height: 6px; background: var(--c-primary); border-radius: 50%; }
+  .cover .series-name {
+    font-size: 26px; font-weight: 700; color: var(--c-text-high);
+    letter-spacing: 0.02em; line-height: 1.5;
+  }
+  .cover .series-name em { font-style: normal; color: var(--c-primary); }
+  .cover h1 {
+    font-size: 52px; font-weight: 700; line-height: 1.4; letter-spacing: 0.02em;
+    color: var(--c-text-high); margin-top: 16px; max-width: 940px;
+  }
+  .cover h1 em { font-style: normal; color: var(--c-primary); }
+  .cover .cover-sub { font-size: 19px; font-weight: 500; line-height: 1.7; color: var(--c-text-med); margin-top: 18px; max-width: 840px; }
+  .cover .cover-bar { width: 56px; height: 4px; background: var(--c-primary); border-radius: var(--r-sm); margin-top: 24px; }
+  .cover .cover-meta { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
+  .cover .cover-meta .name { font-size: 17px; font-weight: 700; color: var(--c-text-high); }
+  .cover .cover-meta .name span { font-size: 13px; font-weight: 400; color: var(--c-text-med); margin-left: 8px; }
+  .cover .cover-meta .info { font-size: 13px; color: var(--c-text-med); letter-spacing: 0.05em; }
+
+  /* ---- 最終ページ：アンケートQR＋連絡先 ---- */
+  .end-grid { display: grid; gap: 16px; flex: 1; align-items: stretch; }
+  .qr-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .qr { width: 100%; max-width: 190px; height: auto; display: block; background: #fff; padding: 6px; border-radius: var(--r-sm); box-shadow: var(--sh-card); margin: 6px auto 8px; }
+  .qr-url { font-size: 10.5px; line-height: 1.5; color: var(--c-text-med); word-break: break-all; }
+  .link-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin-top: 6px; }
+  .li-row { font-size: 12px; line-height: 1.5; color: var(--c-text-med); }
+  .li-row strong { display: block; color: var(--c-text-high); font-weight: 700; font-size: 11.5px; line-height: 1.35; }
+  .li-row a { color: var(--c-primary); font-size: 11.5px; word-break: break-all; text-decoration: none; }
+  .li-row a:hover { text-decoration: underline; }
+
+  /* ---- 2026-09-11 改訂で追加 ---- */
+  .cover .cover-subtitle { font-size: 21px; font-weight: 700; color: var(--c-primary); margin-top: 12px; letter-spacing: 0.04em; }
+  .tbl.compact { font-size: 13px; margin-top: 10px; }
+  .tbl.compact th { padding: 8px 12px; font-size: 11.5px; }
+  .tbl.compact td { padding: 8px 12px; line-height: 1.5; }
+  .grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; margin-top: 12px; flex: 1; min-height: 0; }
+  .grid-2x2 .n-card { padding: 14px 18px; gap: 6px; }
+  .grid-2x2 .n-title { font-size: 16px; }
+  .grid-2x2 .n-body { font-size: 13px; line-height: 1.65; }
+  .tpl-box pre { font-family: "Noto Sans JP", sans-serif; white-space: pre-wrap; font-size: 13.5px; line-height: 1.75; margin: 0; }
+  .tpl-box.old { background: var(--c-bg); }
+  .tpl-box.old .label { color: var(--c-text-med); }
+  .tpl-box.new { border: 2px solid var(--c-primary); }
+  .src-line { font-size: 11px; color: var(--c-text-med); margin-top: 8px; line-height: 1.5; }
+  .step-row { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; line-height: 1.6; color: var(--c-text-high); }
+  .step-row .sn { font-family: "Inter", sans-serif; font-weight: 700; color: #fff; background: var(--c-primary); border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+  .kbd { display: inline-block; font-family: "Inter", sans-serif; font-size: 12px; font-weight: 700; border: 1px solid var(--c-text-med); border-bottom-width: 2px; border-radius: 4px; padding: 0 6px; background: #fff; }
+  .sym-ok { color: #0F6E56; font-weight: 700; }
+  .sym-ng { color: var(--c-primary); font-weight: 700; }
+</style>
+</head><body>
+
+<button class="nav-btn prev" id="btnPrev" aria-label="前のスライド">&#8249;</button>
+<button class="nav-btn next" id="btnNext" aria-label="次のスライド">&#8250;</button>
+
+<div class="stage">
+  <div class="deck" id="deck">
+
+    <div class="slide cover active" id="s1">
+      <div>
+        <div class="series-tag">
+          <div class="dot"></div>
+          3回シリーズ 無料Webセミナー　第1回　／　2026年9月13日（日）21:00〜21:45
+        </div>
+        <div class="series-name" style="margin-top:14px">ChatGPT、去年の使い方のままになっていませんか。</div>
+      </div>
+      <div>
+        <h1>入力欄が1つだった頃で、<br><em>止まっていませんか。</em></h1>
+        <p class="cover-subtitle">〜 伝える場所が、入力欄しかなかった頃 〜</p>
+        <p class="cover-sub">ChatGPTは、この1年で別物になりました。<br>しかも、無料のままで。</p>
+        <div class="cover-bar"></div>
+      </div>
+      <div class="cover-meta">
+        <img class="logo-full" src="assets/webinar_202609_logo_official.png" alt="AI・ITよろず相談所">
+        <div>
+          <div class="name">清水 幸久（Yukisa）<span>AI・ITよろず相談所</span></div>
+          <div class="info" style="margin-top:6px">Google Meet　参加無料　各回45分</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="s2">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Declaration</div>
+      <div class="section-title">今日は<span class="accent">無料アカウント</span>でお見せします</div>
+      <div class="body-area">
+      <div class="note-bar"><strong>有料の画面で「便利でしょう」と言うのは、フェアではないと思っています。</strong>今日のデモの後半は、私が新しく作った無料アカウントで行います。</div>
+      <div class="grid-3">
+        <div class="n-card">
+          <div class="n-num">01</div>
+          <div class="n-title">いまの自分の位置が分かる</div>
+          <div class="n-body">去年で止まっているのか、追えているのか。まずそこを確かめます。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-num">02</div>
+          <div class="n-title">投げ分けの判断がつく</div>
+          <div class="n-body">速い方か、考えさせる方か。この見分けだけ持って帰っていただきます。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-num">03</div>
+          <div class="n-title">課金すべきかが決まる</div>
+          <div class="n-body">上げたほうがいい人と、そうでない人を分けます。ここは正直に申し上げます。</div>
+        </div>
+      </div>
+      <div class="chip-row"><span class="chip"><strong>すでに使っている方へ</strong>　プロンプトの書き方の変化、「忘れる」の正体、小技カードを後半に用意しました</span></div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>2</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s3">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Agenda</div>
+      <div class="section-title">今日の45分</div>
+      <div class="body-area">
+      <table class="tbl">
+        <tr><th>時間（目安）</th><th>内容</th></tr>
+        <tr><td class="k">0〜8分</td><td>いまの自分の位置を確かめる／今週のニュース</td></tr>
+        <tr class="hi"><td class="k">8〜18分</td><td><strong>【デモ①】書き方を変えて、投げ分ける</strong></td></tr>
+        <tr class="hi"><td class="k">18〜30分</td><td><strong>【デモ②】無料のまま、分析から図解まで</strong></td></tr>
+        <tr><td class="k">30〜36分</td><td>すでに使っている方へ：「忘れる」の正体／プロンプトの置き場所／小技</td></tr>
+        <tr><td class="k">36〜40分</td><td>有料に上げるべき人／上げなくていい人</td></tr>
+        <tr><td class="k">40〜45分</td><td>持ち帰り・質問タイム</td></tr>
+      </table>
+      <div class="note-bar"><strong>見ているだけで大丈夫です。</strong>手を動かす必要はありません。ご質問はチャット欄にどうぞ。最後にまとめてお答えします。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>3</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s4">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Premise</div>
+      <div class="section-title">この1年で、<span class="accent">何が変わったのか</span></div>
+      <div class="section-sub">「＋」の中身は、1年前にもだいたいありました。変わったのは入口の数ではなく、次の4つです（無料プランで見た場合）。</div>
+      <div class="body-area">
+      <div class="ba-grid" style="flex:0 1 auto">
+        <div class="ba-side">
+          <div class="ba-head before">〜 去年</div>
+          <div class="ba-body">
+            <div class="ba-item">上限に達すると、軽いモデルに切り替わる</div>
+            <div class="ba-item">考えさせるかどうかは、ほぼChatGPT任せ</div>
+            <div class="ba-item">伝える場所は入力欄だけ。<strong>毎回ぜんぶ書く</strong></div>
+            <div class="ba-item">画像は日本語が崩れて、仕事の資料には使いにくい</div>
+          </div>
+        </div>
+        <div class="ba-sep">→</div>
+        <div class="ba-side">
+          <div class="ba-head after">いま</div>
+          <div class="ba-body">
+            <div class="ba-item">文章のやり取りは<strong>実質無制限</strong></div>
+            <div class="ba-item">入力欄の横の<strong>「思考」</strong>で、自分で選べる</div>
+            <div class="ba-item">記憶・ライブラリ・プロジェクトに<strong>置いておける</strong></div>
+            <div class="ba-item">日本語の入った<strong>図解が作れる</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="note-bar">今日のサブタイトル<strong>「伝える場所が、入力欄しかなかった頃」</strong>はこの意味です。いまは、入力欄の外に前提を置いておけます。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>4</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s5">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Goal</div>
+      <div class="section-title">今日、覚えて帰るものは<span class="accent">1つだけ</span>です</div>
+      <div class="center-stage">
+        <div class="big-msg">答えがだいたい決まっているなら<em>速い方</em>。<br>一緒に探してほしいなら<em>考えさせる方</em>。</div>
+        <p class="lead">機能の名前は覚えなくて大丈夫です。名前は半年で変わります。変わらないのは判断の軸のほうです。すでに使っている方向けの小技は、1枚のカードにまとめてお渡しします。</p>
+      </div>
+      <div class="bar-accent">この見分けがつけば、今日は成功です。</div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>5</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s6">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">News</div>
+      <div class="section-title">今週、<span class="accent">大きな発表が2つ</span>ありました</div>
+      <div class="body-area">
+      <div class="grid-2" style="align-items:stretch">
+        <div class="n-card">
+          <div class="n-step">9月3日　GPT-6 Astra</div>
+          <div class="n-title">OpenAIの新しい最上位モデル</div>
+          <div class="n-body">資料づくり、調べもの、パソコン操作など、<strong>作業を任せる力</strong>が大きく伸びたモデルです。画像を作るモデルではありません。</div>
+          <div class="n-quote">対象はPlus・Pro・Business・Enterprise。<strong>無料プランは対象外。</strong>Plusは当面、Work／Codexでの提供と報じられています</div>
+        </div>
+        <div class="n-card on">
+          <div class="n-step">9月8日　ChatGPT Images 2.5</div>
+          <div class="n-title">画像を作る機能の新しい版</div>
+          <div class="n-body">細かい描き込み、<strong>狙った所だけの修正</strong>、生成速度は最大50%短縮。テンプレートや、手描きのスケッチから作る機能も加わりました。</div>
+          <div class="n-quote"><strong>無料を含む、すべてのプランに提供。</strong>4月の版から、日本語の文字もきれいに入るようになっています</div>
+        </div>
+      </div>
+      <div class="bar-accent">最上位モデルは<em>有料の話</em>。画像は<em>無料にも来た話</em>です。</div>
+      <div class="src-line">出典：OpenAI公式発表・リリースノート、報道（Notebookcheck 9/7）。2026年9月11日時点の情報です。提供範囲は日々変わります。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>6</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s7">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="demo-relay">
+        <span class="pill pill-red"><span class="dot"></span>LIVE DEMO</span>
+        <div class="dr-title">書き方を変えて、<em>投げ分ける</em></div>
+        <div class="dr-high">同じ会議メモを、昔の書き方といまの書き方で投げます。そのあと、考えさせる方にも投げます。</div>
+        <div class="dr-note">7月のCopilot回では、速い方と考えさせる方で<strong>あまり差が出ませんでした。</strong>ChatGPTではどうか、確かめます。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>7</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s8">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Prompt</div>
+      <div class="section-title">プロンプトの書き方も、<span class="accent">変わっています</span></div>
+      <div class="body-area">
+      <div class="grid-2" style="align-items:stretch;margin-top:6px">
+        <div class="tpl-box old">
+          <div class="label">昔の書き方</div>
+<pre>あなたは会議のファシリテーターのプロです。
+以下の会議メモをもとに、議事録を作成してください。
+（会議メモ）
+形式：日時・出席者／決定事項／
+　　　アクションアイテム／次回の予定</pre>
+        </div>
+        <div class="tpl-box new">
+          <div class="label">いまの書き方</div>
+<pre>以下の会議メモから議事録を作ってください。
+読むのは、会議に出ていない部長です。
+メモは走り書きで、書き間違いや訂正の跡があります。
+・決まっていないこと、読み方が分かれそうな所は
+　本文に混ぜず「※要確認」として最後にまとめる
+・担当者と期限は、メモにあるものだけ。推測で埋めない
+（会議メモ）</pre>
+        </div>
+      </div>
+      <table class="tbl compact">
+        <tr><th>やめてよいこと</th><th>かわりに書くこと</th></tr>
+        <tr><td>「あなたは〇〇のプロです」の長い役割設定（ほとんど効きません）</td><td><strong>誰が読むのか</strong>、何に使うのか</td></tr>
+        <tr><td>考える手順を1つずつ指示する</td><td><strong>どうなれば完成か</strong>（進め方はAIに任せる）</td></tr>
+        <tr class="hi"><td>とにかく「正確に」「詳しく」</td><td><strong>確かめてほしい所</strong>と、<strong>あいまいな所の扱い方</strong></td></tr>
+      </table>
+      <div class="src-line">参考：OpenAI 開発者向けガイド（GPT-5.5／5.6）「昔のプロンプトは手順を書きすぎている。昔のモデルにはそれが必要だったから」「手順ではなく、行き先を書く」</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>8</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s9">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Result</div>
+      <div class="section-title">投げ分けの地図</div>
+      <div class="section-sub">いま見ていただいたことを、1枚にまとめます。</div>
+      <div class="body-area">
+      <table class="tbl">
+        <tr><th>こういう作業は</th><th>こう投げる</th><th>なぜ</th></tr>
+        <tr><td class="k">短い文章を整える</td><td><span class="accent">速い方でいい</span></td><td>正解が1つに近い。待つ意味が薄い</td></tr>
+        <tr><td class="k">メモを議事録にする</td><td><span class="accent">速い方でいい</span></td><td>元の情報が揃っている。見てほしい所を書けば足りる</td></tr>
+        <tr class="hi"><td class="k">抜けを見つけたい</td><td><strong>考えさせる</strong></td><td>「書いていないこと」に気づかせる必要がある</td></tr>
+        <tr class="hi"><td class="k">筋道を組み立てる</td><td><strong>考えさせる</strong></td><td>途中で方向を直す余地がいる</td></tr>
+        <tr class="hi"><td class="k">調べて、まとめる</td><td><strong>調べさせる</strong></td><td>その場で探しに行かせた方が確実</td></tr>
+      </table>
+      <div class="bar-accent">まず<em>「見てほしい所」を書く</em>。それでも拾いきれないときに、考えさせる。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>9</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s10">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Around the Input</div>
+      <div class="section-title">入力欄のまわり、<span class="accent">使い分けていますか</span></div>
+      <div class="grid-2x2">
+        <div class="n-card on">
+          <div class="n-step">＋ → ライブラリから追加</div>
+          <div class="n-title">ライブラリ：ファイルの置き場所</div>
+          <div class="n-body">上げたファイル・作ったファイルが<strong>自動で保存</strong>されます（2026年3月23日〜）。<strong>フォルダーで整理</strong>でき、「＋」→「ライブラリから追加」でアップロードし直さずに使えます。</div>
+          <div class="n-quote">容量：無料 500MB／Go 4GB／Plus 20GB／Pro 100GB。一時チャットで上げたファイルは保存されません</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">入力欄の横　思考</div>
+          <div class="n-title">考えさせたいときだけ、オンにする</div>
+          <div class="n-body">デモ①で見ていただいたボタンです。答えがだいたい決まっている仕事はオフのまま。<strong>抜けや理由を探させたいときだけ</strong>オンにします。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">マイク　音声入力</div>
+          <div class="n-title">長い説明は、打つより話す方が早い</div>
+          <div class="n-body">話した内容が<strong>文字になって入力欄に入り、送信前に直せます。</strong>会議の経緯や背景のような長い説明は、打つより声の方がずっと早い。多少言いよどんでも、AIはだいたい汲んでくれます。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">音声を開始　声で会話</div>
+          <div class="n-title">声のまま会話する（マイクとは別物）</div>
+          <div class="n-body">青いボタン。<strong>文字を介さず、声でやり取り</strong>します。途中で割り込めます。移動中の壁打ちや、話しながら考えを整理したいときに。</div>
+          <div class="n-quote">無料は軽い版（GPT-Live-1 mini）を回数制限つきで利用（2026年7月〜）。カメラ・画面共有・プラグインは使えません</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>10</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s11">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="demo-relay">
+        <span class="pill pill-red"><span class="dot"></span>LIVE DEMO</span>
+        <div class="dr-title">無料のまま、<em>分析から図解まで</em></div>
+        <div class="dr-high">ライブラリから表を出す → 声で質問して考えさせる → 新しいチャットに分岐 → インフォグラフィックにする。ここから無料アカウントです。</div>
+        <div class="dr-note"><strong>うまくいかない場面が出ても、そのままお見せします。</strong>そこが今日いちばん役に立つところです。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>11</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s12">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Image</div>
+      <div class="section-title">画像を作る機能の、<span class="accent">無料と有料の違い</span></div>
+      <div class="section-sub">使っている画像のモデルは、どのプランも同じです。違うのは「枚数」と「考えてから描くかどうか」です。</div>
+      <div class="body-area">
+      <table class="tbl compact">
+        <tr><th></th><th>無料</th><th>Plus（月20ドル）</th><th>Pro</th></tr>
+        <tr><td class="k">作れる枚数</td><td>公表なし。<strong>1日2〜3枚ほど</strong>という報告が多い</td><td>公表なし。3時間で約50枚という報告</td><td>実質無制限（公式）</td></tr>
+        <tr class="hi"><td class="k">考えてから描く</td><td><span class="sym-ng">×</span>　すぐ描くだけ</td><td><span class="sym-ok">◎</span>　配置を考え、確かめてから描く</td><td><span class="sym-ok">◎</span></td></tr>
+        <tr><td class="k">公式料金ページの表記</td><td>「限定的で、生成が遅め」</td><td>「より複雑で、正確な画像」</td><td>「無制限で、より速い」</td></tr>
+        <tr><td class="k">向いている使い方</td><td>ときどき図解やイラストを1枚</td><td>資料の図解を何度も作り直す</td><td>画像を大量に作る仕事</td></tr>
+      </table>
+      <div class="bar-accent">画像は、無料と有料の<em>差がはっきり出る</em>ところです。</div>
+      <div class="note-bar"><strong>図の中の数字は、元の表と必ず見比べてください。</strong>画像はそれらしい数字を描いてしまうことがあります。</div>
+      <div class="src-line">出典：ChatGPT公式料金ページ、OpenAI発表、報道（GSMArena ほか）。枚数は利用者の報告で、公式の数字ではありません。「考えてから描く」は4月の発表時点の区分です。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>12</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s13">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Fact</div>
+      <div class="section-title">2026年、<span class="accent">無料プラン</span>で変わったこと</div>
+      <div class="section-sub">OpenAIの公式リリースノート・発表に記載があるものです。</div>
+      <div class="body-area">
+      <table class="tbl">
+        <tr><th>変わったこと</th><th>時期</th><th>ひとこと</th></tr>
+        <tr><td class="k">「思考」を自分で選べる</td><td>3月（＋の中）→ 8月（入力欄の横）</td><td>考えさせるかどうかを、自分で決められる</td></tr>
+        <tr><td class="k">文章のやり取りが実質無制限に</td><td>2026年8月</td><td>上限で軽いモデルに落ちる心配が減った</td></tr>
+        <tr><td class="k">ファイルを置いておける（ライブラリ）</td><td>3月23日登場 → 5月に無料へ</td><td>500MB。フォルダーで整理、アップロードし直さなくていい</td></tr>
+        <tr class="hi"><td class="k">日本語が入った画像</td><td>4月 → 9月8日に新版</td><td>図解やバナーが、仕事で使える水準に</td></tr>
+        <tr><td class="k">声で会話する（音声を開始）</td><td>2026年7月</td><td>無料も軽い版を回数制限つきで使える</td></tr>
+      </table>
+      <div class="note-bar">「前の会話を覚えている」「じっくり調べる（Deep Research）」は、<strong>2025年から無料でも使えます</strong>（範囲や回数に制限あり）。去年の時点で止まっている方は、ここから知らないことになります。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>13</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s14">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Memory</div>
+      <div class="section-title">「前に言ったのに、忘れる」には<span class="accent">2種類</span>あります</div>
+      <div class="body-area">
+      <table class="tbl compact">
+        <tr><th></th><th>① 1つのチャットの中で忘れる</th><th>② チャットをまたぐと忘れる</th></tr>
+        <tr><td class="k">よくある相談</td><td>長く話していたら、最初の指示を無視し始めた</td><td>新しいチャットにしたら、また一から説明させられた</td></tr>
+        <tr><td class="k">正体</td><td><strong>一度に見える量の上限</strong>（コンテキストウィンドウ）。古い部分から見えにくくなる</td><td><strong>記憶（メモリー）</strong>。チャットをまたいで覚えておく機能</td></tr>
+        <tr><td class="k">無料と有料の差<br>（公式料金ページ）</td><td>速い方：無料 27K／Go・Plus 54K／Pro 128K<br>考える方：Go・Plus 256K／Pro 400K（単位はトークン）</td><td>無料「限定的」／Go以上「過去のチャットも参照」／Plus・Pro「拡張」</td></tr>
+        <tr class="hi"><td class="k">直し方</td><td><strong>ここまでを要約させて、新しいチャットに貼って続ける</strong></td><td><strong>記憶をオンにする／プロジェクトに置く</strong></td></tr>
+      </table>
+      <div class="note-bar"><strong>「新しいチャットで分岐」は①の対策にはなりません。</strong>分岐は、それまでの会話を全部引き継ぐからです。分岐は「元の話を残したまま、別の方向に進みたい」ときに使います。</div>
+      <div class="src-line">無料プランの記憶は2025年6月から「最近の会話」を参照。2026年6月に「覚えた内容が自動で更新される」改良が有料（米国）から始まり、無料へ順次拡大予定。詳しい仕組みは note（note.com/yukisa0814）にも書いています。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>14</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s15">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Prompt Library</div>
+      <div class="section-title">よく使うプロンプトの<span class="accent">置き場所</span></div>
+      <div class="section-sub">ChatGPTには、プロンプトを保存しておく専用の機能がまだありません。置き場所は2つあります。</div>
+      <div class="body-area">
+      <div class="grid-2" style="align-items:stretch">
+        <div class="n-card on">
+          <div class="n-step">手元のパソコン　Windows</div>
+          <div class="n-title"><span class="kbd">Win</span> ＋ <span class="kbd">V</span> にピン留めする</div>
+          <div class="step-row"><span class="sn">1</span><span>設定 → システム → クリップボード →「クリップボードの履歴」をオン</span></div>
+          <div class="step-row"><span class="sn">2</span><span>プロンプトをコピーして <span class="kbd">Win</span>＋<span class="kbd">V</span>。一覧の右にある<strong>ピンのアイコン</strong>を押す</span></div>
+          <div class="step-row"><span class="sn">3</span><span>次からは <span class="kbd">Win</span>＋<span class="kbd">V</span> → クリックで貼り付け</span></div>
+          <div class="n-body">複数行でもOK。<strong>再起動しても、「すべてクリア」しても残ります。</strong>Copilot・Gemini・メールでもそのまま使えます。</div>
+          <div class="n-quote">会社のパソコンでは、管理者が止めていることがあります。パスワードはコピーしないでください（履歴に残ります）</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">ChatGPTの中　次回くわしく</div>
+          <div class="n-title">プロジェクトの「指示」に入れておく</div>
+          <div class="n-body"><strong>プロジェクト</strong>は、仕事ごとに「指示」とファイルとチャットをまとめておく箱です。<strong>無料でも使えます</strong>（1つのプロジェクトにファイル5個まで）。</div>
+          <div class="n-quote">例：「議事録」プロジェクトの指示に、さっきの「いまの書き方」を入れておく → 中でメモを貼るだけで、毎回同じ書き方になる</div>
+          <div class="n-body">すべてのチャットに効く「カスタム指示」との使い分けは、<strong>第2回</strong>で実演します。</div>
+        </div>
+      </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>15</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s16">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Tips</div>
+      <div class="section-title">すでに使っている方へ　<span class="accent">小技カード</span></div>
+      <div class="grid-2x2">
+        <div class="n-card">
+          <div class="n-step">01　一時チャット</div>
+          <div class="n-title">記憶を汚さずに、試し投げする</div>
+          <div class="n-body">新しいチャットの右上の<strong>「一時」</strong>。履歴に残らず、記憶にも入らず、学習にも使われません。<strong>記憶の影響がない「素の答え」</strong>と比べるのにも使えます。開始時に記憶を使うかを選べ、あとから保存もできます。</div>
+          <div class="n-quote">安全のため最大30日は保管されます。<strong>機密を入れてよい場所ではありません</strong></div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">02　新しいチャットで分岐</div>
+          <div class="n-title">1つのチャットで、全部やらない</div>
+          <div class="n-body">回答の<strong>「…」→「新しいチャットで分岐」</strong>。そこまでの会話を引き継いだ別のチャットができます。元のチャットはそのまま残るので、<strong>分析は分析のまま、図解や別案は分岐先で</strong>進められます。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">03　長くなったら</div>
+          <div class="n-title">要約させて、新しいチャットで続ける</div>
+          <div class="n-body">「ここまでの前提と決まったことを、次のチャットに渡す用に箇条書きでまとめて」→ 新しいチャットに貼る。<strong>「最初の指示を忘れる」の対策</strong>はこれです。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-step">04　いまの書き方</div>
+          <div class="n-title">役割より「見てほしい所」を1行</div>
+          <div class="n-body">「読むのは誰か」「確かめてほしい所」「あいまいな所は※要確認に」。この3つを足すだけで、速い方でも結果が変わります。よく使う形は <span class="kbd">Win</span>＋<span class="kbd">V</span> にピン留め。</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>16</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s17">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Decision</div>
+      <div class="section-title">有料に上げるべき人／<span class="accent">上げなくていい人</span></div>
+      <div class="section-sub">7月のアンケートでいただいたご質問です。正面からお答えします。</div>
+      <div class="body-area">
+      <table class="tbl">
+        <tr><th>あなたの使い方</th><th>判断</th><th>ひとこと</th></tr>
+        <tr><td class="k">週に数回、調べものに使う</td><td><strong>無料のままでいい</strong></td><td>上限にぶつかりません</td></tr>
+        <tr><td class="k">文章を整えるのが中心</td><td><strong>無料のままでいい</strong></td><td>速い方で十分足ります</td></tr>
+        <tr class="hi"><td class="k">毎日、仕事で何度も使う</td><td><span class="accent">上げる価値あり</span></td><td>待ち時間と上限がストレスに</td></tr>
+        <tr class="hi"><td class="k">資料や表を扱わせたい</td><td><span class="accent">上げる価値あり</span></td><td>扱える量（一度に見える量）と回数が違います</td></tr>
+        <tr class="hi"><td class="k">図解や画像を仕事でよく作る</td><td><span class="accent">上げる価値あり</span></td><td>枚数と「考えてから描く」が違います</td></tr>
+        <tr class="hi"><td class="k">作業そのものを任せたい</td><td><span class="accent">上げる価値あり</span></td><td>第3回で扱う範囲。最上位のAstraも有料だけ</td></tr>
+      </table>
+      <div class="bar-accent">目安：<em>1日に3回以上開いているなら、上げる。週に数回なら、まだ早い。</em></div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>17</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s18">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Advice</div>
+      <div class="section-title">いきなり払わなくていいです</div>
+      <div class="center-stage">
+        <div class="big-msg">まず1ヶ月、<em>無料のまま毎日開く</em>。<br>上限にぶつかってイライラしたら、そのときが払いどきです。</div>
+        <p class="lead">ぶつからなかったら、払う必要はありません。月20ドル、年間で3万円を超えます。使っていないのに払い続けるのが、いちばんもったいない。</p>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>18</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s19">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Landscape</div>
+      <div class="section-title">そして、<span class="accent">ChatGPTだけではありません</span></div>
+      <div class="section-sub">いま日本のビジネスの現場で、実際に使われている4つです。</div>
+      <div class="body-area">
+      <table class="tbl">
+        <tr><th>道具</th><th>日本での利用率</th><th>どういうときに</th></tr>
+        <tr class="hi"><td class="k">ChatGPT</td><td class="num">36.2%</td><td>もっとも使われている入口。今日の主役</td></tr>
+        <tr><td class="k">Gemini</td><td class="num">25.0%</td><td>Googleアカウントがあれば、もう使える状態</td></tr>
+        <tr><td class="k">Copilot</td><td class="num">13.3%</td><td>会社から配られている方向け。Excelやメールと地続き</td></tr>
+        <tr><td class="k">Claude</td><td class="num">4.3%</td><td>長い文章や資料を読ませると強い。使う人はまだ少ない</td></tr>
+      </table>
+      <div class="note-bar">出典：ICT総研「2026年2月 生成AIサービス利用動向に関する調査」（n=2,024）。<strong>数が少ない＝良くない、ではありません。</strong>第2回・第3回でも自然に出てきます。</div>
+      </div>
+
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>19</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s20">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Take Away</div>
+      <div class="section-title">持ち帰り　／　<span class="accent">今週やること</span>　／　次回</div>
+      <div class="grid-2" style="flex:1;align-items:stretch">
+        <div class="n-card">
+          <div class="n-step">今週やること</div>
+          <div class="n-title">同じ依頼を、両方に投げてみる</div>
+          <div class="n-body">今週いちばん面倒だった作業をひとつ選んで、速い方と考えさせる方の両方に投げてください。5分で終わります。</div>
+          <div class="n-quote">1　今週いちばん面倒だった作業を1つ決める</div>
+          <div class="n-quote">2　「見てほしい所」を1行足して、速い方に投げる</div>
+          <div class="n-quote">3　同じ文章で、考えさせる方に投げる</div>
+          <div class="n-body">うまくいかなくても構いません。<strong>どこで止まったかを次回教えてください。</strong>それがそのまま第2回の材料になります。小技カードは、アンケートにご回答いただいた方にお送りする資料に入っています。</div>
+        </div>
+        <div class="next-card">
+          <div class="next-date">第2回　2026年9月20日（日）21:00〜21:45</div>
+          <div class="next-title">同じことを聞いたのに、<em>昨日と違う答えが返ってくる</em></div>
+          <div class="next-point">なぜ答えが揺らぐのか、原因を切り分けます</div>
+          <div class="next-point">原因は指示文だけではありません</div>
+          <div class="next-point">毎回いちから説明するのを、やめる方法（カスタム指示とプロジェクト）</div>
+          <div class="next-point"><strong>その場で、みなさんの指示文を直します</strong></div>
+        </div>
+      </div>
+      <div class="bar-accent">今日の要点はひとつです。<em>答えが決まっているなら速い方、探すなら考えさせる方。</em></div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>20</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s21">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Q &amp; A</div>
+      <div class="section-title">質問タイム</div>
+      <div class="section-sub">チャット欄でも、マイクでも構いません。</div>
+      <div class="center-stage">
+        <div class="big-msg">「こんなこと聞いていいのかな」<br>という質問ほど、<em>歓迎です</em>。</div>
+        <p class="lead">私は25年間、そういう質問に答えるのが仕事でした。検索するキーワードすら思いつかない、というご相談がいちばん多かったです。うまくいかなかった画面を、そのまま見せていただいても構いません。</p>
+      </div>
+
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>21</strong> / 22</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s22">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第1回 ／ 2026.09.13</span>
+      </div>
+      <div class="kicker">Thank You</div>
+      <div class="section-title">アンケートのお願い　／　<span class="accent">ご連絡先</span></div>
+      <div class="section-sub">本日はありがとうございました。次回は9月20日（日）21:00〜です。</div>
+      <div class="end-grid" style="grid-template-columns: 0.85fr 1.15fr; margin-top:12px">
+        <div class="n-card qr-card">
+          <div class="n-title">アンケート（1〜2分）</div>
+          <div class="n-body" style="margin-top:8px">お名前（ニックネーム可）を入れる欄を作りました。<strong>次回からのご案内で、お名前でお呼びできます。</strong></div>
+          <div class="n-body">次のシリーズの内容は、<strong>ここに書かれたこと</strong>で決まります。</div>
+          <img class="qr" src="data:image/png;base64,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" alt="アンケートのQRコード"><div class="qr-url"><a href="https://docs.google.com/forms/d/e/1FAIpQLSf-46qJOwzzz1QqcvtWQtkIDAfA1-arAseHHU3F9x29Jgdzcw/viewform?usp=header" target="_blank" rel="noopener" style="color:inherit">https://docs.google.com/forms/d/e/1FAIpQLSf-46qJOwzzz1QqcvtWQtkIDAfA1-arAseHHU3F9x29Jgdzcw/viewform?usp=header</a></div>
+        </div>
+        <div class="n-card">
+          <div class="n-title">AI・ITよろず相談所　清水 幸久（Yukisa）</div>
+          <div class="link-list">
+            <div class="li-row"><strong>ホームページ</strong><a href="https://yorozusoudansyo.github.io/home/" target="_blank" rel="noopener">yorozusoudansyo.github.io/home/</a></div>
+            <div class="li-row"><strong>無料相談（30分・オンライン）</strong><a href="https://meetbook-booking.web.app/" target="_blank" rel="noopener">予約フォームへ</a></div>
+            <div class="li-row"><strong>X（ほぼ毎日発信中）</strong><a href="https://x.com/Yorozu0519" target="_blank" rel="noopener">@Yorozu0519</a></div>
+            <div class="li-row"><strong>note（AI活用マガジン）</strong><a href="https://note.com/yukisa0814" target="_blank" rel="noopener">note.com/yukisa0814</a></div>
+            <div class="li-row"><strong>YouTube（過去シリーズの録画）</strong><a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener">YouTubeチャンネル</a></div>
+            <div class="li-row"><strong>Facebookページ</strong><a href="https://www.facebook.com/profile.php?id=61592837639364" target="_blank" rel="noopener">ページを見る</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>22</strong> / 22</span>
+      </div>
+    </div>
+
+<div class="nav-hint">← → キー、または左右のボタンで移動　／　F でフルスクリーン</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = Math.max(0, Math.min(total - 1, n));
+    slides[cur].classList.add('active');
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+  btnPrev.addEventListener('click', function (e) { e.stopPropagation(); go(cur - 1); });
+  btnNext.addEventListener('click', function (e) { e.stopPropagation(); go(cur + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(total - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) { document.exitFullscreen(); }
+      else { document.documentElement.requestFullscreen(); }
+    }
+  });
+  go(0);
+</script>
+</body>
+</html>
