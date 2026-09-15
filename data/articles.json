@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "ChatGPT、去年の使い方のままになっていませんか｜第1回 入力欄が1つだった頃で、止まっていませんか",
+      "url": "https://www.youtube.com/watch?v=dgLIeYf_Ojg",
+      "date": "2026.09.15",
+      "thumbnail": "https://i.ytimg.com/vi/dgLIeYf_Ojg/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "AIで仕事が速くなる人、ならない人｜「40％時短」の条件",
       "url": "https://www.youtube.com/watch?v=Z1aE8hChK50",
       "date": "2026.09.09",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=oN8Qek04Toc",
       "date": "2026.08.30",
       "thumbnail": "https://i.ytimg.com/vi/oN8Qek04Toc/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "自分の道具に必要なのは「再現性」 #Shorts",
-      "url": "https://www.youtube.com/watch?v=w0RFfG6817E",
-      "date": "2026.08.30",
-      "thumbnail": "https://i.ytimg.com/vi/w0RFfG6817E/hqdefault.jpg"
     },
     {
       "source": "SITE",
