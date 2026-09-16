@@ -3,6 +3,20 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "まだ文章に時間をかけてる？AIで作業時間40%減の実験",
+      "url": "https://www.youtube.com/watch?v=H-1Mt3Rz2qI",
+      "date": "2026.09.16",
+      "thumbnail": "https://i.ytimg.com/vi/H-1Mt3Rz2qI/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "AIで仕事を失う前に、あなたの「評価」が変わる",
+      "url": "https://www.youtube.com/watch?v=jugdS93Amhs",
+      "date": "2026.09.16",
+      "thumbnail": "https://i.ytimg.com/vi/jugdS93Amhs/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "ChatGPT、去年の使い方のままになっていませんか｜第1回 入力欄が1つだった頃で、止まっていませんか",
       "url": "https://www.youtube.com/watch?v=dgLIeYf_Ojg",
       "date": "2026.09.15",
@@ -63,20 +77,6 @@
       "url": "https://www.youtube.com/watch?v=pcSsFyCsefc",
       "date": "2026.09.02",
       "thumbnail": "https://i.ytimg.com/vi/pcSsFyCsefc/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "【無料Webセミナー】書けなくても、使える｜第3回 作った道具を、自分の仕事に移す",
-      "url": "https://www.youtube.com/watch?v=6YWSX8xY7Ck",
-      "date": "2026.09.01",
-      "thumbnail": "https://i.ytimg.com/vi/6YWSX8xY7Ck/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIの答えを「自分の道具」にする方法 #Shorts",
-      "url": "https://www.youtube.com/watch?v=oN8Qek04Toc",
-      "date": "2026.08.30",
-      "thumbnail": "https://i.ytimg.com/vi/oN8Qek04Toc/hqdefault.jpg"
     },
     {
       "source": "SITE",
