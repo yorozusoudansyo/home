@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "ChatGPT、去年の使い方のままになっていませんか｜第2回 同じことを聞いたのに、昨日と違う答えが返ってくる",
+      "url": "https://www.youtube.com/watch?v=bT57_0aVixw",
+      "date": "2026.09.21",
+      "thumbnail": "https://i.ytimg.com/vi/bT57_0aVixw/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "AIをまだ使っていない人へ。最初はこの一言でいい",
       "url": "https://www.youtube.com/watch?v=q2l3wo3wwyk",
       "date": "2026.09.19",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=UuDhdWoB8IU",
       "date": "2026.09.07",
       "thumbnail": "https://i.ytimg.com/vi/UuDhdWoB8IU/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "同じ仕組みを、営業や開発の判断へ移す #Shorts",
-      "url": "https://www.youtube.com/watch?v=1yoLsoKEVaw",
-      "date": "2026.09.06",
-      "thumbnail": "https://i.ytimg.com/vi/1yoLsoKEVaw/hqdefault.jpg"
     },
     {
       "source": "SITE",
