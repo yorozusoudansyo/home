@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>第2回 同じことを聞いたのに、昨日と違う答えが返ってくる｜AI・ITよろず相談所</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-primary: #D32F2F;
+    --c-primary-hover: #B71C1C;
+    --c-primary-light: #FFEBEE;
+    --c-success: #0F6E56;
+    --c-success-light: #E1F5EE;
+    --c-text-high: #1F2937;
+    --c-text-med: #4B5563;
+    --c-border: #E5E7EB;
+    --c-bg: #F9FAFB;
+    --c-surface: #FFFFFF;
+    --r-sm: 4px;
+    --r-md: 8px;
+    --r-pill: 999px;
+    --sh-card: 0 4px 6px rgba(0,0,0,0.05);
+    --sh-overlay: 0 10px 15px rgba(0,0,0,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; overflow: hidden; background: var(--c-bg); }
+  body {
+    font-family: "Inter", "Noto Sans JP", sans-serif;
+    color: var(--c-text-high);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage { position: fixed; inset: 0; display: grid; place-items: center; background: #E5E7EB; }
+  .deck {
+    position: relative;
+    width: min(100vw, calc(100vh * 16 / 9));
+    height: min(100vh, calc(100vw * 9 / 16));
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    padding: 46px 62px 60px;
+    background: var(--c-bg);
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity 150ms ease;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+
+  /* ---- Nav ---- */
+  .nav-btn {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 72px;
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--c-text-high); font-size: 22px;
+    transition: background 150ms ease; z-index: 200; user-select: none;
+  }
+  .nav-btn:hover { background: var(--c-bg); }
+  .nav-btn.prev { left: 8px; }
+  .nav-btn.next { right: 8px; }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+  .nav-hint {
+    position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; color: var(--c-text-med); letter-spacing: 0.08em;
+    pointer-events: none; z-index: 100;
+  }
+
+  /* ---- Header / Footer ---- */
+  .slide-header {
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--c-text-med); font-size: 13px; letter-spacing: 0.05em;
+    margin-bottom: 16px; flex-shrink: 0;
+  }
+  .slide-header .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--c-text-high); font-weight: 700; font-size: 14px; letter-spacing: 0.04em;
+  }
+  .logo-mark { height: 32px; width: auto; display: block; flex-shrink: 0; }
+  .logo-full { width: 172px; height: auto; display: block; }
+  .slide-footer {
+    margin-top: auto; flex-shrink: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--c-text-med); font-size: 12px; letter-spacing: 0.05em; padding-top: 10px;
+  }
+  .page-num { font-family: "Inter", sans-serif; font-weight: 500; }
+  .page-num strong { color: var(--c-primary); font-weight: 700; }
+
+  /* ---- Type utilities ---- */
+  .kicker {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em;
+    color: var(--c-primary); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: 32px; font-weight: 700; line-height: 1.4; letter-spacing: 0.02em;
+    color: var(--c-text-high); display: inline-block;
+    padding-bottom: 9px; border-bottom: 2px solid var(--c-primary); align-self: flex-start;
+  }
+  .section-sub { font-size: 15px; line-height: 1.7; color: var(--c-text-med); margin-top: 10px; }
+  .accent, em.accent { font-style: normal; color: var(--c-primary); }
+
+  /* ---- Building blocks ---- */
+  .card {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); padding: 20px 24px; box-shadow: var(--sh-card);
+  }
+  .body-area { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+  .center-stage {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 22px; text-align: center;
+  }
+  .big-msg { font-size: 42px; font-weight: 700; line-height: 1.5; color: var(--c-text-high); max-width: 900px; }
+  .big-msg em { font-style: normal; color: var(--c-primary); }
+  .mid-msg { font-size: 26px; font-weight: 700; line-height: 1.6; color: var(--c-text-high); max-width: 860px; }
+  .mid-msg em { font-style: normal; color: var(--c-primary); }
+  .lead { font-size: 16px; line-height: 1.75; color: var(--c-text-med); max-width: 820px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 14px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px; }
+
+  .n-card {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md);
+    padding: 20px 20px; box-shadow: var(--sh-card);
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .n-card.on { border: 2px solid var(--c-primary); background: var(--c-primary-light); }
+  .n-num { font-family: "Inter", sans-serif; font-size: 34px; font-weight: 700; color: var(--c-primary); line-height: 1; }
+  .n-step { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--c-text-med); }
+  .n-title { font-size: 17px; font-weight: 700; color: var(--c-text-high); line-height: 1.45; }
+  .n-body { font-size: 13.5px; line-height: 1.75; color: var(--c-text-med); }
+  .n-body strong { color: var(--c-text-high); }
+  .n-quote {
+    background: var(--c-primary-light); border-left: 3px solid var(--c-primary);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0; padding: 9px 12px;
+    font-size: 13px; line-height: 1.7; color: var(--c-text-high);
+  }
+
+  .bar-accent {
+    margin-top: 16px; padding: 13px 20px; background: var(--c-primary-light);
+    border-left: 4px solid var(--c-primary); border-radius: 0 var(--r-md) var(--r-md) 0;
+    font-size: 16px; font-weight: 600; color: var(--c-text-high); line-height: 1.6;
+  }
+  .bar-accent em { font-style: normal; color: var(--c-primary); }
+  .note-bar {
+    margin-top: 14px; padding: 11px 18px; background: var(--c-surface);
+    border: 1px solid var(--c-border); border-radius: var(--r-md);
+    font-size: 13.5px; line-height: 1.7; color: var(--c-text-med);
+  }
+  .note-bar strong { color: var(--c-text-high); }
+
+  .chip-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  .chip {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-pill);
+    padding: 6px 14px; font-size: 12px; color: var(--c-text-med);
+  }
+  .chip strong { color: var(--c-text-high); font-weight: 700; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 15px; border-radius: var(--r-pill);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+  }
+  .pill-red { background: var(--c-primary); color: #fff; }
+  .pill-red .dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; display: inline-block; }
+  .pill-light { background: var(--c-primary-light); color: var(--c-primary); border: 1px solid var(--c-primary); }
+  .pill-outline { background: transparent; color: var(--c-text-med); border: 1px solid var(--c-text-med); }
+
+  /* ---- Table ---- */
+  .tbl { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 14px; }
+  .tbl th {
+    background: var(--c-bg); color: var(--c-text-high); border-bottom: 1px solid var(--c-border);
+    padding: 10px 14px; text-align: left; font-size: 12px; letter-spacing: 0.06em; font-weight: 700;
+  }
+  .tbl th:first-child { border-radius: var(--r-sm) 0 0 0; }
+  .tbl th:last-child { border-radius: 0 var(--r-sm) 0 0; }
+  .tbl td {
+    padding: 10px 14px; border-bottom: 1px solid var(--c-border);
+    background: var(--c-surface); vertical-align: middle; line-height: 1.55;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl td.k { font-weight: 700; }
+  .tbl tr.hi td { background: var(--c-primary-light); }
+  .tbl td.num { font-family: "Inter", sans-serif; font-weight: 700; text-align: right; }
+  .tbl .rank { font-family: "Inter", sans-serif; font-weight: 700; color: var(--c-primary); }
+
+  /* ---- Demo relay ---- */
+  .demo-relay {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 22px; text-align: center;
+  }
+  .demo-relay .dr-title { font-size: 38px; font-weight: 700; color: var(--c-text-high); line-height: 1.5; max-width: 860px; }
+  .demo-relay .dr-title em { font-style: normal; color: var(--c-primary); }
+  .demo-relay .dr-high {
+    font-size: 17px; font-weight: 600; color: var(--c-text-high);
+    background: var(--c-primary-light); border-radius: var(--r-md);
+    padding: 13px 26px; max-width: 760px; line-height: 1.7;
+  }
+  .demo-relay .dr-note {
+    font-size: 14px; color: var(--c-text-med); background: var(--c-surface);
+    border: 1px solid var(--c-border); border-radius: var(--r-md);
+    padding: 10px 22px; max-width: 760px; line-height: 1.7;
+  }
+  .demo-relay .dr-note strong { color: var(--c-primary); }
+
+  /* ---- Prompt / template box ---- */
+  .tpl-box {
+    background: var(--c-surface); color: var(--c-text-high); border: 1px solid var(--c-border);
+    box-shadow: var(--sh-card); padding: 15px 20px; border-radius: var(--r-md);
+    font-size: 14.5px; line-height: 1.85; margin-top: 12px; text-align: left;
+  }
+  .tpl-box .label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--c-primary); margin-bottom: 7px;
+  }
+  .tpl-box em { font-style: normal; font-weight: 700; color: var(--c-primary); }
+
+  /* ---- Screenshot placeholder ---- */
+  .ss-holder {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; border: 1px dashed var(--c-border); border-radius: var(--r-md);
+    background: var(--c-surface); margin-top: 12px; min-height: 120px;
+  }
+  .ss-label { font-size: 19px; font-weight: 700; color: var(--c-text-high); }
+  .ss-sub { font-size: 13.5px; color: var(--c-text-med); }
+
+  /* ---- Summary list ---- */
+  .sum-list { display: flex; flex-direction: column; gap: 11px; flex: 1; margin-top: 14px; justify-content: center; }
+  .sum-item {
+    display: flex; align-items: center; gap: 18px; padding: 14px 22px;
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); box-shadow: var(--sh-card);
+  }
+  .sum-num { font-family: "Inter", sans-serif; font-size: 30px; font-weight: 700; color: var(--c-primary); line-height: 1; min-width: 46px; text-align: center; }
+  .sum-text { font-size: 17px; font-weight: 700; color: var(--c-text-high); line-height: 1.5; }
+  .sum-text em { font-style: normal; color: var(--c-primary); }
+  .sum-sub { font-size: 13px; font-weight: 400; color: var(--c-text-med); margin-top: 3px; line-height: 1.6; }
+
+  /* ---- Next card ---- */
+  .next-card {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md);
+    box-shadow: var(--sh-card); padding: 24px 28px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .next-date { font-size: 14px; font-weight: 600; color: var(--c-text-med); letter-spacing: 0.05em; }
+  .next-title { font-size: 26px; font-weight: 700; line-height: 1.4; color: var(--c-text-high); }
+  .next-title em { font-style: normal; color: var(--c-primary); }
+  .next-point { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.65; color: var(--c-text-high); }
+  .next-point::before { content: ''; width: 6px; height: 6px; background: var(--c-primary); border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
+
+  /* ---- Before / After ---- */
+  .ba-grid { display: grid; grid-template-columns: 1fr 46px 1fr; align-items: stretch; margin-top: 16px; flex: 1; }
+  .ba-side { display: flex; flex-direction: column; }
+  .ba-head { padding: 10px 18px; border-radius: var(--r-md) var(--r-md) 0 0; font-size: 16px; font-weight: 700; text-align: center; }
+  .ba-head.before { background: var(--c-border); color: var(--c-text-med); }
+  .ba-head.after { background: var(--c-primary); color: #fff; }
+  .ba-body {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: 0 0 var(--r-md) var(--r-md); padding: 14px 18px; flex: 1;
+  }
+  .ba-item {
+    font-size: 14.5px; line-height: 1.65; padding: 11px 0;
+    border-bottom: 1px solid var(--c-border); color: var(--c-text-high);
+  }
+  .ba-item:last-child { border-bottom: none; }
+  .ba-sep { display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: var(--c-primary); }
+
+  /* ---- 用語カード（その場で言葉を説明する） ---- */
+  .term {
+    margin-top: 12px; background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); box-shadow: var(--sh-card); padding: 13px 18px; text-align: left;
+  }
+  .term .t-head { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
+  .term .t-word { font-size: 16px; font-weight: 700; color: var(--c-text-high); }
+  .term .t-en { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 500; color: var(--c-text-med); letter-spacing: 0.06em; }
+  .term .t-def { font-size: 13.5px; line-height: 1.75; color: var(--c-text-med); }
+  .term .t-def strong { color: var(--c-text-high); }
+
+  /* ---- 今日出てきた言葉 ---- */
+  .term-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-top: 12px; }
+  .term-row {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--r-md); padding: 11px 16px;
+  }
+  .term-row .w { font-size: 15px; font-weight: 700; color: var(--c-text-high); display: flex; align-items: center; gap: 8px; }
+  .term-row .d { font-size: 12.5px; line-height: 1.65; color: var(--c-text-med); margin-top: 3px; }
+  .tag-new {
+    font-family: "Inter", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--c-primary); background: var(--c-primary-light);
+    border-radius: var(--r-pill); padding: 2px 9px;
+  }
+  .tag-old {
+    font-family: "Inter", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--c-text-med); background: var(--c-bg); border: 1px solid var(--c-border);
+    border-radius: var(--r-pill); padding: 2px 9px;
+  }
+
+  /* ---- 語彙のはしご（3回の積み上がり） ---- */
+  .ladder { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; flex: 1; }
+  .ladder-col {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md);
+    box-shadow: var(--sh-card); padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .ladder-col .l-head { font-family: "Inter", sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--c-primary); }
+  .ladder-col .l-sub { font-size: 13px; color: var(--c-text-med); line-height: 1.6; padding-bottom: 8px; border-bottom: 1px solid var(--c-border); }
+  .ladder-col .l-item { font-size: 14.5px; font-weight: 700; color: var(--c-text-high); line-height: 1.6; }
+
+  /* ---- Cover ---- */
+  .cover {
+    background:
+      radial-gradient(1100px 500px at 110% -5%, var(--c-primary-light) 0%, transparent 55%),
+      var(--c-bg);
+    padding: 62px 74px; justify-content: space-between;
+  }
+  .cover .series-tag {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.1em; color: var(--c-text-med);
+  }
+  .cover .series-tag .dot { width: 6px; height: 6px; background: var(--c-primary); border-radius: 50%; }
+  .cover .series-name {
+    font-size: 26px; font-weight: 700; color: var(--c-text-high);
+    letter-spacing: 0.02em; line-height: 1.5;
+  }
+  .cover .series-name em { font-style: normal; color: var(--c-primary); }
+  .cover h1 {
+    font-size: 52px; font-weight: 700; line-height: 1.4; letter-spacing: 0.02em;
+    color: var(--c-text-high); margin-top: 16px; max-width: 940px;
+  }
+  .cover h1 em { font-style: normal; color: var(--c-primary); }
+  .cover .cover-sub { font-size: 19px; font-weight: 500; line-height: 1.7; color: var(--c-text-med); margin-top: 18px; max-width: 840px; }
+  .cover .cover-bar { width: 56px; height: 4px; background: var(--c-primary); border-radius: var(--r-sm); margin-top: 24px; }
+  .cover .cover-meta { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
+  .cover .cover-meta .name { font-size: 17px; font-weight: 700; color: var(--c-text-high); }
+  .cover .cover-meta .name span { font-size: 13px; font-weight: 400; color: var(--c-text-med); margin-left: 8px; }
+  .cover .cover-meta .info { font-size: 13px; color: var(--c-text-med); letter-spacing: 0.05em; }
+
+  /* ---- 最終ページ：アンケートQR＋連絡先 ---- */
+  .end-grid { display: grid; gap: 16px; flex: 1; align-items: stretch; }
+  .qr-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .qr { width: 100%; max-width: 190px; height: auto; display: block; background: #fff; padding: 6px; border-radius: var(--r-sm); box-shadow: var(--sh-card); margin: 6px auto 8px; }
+  .qr-url { font-size: 10.5px; line-height: 1.5; color: var(--c-text-med); word-break: break-all; }
+  .link-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin-top: 6px; }
+  .li-row { font-size: 12px; line-height: 1.5; color: var(--c-text-med); }
+  .li-row strong { display: block; color: var(--c-text-high); font-weight: 700; font-size: 11.5px; line-height: 1.35; }
+  .li-row a { color: var(--c-primary); font-size: 11.5px; word-break: break-all; text-decoration: none; }
+  .li-row a:hover { text-decoration: underline; }
+  /* ---- 2026-09-11 改訂で追加 ---- */
+  .cover .cover-subtitle { font-size: 21px; font-weight: 700; color: var(--c-primary); margin-top: 12px; letter-spacing: 0.04em; }
+  .tbl.compact { font-size: 13px; margin-top: 10px; }
+  .tbl.compact th { padding: 8px 12px; font-size: 11.5px; }
+  .tbl.compact td { padding: 8px 12px; line-height: 1.5; }
+  .grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; margin-top: 12px; flex: 1; min-height: 0; }
+  .grid-2x2 .n-card { padding: 14px 18px; gap: 6px; }
+  .grid-2x2 .n-title { font-size: 16px; }
+  .grid-2x2 .n-body { font-size: 13px; line-height: 1.65; }
+  .tpl-box pre { font-family: "Noto Sans JP", sans-serif; white-space: pre-wrap; font-size: 13.5px; line-height: 1.75; margin: 0; }
+  .tpl-box.old { background: var(--c-bg); }
+  .tpl-box.old .label { color: var(--c-text-med); }
+  .tpl-box.new { border: 2px solid var(--c-primary); }
+  .src-line { font-size: 11px; color: var(--c-text-med); margin-top: 8px; line-height: 1.5; }
+  .step-row { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; line-height: 1.6; color: var(--c-text-high); }
+  .step-row .sn { font-family: "Inter", sans-serif; font-weight: 700; color: #fff; background: var(--c-primary); border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+  .kbd { display: inline-block; font-family: "Inter", sans-serif; font-size: 12px; font-weight: 700; border: 1px solid var(--c-text-med); border-bottom-width: 2px; border-radius: 4px; padding: 0 6px; background: #fff; }
+  .sym-ok { color: #0F6E56; font-weight: 700; }
+  .sym-ng { color: var(--c-primary); font-weight: 700; }
+  .tbl.use td.k { width: 22%; }
+</style>
+</head><body>
+
+<button class="nav-btn prev" id="btnPrev" aria-label="前のスライド">&#8249;</button>
+<button class="nav-btn next" id="btnNext" aria-label="次のスライド">&#8250;</button>
+
+<div class="stage">
+  <div class="deck" id="deck">
+
+    <div class="slide cover active" id="s1">
+      <div>
+        <div class="series-tag">
+          <div class="dot"></div>
+          3回シリーズ 無料Webセミナー　第2回　／　2026年9月20日（日）21:00〜21:45
+        </div>
+        <div class="series-name" style="margin-top:14px">ChatGPT、去年の使い方のままになっていませんか。</div>
+      </div>
+      <div>
+        <h1>同じことを聞いたのに、<br><em>昨日と違う答えが返ってくる。</em></h1>
+        <p class="cover-sub">原因は、たいてい指示文ではありません。<br>もっと手前にあります。</p>
+        <div class="cover-bar"></div>
+      </div>
+      <div class="cover-meta">
+        <img class="logo-full" src="assets/webinar_202609_logo_official.png" alt="AI・ITよろず相談所">
+        <div>
+          <div class="name">清水 幸久（Yukisa）<span>AI・ITよろず相談所</span></div>
+          <div class="info" style="margin-top:6px">Google Meet　参加無料　各回45分</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide" id="s2">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Recap</div>
+      <div class="section-title">前回の振り返り　／　<span class="accent">今日が本番です</span></div>
+      <div class="body-area">
+      <div class="grid-3">
+        <div class="n-card">
+          <div class="n-num">01</div>
+          <div class="n-title">速い方と、考えさせる方</div>
+          <div class="n-body">答えがだいたい決まっているなら速い方。一緒に探してほしいなら、入力欄の横の「思考」で考えさせる方。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-num">02</div>
+          <div class="n-title">書き方も変わった</div>
+          <div class="n-body">「あなたは〇〇のプロです」より、<strong>誰が読むか・どうなれば完成か・確かめてほしい所</strong>を書く。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-num">03</div>
+          <div class="n-title">「忘れる」は2種類</div>
+          <div class="n-body">1つのチャットの中で忘れる／チャットをまたぐと忘れる。<strong>今日は2つ目を、置き場所で解決します。</strong></div>
+        </div>
+      </div>
+      <div class="note-bar"><strong>今日が初めての方も大丈夫です。</strong>前回を見ていなくても、今日だけで完結します。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>2</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s3">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Agenda</div>
+      <div class="section-title">今日の45分</div>
+      <div class="body-area">
+      <table class="tbl">
+        <tr><th>時間</th><th>内容</th></tr>
+        <tr><td class="k">0〜7分</td><td>なぜ揺らぐのか。原因を3つに分ける</td></tr>
+        <tr class="hi"><td class="k">7〜17分</td><td><strong>【デモ①】型なし／型あり、並べて実行</strong></td></tr>
+        <tr class="hi"><td class="k">17〜27分</td><td><strong>【デモ②】毎回いちから説明するのを、やめる（カスタム指示とプロジェクト）</strong></td></tr>
+        <tr class="hi"><td class="k">27〜37分</td><td><strong>よくある残念な指示文を、その場で直します</strong></td></tr>
+        <tr><td class="k">37〜45分</td><td>質問タイム・次回予告</td></tr>
+      </table>
+      <div class="note-bar"><strong>見ているだけで大丈夫です。</strong>ご質問はチャット欄にどうぞ。最後にまとめてお答えします。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>3</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s4">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Premise</div>
+      <div class="section-title">こういうこと、<span class="accent">ありませんか</span></div>
+      <div class="center-stage">
+        <div class="big-msg">昨日はちゃんとした答えが返ってきた。<br>同じことを聞いたのに、今日は<em>的外れ</em>。</div>
+        <p class="lead">自分は何も変えていない。──こうなると、たいていの方は「AIってそういうものだな」と思って、使うのをやめてしまいます。これがすごくもったいない。原因ははっきりしていて、しかも直せます。</p>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>4</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s5">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Cause</div>
+      <div class="section-title">揺らぐ原因は、<span class="accent">3つしかありません</span></div>
+      <div class="body-area">
+      <div class="grid-3">
+        <div class="n-card">
+          <div class="n-num">01</div>
+          <div class="n-title">前提が渡っていない</div>
+          <div class="n-body">あなたの頭の中にはあるが、書いていない。<strong>いちばん多い原因です。</strong>AIは書いていないことを知りません。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-num">02</div>
+          <div class="n-title">出してほしい形を言っていない</div>
+          <div class="n-body">長さ・形式・読み手。指定しなければ、毎回変わります。当たり前です。</div>
+        </div>
+        <div class="n-card">
+          <div class="n-num">03</div>
+          <div class="n-title">新しい会話で、いちから始めている</div>
+          <div class="n-body">毎回まっさらな相手に話しかけているのと同じ状態です。前回の「チャットをまたぐと忘れる」です。<strong>これが実は曲者です。</strong></div>
+        </div>
+      </div>
+      <div class="bar-accent">前半のデモで<em>①と②</em>を、後半のデモで<em>③</em>を扱います。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>5</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s6">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Goal</div>
+      <div class="section-title">今日、持って帰るものは<span class="accent">1つだけ</span>です</div>
+      <div class="center-stage">
+        <div class="big-msg">自分の仕事用の指示文が、<br><em>1本</em>、手元にできている。</div>
+        <p class="lead">理屈を分かって帰るのではなく、モノを持って帰っていただきます。明日からそのままコピーして使える形です。メモを取る準備をしておいてください。メモアプリでもチャット欄でも構いません。</p>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>6</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s7">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="demo-relay">
+        <span class="pill pill-red"><span class="dot"></span>LIVE DEMO</span>
+        <div class="dr-title">型なし／型あり、<em>並べて実行</em></div>
+        <div class="dr-high">ブラウザを2つ並べます。左が型なし、右が型あり。まったく同じ依頼を、同時に投げます。</div>
+        <div class="dr-note"><strong>山場は「型なしを、もう一度そのまま投げる」ところです。</strong>私は何も変えていないのに、違う答えが返ってきます。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>7</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s8">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Template</div>
+      <div class="section-title">指示の型　—　<span class="accent">3つ書くだけ</span></div>
+      <div class="section-sub">前回お見せした「いまの書き方」と同じです。役割の一文は、もう要りません。</div>
+      <div class="body-area">
+      <div class="tpl-box new">
+        <div class="label">コピーして、空欄を埋めてください</div>
+        以下の〔　　　　〕をもとに、〔　　　　〕を作ってください。<br>
+        【ここに材料を貼る】<br>
+        <br>
+        <em>背景：</em>　　←　① 誰が読むか・何に使うか<br>
+        ・読み手は〔　　　　〕です　・〔　　　　〕に使います<br>
+        <br>
+        <em>以下の形で出してください：</em>　　←　② どうなれば完成か<br>
+        ・〔　　　　〕　・全体で〔　　〕字程度<br>
+        <br>
+        <em>確かめてほしい所：</em>　　←　③ 確かめてほしい所・あいまいな所の扱い<br>
+        ・〔　　　　〕は必ず確認する　・資料から判断できない点は「※要確認」として最後に分ける
+      </div>
+      <div class="note-bar">①の背景は、<strong>独り言みたいに書いて大丈夫です。</strong>「部長に出す。細かいことにうるさい人。3分で読み終わる長さで」──これで十分伝わります。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>8</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s9">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="demo-relay">
+        <span class="pill pill-red"><span class="dot"></span>LIVE DEMO</span>
+        <div class="dr-title">毎回いちから説明するのを、<em>やめる</em></div>
+        <div class="dr-high">指示文を工夫するより、こちらの方が効きます。置き場所は2つ。<strong>カスタム指示</strong>と<strong>プロジェクト</strong>です。</div>
+        <div class="dr-note">一度置いておけば、次からは書かなくていい。<strong>毎回の指示文が、ぐっと短くなります。</strong></div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>9</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s10">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Setup</div>
+      <div class="section-title">カスタム指示に置く前提　—　<span class="accent">3〜5行で十分</span></div>
+      <div class="section-sub">置き場所は　設定 → パーソナライズ → カスタム指示。長く書きすぎない方が、うまくいきます。</div>
+      <div class="body-area">
+      <table class="tbl">
+        <tr><th>書くこと</th><th>例</th></tr>
+        <tr><td class="k">① 自分の仕事</td><td>建設資材メーカーの営業事務です</td></tr>
+        <tr><td class="k">② よく出す相手</td><td>社内向けが多い。上司は簡潔な文章を好む</td></tr>
+        <tr><td class="k">③ いつもの形</td><td>結論から書く。箇条書き中心。長くて800字</td></tr>
+        <tr class="hi"><td class="k">④ やってほしくないこと</td><td>大げさな表現は使わない。カタカナ語を減らす</td></tr>
+      </table>
+      <div class="bar-accent">いちばん効くのは<em>④「やってほしくないこと」</em>です。この一行だけで、返ってくる文章が自分の言葉に近づきます。</div>
+      <div class="note-bar"><strong>置いた前提は、その場で上書きできます。</strong>「これは社外向けです。今回だけ丁寧な文体で」と書けば、そちらが優先されます。縛られるわけではありません。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>10</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s11">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Where</div>
+      <div class="section-title">カスタム指示と、<span class="accent">プロジェクトの指示</span></div>
+      <div class="section-sub">前回「次回くわしく」とお伝えした使い分けです。</div>
+      <div class="body-area">
+      <table class="tbl use compact">
+        <tr><th></th><th>カスタム指示</th><th>プロジェクトの指示</th></tr>
+        <tr><td class="k">どこにある</td><td>設定 → パーソナライズ → <strong>カスタム指示</strong></td><td>サイドバーの「新しいプロジェクト」→ 作ったプロジェクトの<strong>設定（歯車）→ 指示</strong></td></tr>
+        <tr><td class="k">効く範囲</td><td><strong>すべてのチャット</strong></td><td><strong>そのプロジェクトの中だけ</strong></td></tr>
+        <tr><td class="k">書くこと</td><td>自分のこと（仕事・よく出す相手・やってほしくないこと）</td><td>この仕事の型（読み手・完成の形・確かめてほしい所）</td></tr>
+        <tr><td class="k">例</td><td>建設資材メーカーの営業事務。結論から、簡潔に</td><td>「報告書」プロジェクト：部長向け。結論3行＋判断が必要な点3つ</td></tr>
+        <tr><td class="k">ぶつかったら</td><td>—</td><td>プロジェクトの指示が優先</td></tr>
+        <tr><td class="k">無料で</td><td>使える</td><td>使える（ファイルは1プロジェクト5個まで。Go・Plus 25個／Pro 40個）</td></tr>
+      </table>
+      <div class="bar-accent">カスタム指示＝<em>自分のこと</em>。プロジェクトの指示＝<em>この仕事の型</em>。</div>
+      <div class="src-line">出典：OpenAIヘルプ（プロジェクト）。2026年9月11日時点の情報です。</div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>11</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s12">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Live</div>
+      <div class="section-title">ここから10分、<span class="accent">その場で直します</span></div>
+      <div class="center-stage">
+        <div class="big-msg">よくある残念な指示文を3本、<br><em>目の前で直します。</em></div>
+        <p class="lead">相談を受けていて、何度も見てきた形です。ご自分の指示文に似ていないか、見比べながらご覧ください。直す前と後を、両方実行してお見せします。</p>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>12</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s13">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Pattern</div>
+      <div class="section-title">よくある直しどころ　—　<span class="accent">よくあるのはこの5つ</span></div>
+      <div class="body-area">
+      <div class="sum-list">
+        <div class="sum-item"><div class="sum-num">1</div><div><div class="sum-text">読み手が書いていない<div class="sum-sub">「上司に出す」の一言で、文体が変わります。<strong>「あなたは〇〇のプロです」を足すより効きます</strong></div></div></div></div>
+        <div class="sum-item"><div class="sum-num">2</div><div><div class="sum-text">長さを言っていない<div class="sum-sub">「800字くらい」だけで、毎回の振れ幅が消えます</div></div></div></div>
+        <div class="sum-item"><div class="sum-num">3</div><div><div class="sum-text">材料と指示が混ざっている<div class="sum-sub">【ここから資料】【ここまで】と囲むだけで直ります</div></div></div></div>
+        <div class="sum-item"><div class="sum-num">4</div><div><div class="sum-text">やってほしいことが混ざっている<div class="sum-sub">考える・まとめる・清書を一度に頼むと、どこを直せばいいか分からなくなる。分けて頼めば途中で確かめられます</div></div></div></div>
+        <div class="sum-item"><div class="sum-num">5</div><div><div class="sum-text">ダメ出しだけして、直し方を言っていない<div class="sum-sub">「違う」ではなく「もっと短く」と方向を言う</div></div></div></div>
+      </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>13</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s14">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Take Away</div>
+      <div class="section-title">持ち帰り　／　<span class="accent">今週やること</span>　／　次回</div>
+      <div class="grid-2" style="flex:1;align-items:stretch">
+        <div class="n-card">
+          <div class="n-step">今週やること</div>
+          <div class="n-title">前提を3〜5行、カスタム指示に置いてくる</div>
+          <div class="n-body">さっきの4項目を、自分の言葉で書いて置いてください。10分あればできます。</div>
+          <div class="n-quote">1　自分の仕事を1行</div>
+          <div class="n-quote">2　よく出す相手を1行</div>
+          <div class="n-quote">3　いつもの形を1行</div>
+          <div class="n-quote">4　やってほしくないことを1行</div>
+          <div class="n-body">同じ形の仕事が毎週あるなら、<strong>プロジェクトを1つ作って、今日の型を指示に入れる。</strong></div>
+          <div class="n-body"><strong>次回、それが効いている状態で来ていただくと話が早いです。</strong></div>
+        </div>
+        <div class="next-card">
+          <div class="next-date">第3回　2026年9月27日（日）21:00〜21:45</div>
+          <div class="next-title">「調べる・書く」は、<em>もう卒業していい</em></div>
+          <div class="next-point">「毎週この曜日にこれをやっておいて」を1本だけ作ります</div>
+          <div class="next-point">当日、目の前で作って、実際に動くところまで</div>
+          <div class="next-point">いくつもの手順を、一度の依頼でまとめて渡す</div>
+          <div class="next-point">最後に、コードを書かずに自分用の道具を作る話も</div>
+        </div>
+      </div>
+      <div class="bar-accent">今日の要点はひとつです。<em>指示文を工夫するより、前提を置いておく方が効く。</em></div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>14</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s15">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Q &amp; A</div>
+      <div class="section-title">質問タイム</div>
+      <div class="section-sub">チャット欄でも、マイクでも構いません。</div>
+      <div class="center-stage">
+        <div class="big-msg">今日の直し方で、<br><em>気になったところ</em>を聞いてください。</div>
+        <p class="lead">ご自分の指示文を見せていただく必要はありません。「こういう場合はどう書けばいい？」という聞き方で十分です。</p>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>15</strong> / 16</span>
+      </div>
+    </div>
+
+    <div class="slide" id="s16">
+      <div class="slide-header">
+        <div class="brand"><img class="logo-mark" src="assets/webinar_202609_logo_mark.png" alt="AI・ITよろず相談所">AI・ITよろず相談所</div>
+        <span>第2回 ／ 2026.09.20</span>
+      </div>
+      <div class="kicker">Thank You</div>
+      <div class="section-title">アンケートのお願い　／　<span class="accent">ご連絡先</span></div>
+      <div class="section-sub">本日はありがとうございました。次回は9月27日（日）21:00〜、最終回です。</div>
+      <div class="end-grid" style="grid-template-columns: 0.85fr 1.15fr; margin-top:12px">
+        <div class="n-card qr-card">
+          <div class="n-title">アンケート（1〜2分）</div>
+          <div class="n-body" style="margin-top:8px">お名前（ニックネーム可）を入れる欄を作りました。<strong>次回からのご案内で、お名前でお呼びできます。</strong></div>
+          <div class="n-body">次のシリーズの内容は、<strong>ここに書かれたこと</strong>で決まります。</div>
+          <img class="qr" src="data:image/png;base64,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" alt="アンケートのQRコード"><div class="qr-url"><a href="https://docs.google.com/forms/d/e/1FAIpQLSf-46qJOwzzz1QqcvtWQtkIDAfA1-arAseHHU3F9x29Jgdzcw/viewform?usp=header" target="_blank" rel="noopener" style="color:inherit">https://docs.google.com/forms/d/e/1FAIpQLSf-46qJOwzzz1QqcvtWQtkIDAfA1-arAseHHU3F9x29Jgdzcw/viewform?usp=header</a></div>
+        </div>
+        <div class="n-card">
+          <div class="n-title">AI・ITよろず相談所　清水 幸久（Yukisa）</div>
+          <div class="link-list">
+            <div class="li-row"><strong>ホームページ</strong><a href="https://yorozusoudansyo.github.io/home/" target="_blank" rel="noopener">yorozusoudansyo.github.io/home/</a></div>
+            <div class="li-row"><strong>無料相談（30分・オンライン）</strong><a href="https://meetbook-booking.web.app/" target="_blank" rel="noopener">予約フォームへ</a></div>
+            <div class="li-row"><strong>X（ほぼ毎日発信中）</strong><a href="https://x.com/Yorozu0519" target="_blank" rel="noopener">@Yorozu0519</a></div>
+            <div class="li-row"><strong>note（AI活用マガジン）</strong><a href="https://note.com/yukisa0814" target="_blank" rel="noopener">note.com/yukisa0814</a></div>
+            <div class="li-row"><strong>YouTube（過去シリーズの録画）</strong><a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener">YouTubeチャンネル</a></div>
+            <div class="li-row"><strong>Facebookページ</strong><a href="https://www.facebook.com/profile.php?id=61592837639364" target="_blank" rel="noopener">ページを見る</a></div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>AI・ITよろず相談所 ／ 清水幸久</span>
+        <span class="page-num"><strong>16</strong> / 16</span>
+      </div>
+    </div>
+
+<div class="nav-hint">← → キー、または左右のボタンで移動　／　F でフルスクリーン</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = Math.max(0, Math.min(total - 1, n));
+    slides[cur].classList.add('active');
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+  btnPrev.addEventListener('click', function (e) { e.stopPropagation(); go(cur - 1); });
+  btnNext.addEventListener('click', function (e) { e.stopPropagation(); go(cur + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(total - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) { document.exitFullscreen(); }
+      else { document.documentElement.requestFullscreen(); }
+    }
+  });
+  go(0);
+</script>
+</body>
+</html>
