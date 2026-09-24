@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "AI議事録を結局直している人へ｜任せる仕事を4つに分ける【第3回】",
+      "url": "https://www.youtube.com/watch?v=IGoA33kbnyU",
+      "date": "2026.09.24",
+      "thumbnail": "https://i.ytimg.com/vi/IGoA33kbnyU/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "ChatGPT、去年の使い方のままになっていませんか｜第2回 同じことを聞いたのに、昨日と違う答えが返ってくる",
       "url": "https://www.youtube.com/watch?v=bT57_0aVixw",
       "date": "2026.09.21",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=Z1aE8hChK50",
       "date": "2026.09.09",
       "thumbnail": "https://i.ytimg.com/vi/Z1aE8hChK50/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "コードを一行も書かず、画面のあるアプリを作る #Shorts",
-      "url": "https://www.youtube.com/watch?v=UuDhdWoB8IU",
-      "date": "2026.09.07",
-      "thumbnail": "https://i.ytimg.com/vi/UuDhdWoB8IU/hqdefault.jpg"
     },
     {
       "source": "SITE",
