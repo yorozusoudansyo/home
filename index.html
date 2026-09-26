@@ -1205,7 +1205,7 @@
 
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar" id="announce-bar">
-  <span>🔴 参加受付中：無料Webセミナー「書けなくても、作れる。」8/16・23・30(日) 20:00〜 → <a href="webinar_lp_202608.html">詳細・お申し込み</a></span>
+  <span>🔴 参加受付中：無料Webセミナー「ChatGPT、去年の使い方のままになっていませんか」最終回 9/27(日) 21:00〜 → <a href="webinar_lp_202609.html">詳細・お申し込み</a></span>
   <button class="announce-close" id="announce-close" aria-label="お知らせを閉じる">&times;</button>
 </div>
 
@@ -1437,25 +1437,35 @@
     用意しています。
   </h2>
   <p class="section-intro reveal">
-    note で気軽に読む、ウェビナーでまとまって学ぶ、そして個別相談で自分ごととして深める——段階に合わせて選べる学びの場をご用意しています。現在、8月の全3回シリーズを参加受付中です。過去のウェビナーは、アーカイブと実演動画を<a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a>で公開中です。
+    note で気軽に読む、ウェビナーでまとまって学ぶ、そして個別相談で自分ごととして深める——段階に合わせて選べる学びの場をご用意しています。現在は9月の全3回シリーズを開催中で、最終回 9/27（日）を参加受付中です。過去のウェビナーは、アーカイブと実演動画を<a href="https://www.youtube.com/channel/UC_Nl9zjN9bE4VE66TcLRUyQ" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a>で公開中です。
   </p>
 
   <div class="seminars-grid reveal-stagger">
 
     <div class="seminar-card featured">
       <div class="seminar-card-text">
-        <span class="seminar-badge live">開催予定・参加受付中</span>
-        <h4>「書けなくても、作れる。」</h4>
-        <p class="seminar-sub">「これ、毎回面倒」をAIで自分の道具にする／全3回無料Webセミナー</p>
+        <span class="seminar-badge live">最終回 9/27（日）受付中</span>
+        <h4>「ChatGPT、去年の使い方のままになっていませんか」</h4>
+        <p class="seminar-sub">ChatGPT・Claude・Gemini・Copilot の使い分け／全3回無料Webセミナー</p>
         <p class="seminar-detail">
-          8/16・8/23・8/30（日）各回20:00–20:45／Google Meet開催。<br/>
-          コードを一行も書かずに、AIとの会話だけで自分専用の小さな道具を作ります。コード経験は不要、各回単独でのご参加も歓迎です。
+          9/13・9/20・9/27（日）各回21:00–21:45／オンライン開催。<br/>
+          この1年で別物になったChatGPTを、実際の画面でお見せします。最終回（9/27）は参加受付中。1回だけのご参加でも大丈夫です。
         </p>
       </div>
-      <a href="webinar_lp_202608.html" class="btn btn-primary">
+      <a href="webinar_lp_202609.html" class="btn btn-primary">
         <span>詳細・お申し込み</span>
         <span class="arrow">→</span>
       </a>
+    </div>
+
+    <div class="seminar-card">
+      <span class="seminar-badge done">開催終了</span>
+      <h4>「書けなくても、作れる。」</h4>
+      <p class="seminar-sub">「これ、毎回面倒」をAIで自分の道具にする／全3回無料Webセミナー</p>
+      <p class="seminar-detail">
+        2026年8月に全3回開催（各回20:00–20:45／Google Meet）。コードを一行も書かずに、AIとの会話だけで自分専用の小さな道具を作るまでを実演しました。
+      </p>
+      <a href="webinar_lp_202608.html" class="btn btn-ghost">内容を見る</a>
     </div>
 
     <div class="seminar-card">
@@ -1864,7 +1874,7 @@ window.addEventListener('scroll', () => {
     document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
   };
 
-  const dismissed = sessionStorage.getItem('announceBarDismissed_v3') === '1';
+  const dismissed = sessionStorage.getItem('announceBarDismissed_v4') === '1';
   if (dismissed) {
     bar.style.display = 'none';
     return;
@@ -1877,7 +1887,7 @@ window.addEventListener('scroll', () => {
   closeBtn.addEventListener('click', () => {
     bar.style.display = 'none';
     document.body.classList.remove('has-announce');
-    sessionStorage.setItem('announceBarDismissed_v3', '1');
+    sessionStorage.setItem('announceBarDismissed_v4', '1');
   });
 })();
 
