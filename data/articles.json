@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "AIで文章作成が平均40％短縮。でも条件がある【第3回②】#Shorts",
+      "url": "https://www.youtube.com/watch?v=kd_DFayUlEY",
+      "date": "2026.09.26",
+      "thumbnail": "https://i.ytimg.com/vi/kd_DFayUlEY/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "AI議事録、結局自分で直している理由【第3回①】#Shorts",
       "url": "https://www.youtube.com/watch?v=Rl22YdBsrbU",
       "date": "2026.09.25",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=jugdS93Amhs",
       "date": "2026.09.16",
       "thumbnail": "https://i.ytimg.com/vi/jugdS93Amhs/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "ChatGPT、去年の使い方のままになっていませんか｜第1回 入力欄が1つだった頃で、止まっていませんか",
-      "url": "https://www.youtube.com/watch?v=dgLIeYf_Ojg",
-      "date": "2026.09.15",
-      "thumbnail": "https://i.ytimg.com/vi/dgLIeYf_Ojg/hqdefault.jpg"
     },
     {
       "source": "SITE",
