@@ -3,6 +3,13 @@
   "articles": [
     {
       "source": "YOUTUBE",
+      "title": "AIが急に間違える「ギザギザの境界」【第3回③】#Shorts",
+      "url": "https://www.youtube.com/watch?v=4I8HQ7PsJj4",
+      "date": "2026.09.27",
+      "thumbnail": "https://i.ytimg.com/vi/4I8HQ7PsJj4/hqdefault.jpg"
+    },
+    {
+      "source": "YOUTUBE",
       "title": "AIで文章作成が平均40％短縮。でも条件がある【第3回②】#Shorts",
       "url": "https://www.youtube.com/watch?v=kd_DFayUlEY",
       "date": "2026.09.26",
@@ -70,13 +77,6 @@
       "url": "https://www.youtube.com/watch?v=H-1Mt3Rz2qI",
       "date": "2026.09.16",
       "thumbnail": "https://i.ytimg.com/vi/H-1Mt3Rz2qI/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIで仕事を失う前に、あなたの「評価」が変わる",
-      "url": "https://www.youtube.com/watch?v=jugdS93Amhs",
-      "date": "2026.09.16",
-      "thumbnail": "https://i.ytimg.com/vi/jugdS93Amhs/hqdefault.jpg"
     },
     {
       "source": "SITE",
