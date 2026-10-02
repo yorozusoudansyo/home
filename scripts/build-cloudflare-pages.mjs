@@ -68,5 +68,28 @@ for (const entry of await readdir(sourceRoot, { withFileTypes: true })) {
 await publishDirectory(join(sourceRoot, 'assets'));
 await publishDirectory(join(sourceRoot, 'momoko-event'));
 await publishFile(join(sourceRoot, 'data', 'articles.json'));
+await writeFile(join(outputRoot, '404.html'), `<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>ページが見つかりません | AI・ITよろず相談所</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f8f9fb; color: #1f2937; font-family: system-ui, sans-serif; }
+    main { max-width: 36rem; padding: 2rem; text-align: center; }
+    h1 { font-size: clamp(1.5rem, 5vw, 2rem); }
+    a { color: #b71c1c; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>ページが見つかりません</h1>
+    <p>URLをご確認ください。</p>
+    <a href="/">トップページへ戻る</a>
+  </main>
+</body>
+</html>
+`, 'utf8');
 
 console.log(`Cloudflare Pages output ready in dist for ${newBase}`);
