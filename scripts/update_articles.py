@@ -50,7 +50,7 @@ YOUTUBE_RSS_URL = (
 
 USER_AGENT = (
     "Mozilla/5.0 (compatible; YorozuArticleBot/1.0; "
-    "+https://yorozusoudansyo.github.io/home/)"
+    "+https://yorozusoudansyo.pages.dev/)"
 )
 REQUEST_TIMEOUT = 15  # seconds
 
