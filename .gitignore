@@ -26,3 +26,6 @@ secrets.json
 
 # 面談予約システム（旧 D:\MyBusiness\My_LP、Firebase Hostingで別途デプロイ。GitHub Pagesには公開しない）
 /booking-system/
+
+# Cloudflare Pages build output
+/dist/
