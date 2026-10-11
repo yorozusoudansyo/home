@@ -2,81 +2,17 @@
   "$schema": "Each article: { source: 'NOTE'|'X'|'YOUTUBE'|'SITE', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
   "articles": [
     {
-      "source": "YOUTUBE",
-      "title": "長いチャット、どう引き継ぐ？｜第1回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=-vTWbTdRli8",
-      "date": "2026.10.09",
-      "thumbnail": "https://i.ytimg.com/vi/-vTWbTdRli8/hqdefault.jpg"
+      "source": "NOTE",
+      "title": "去年「使えない」と感じたCopilotは、もう\"別物\"になっています。",
+      "url": "https://note.com/yukisa0814/n/n655b81ad2ba3",
+      "date": "2026.06.27",
+      "thumbnail": "https://assets.st-note.com/img/1782555942-izFgOpJX5SWIkZjn04LCq1Yy.png"
     },
     {
-      "source": "YOUTUBE",
-      "title": "定期実行、登録の前に？｜第3回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=-WbCdUHF-B0",
-      "date": "2026.10.08",
-      "thumbnail": "https://i.ytimg.com/vi/-WbCdUHF-B0/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "答えが揺れる、なぜ？｜第2回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=4J0I8St8GTE",
-      "date": "2026.10.07",
-      "thumbnail": "https://i.ytimg.com/vi/4J0I8St8GTE/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "指示文、何を書く？｜第1回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=ONdze8LXmE0",
-      "date": "2026.10.06",
-      "thumbnail": "https://i.ytimg.com/vi/ONdze8LXmE0/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AI議事録を1本試す。機密情報に注意【第3回⑥】#Shorts",
-      "url": "https://www.youtube.com/watch?v=KPsn0P35YU8",
-      "date": "2026.09.30",
-      "thumbnail": "https://i.ytimg.com/vi/KPsn0P35YU8/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "議事録をAIに渡す前に、仕事を4つに分ける【第3回⑤】#Shorts",
-      "url": "https://www.youtube.com/watch?v=0fEqVZZLVAQ",
-      "date": "2026.09.29",
-      "thumbnail": "https://i.ytimg.com/vi/0fEqVZZLVAQ/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "ChatGPT、去年の使い方のままになっていませんか｜第3回 「調べる・書く」は、もう卒業していい",
-      "url": "https://www.youtube.com/watch?v=EwBO-go1Onw",
-      "date": "2026.09.28",
-      "thumbnail": "https://i.ytimg.com/vi/EwBO-go1Onw/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "新しいツール（CAD）を断ったその判断【第3回④】#Shorts",
-      "url": "https://www.youtube.com/watch?v=ar7q5CnYH6M",
-      "date": "2026.09.28",
-      "thumbnail": "https://i.ytimg.com/vi/ar7q5CnYH6M/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIが急に間違える「ギザギザの境界」【第3回③】#Shorts",
-      "url": "https://www.youtube.com/watch?v=4I8HQ7PsJj4",
-      "date": "2026.09.27",
-      "thumbnail": "https://i.ytimg.com/vi/4I8HQ7PsJj4/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIで文章作成が平均40％短縮。でも条件がある【第3回②】#Shorts",
-      "url": "https://www.youtube.com/watch?v=kd_DFayUlEY",
-      "date": "2026.09.26",
-      "thumbnail": "https://i.ytimg.com/vi/kd_DFayUlEY/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AI議事録、結局自分で直している理由【第3回①】#Shorts",
-      "url": "https://www.youtube.com/watch?v=Rl22YdBsrbU",
-      "date": "2026.09.25",
-      "thumbnail": "https://i.ytimg.com/vi/Rl22YdBsrbU/hqdefault.jpg"
+      "source": "NOTE",
+      "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(後編)",
+      "url": "https://note.com/yukisa0814/n/nbf3c9fe886d7",
+      "date": "2026.05.09"
     },
     {
       "source": "SITE",
@@ -84,6 +20,60 @@
       "url": "saisho-ni-shitte-hoshii-AI-no-tsukiaikata.html",
       "date": "2026.04.30",
       "thumbnail": "assets/card-tsukiaikata.png"
+    },
+    {
+      "source": "NOTE",
+      "title": "【完全解説】Microsoft Copilotの基礎から神活用術まで！ビジネスパーソンのための最新AIガイド",
+      "url": "https://note.com/yukisa0814/n/n5d67dd54884a",
+      "date": "2026.04.28"
+    },
+    {
+      "source": "NOTE",
+      "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(前編)",
+      "url": "https://note.com/yukisa0814/n/ncf59d2678127",
+      "date": "2026.04.28"
+    },
+    {
+      "source": "NOTE",
+      "title": "「画像をきれいにして」——4つのAIに同じお願いをしたら、全員が違う答えを返してきた",
+      "url": "https://note.com/yukisa0814/n/na86e3c5d042d",
+      "date": "2026.04.23"
+    },
+    {
+      "source": "NOTE",
+      "title": "究極のビジネスプロンプト大全〜階層別・部署別 120選〜 ここからダウンロード！！",
+      "url": "https://note.com/yukisa0814/n/n24c9907e18cf",
+      "date": "2026.04.14"
+    },
+    {
+      "source": "NOTE",
+      "title": "昭和の「紙の単価表」2000項目を、AIで一瞬にしてExcel化する最強の仕事術",
+      "url": "https://note.com/yukisa0814/n/n2bbf5322d43b",
+      "date": "2026.04.11"
+    },
+    {
+      "source": "NOTE",
+      "title": "3大AIのカスタム設定完全ガイド——Claude・ChatGPT・Geminiを「自分専用AI」に育てる",
+      "url": "https://note.com/yukisa0814/n/n7e4242f37059",
+      "date": "2026.04.09"
+    },
+    {
+      "source": "NOTE",
+      "title": "【完全保存版】Gemini × NotebookLMの最強連携！「もっともらしい嘘」を許さない最新AI活用術",
+      "url": "https://note.com/yukisa0814/n/n6cf7a474b4dc",
+      "date": "2026.04.08"
+    },
+    {
+      "source": "NOTE",
+      "title": "AIガチャを卒業！Gemini Canvasで実現する『爆速』ビジネス文書作成術",
+      "url": "https://note.com/yukisa0814/n/na64f9a2bebd6",
+      "date": "2026.04.08"
+    },
+    {
+      "source": "NOTE",
+      "title": "AIの「もっともらしい嘘」を防ぐ——3大AIのカスタム設定ハレーション防止ガイド",
+      "url": "https://note.com/yukisa0814/n/n2940df3dd84d",
+      "date": "2026.04.07"
     }
   ]
 }
