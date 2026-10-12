@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LP制作支援｜AIと一緒に、自分のLPを自分で作る｜AI・ITよろず相談所</title>
+<meta name="description" content="外注せず、公開後の更新も自分でできるLPを。AIの使い方を隣で教えながら、90分×3〜4回で公開まで伴走します。お試しコース50,000円、本格コース80,000円（税込）。AI・ITよろず相談所。">
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="自分のLPを、AIと一緒に、自分で作る。｜LP制作支援">
+<meta property="og:description" content="外注せず、公開後の更新も自分でできるLPを。90分×3〜4回の伴走で公開まで。AI・ITよろず相談所。">
+<meta property="og:url" content="https://yorozusoudansyo.pages.dev/lp-support.html">
+<meta property="og:site_name" content="AI・ITよろず相談所">
+<meta name="twitter:card" content="summary">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+:root{
+  --color-primary-base:#D32F2F;
+  --color-primary-hover:#B71C1C;
+  --color-primary-light:#FFEBEE;
+  --color-text-high:#1F2937;
+  --color-text-medium:#4B5563;
+  --color-border:#E5E7EB;
+  --color-background:#F9FAFB;
+  --color-surface:#FFFFFF;
+  --font-family:"Inter","Noto Sans JP","Noto Sans CJK JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif;
+  --radius-sm:4px; --radius-md:8px; --radius-pill:999px;
+  --shadow-card:0 4px 6px rgba(0,0,0,.05);
+  --shadow-overlay:0 10px 15px rgba(0,0,0,.1);
+  --space-xxs:4px; --space-xs:8px; --space-s:16px;
+  --space-m:24px;  --space-l:32px; --space-xl:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-family);background:var(--color-background);
+  color:var(--color-text-high);font-size:1rem;line-height:1.8;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+.wrap{max-width:768px;margin:0 auto;padding:0 var(--space-m)}
+.icon{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* header */
+.site-head{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--color-border);padding:var(--space-s) 0}
+.site-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--space-s)}
+.brand{display:flex;align-items:center;text-decoration:none;flex:none}
+.brand img{height:32px;width:auto;display:block}
+.head-cta{font-size:.8125rem;font-weight:700;text-decoration:none;
+  color:var(--color-primary-base);border:1px solid var(--color-primary-base);
+  padding:var(--space-xs) var(--space-s);border-radius:var(--radius-sm);white-space:nowrap;
+  transition:background .15s ease}
+.head-cta:hover,.head-cta:focus-visible{background:var(--color-primary-light)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--color-surface);
+  border-bottom:1px solid var(--color-border);padding:var(--space-xl) 0}
+.hero::before{content:"";position:absolute;top:-160px;right:-160px;width:420px;height:420px;
+  border-radius:var(--radius-pill);
+  background:radial-gradient(circle,var(--color-primary-light) 0%,rgba(255,235,238,0) 70%);
+  pointer-events:none}
+.hero .wrap{position:relative;z-index:1}
+.kicker{display:inline-flex;align-items:center;gap:var(--space-xs);
+  font-size:.75rem;font-weight:700;letter-spacing:.05em;
+  color:var(--color-primary-base);background:var(--color-primary-light);
+  padding:var(--space-xs) var(--space-s);border-radius:var(--radius-pill);margin-bottom:var(--space-m)}
+h1{font-size:2rem;font-weight:700;line-height:1.4;letter-spacing:.05em;
+  margin-bottom:var(--space-s);text-wrap:balance}
+h1 .em{color:var(--color-primary-base)}
+.hero .sub{font-size:1.125rem;font-weight:500;line-height:1.7;
+  color:var(--color-text-medium);margin-bottom:var(--space-l)}
+.statbar{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--color-border);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);overflow:hidden;margin-bottom:var(--space-l)}
+.statbar div{background:var(--color-surface);padding:var(--space-s);text-align:center}
+.statbar .n{display:block;font-size:1.375rem;font-weight:700;line-height:1.3;letter-spacing:.03em}
+.statbar .n em{font-style:normal;color:var(--color-primary-base)}
+.statbar .l{display:block;font-size:.6875rem;color:var(--color-text-medium);margin-top:var(--space-xxs)}
+.btn{display:inline-flex;align-items:center;gap:var(--space-xs);
+  background:var(--color-primary-base);color:#fff;font-weight:700;font-size:1rem;
+  text-decoration:none;padding:var(--space-s) var(--space-l);
+  border-radius:var(--radius-sm);box-shadow:var(--shadow-card);transition:background .15s ease}
+.btn:hover,.btn:focus-visible{background:var(--color-primary-hover)}
+.btn:focus-visible{outline:2px solid var(--color-text-high);outline-offset:2px}
+.btn-note{font-size:.75rem;color:var(--color-text-medium);margin-top:var(--space-xs)}
+.monitor-strip{margin-top:var(--space-m);display:flex;gap:var(--space-s);align-items:flex-start;
+  background:var(--color-background);border:1px solid var(--color-border);
+  border-left:4px solid var(--color-primary-base);border-radius:var(--radius-md);
+  padding:var(--space-s) var(--space-m);font-size:.875rem;line-height:1.7}
+.monitor-strip b{color:var(--color-primary-base)}
+.monitor-strip a{color:var(--color-primary-base);font-weight:700;white-space:nowrap}
+
+/* sections */
+section{padding:var(--space-xl) 0}
+section.alt{background:var(--color-surface);border-top:1px solid var(--color-border);
+  border-bottom:1px solid var(--color-border)}
+.sec-label{display:flex;align-items:center;gap:var(--space-xs);
+  font-size:.75rem;font-weight:700;letter-spacing:.1em;
+  color:var(--color-primary-base);margin-bottom:var(--space-xs)}
+.sec-label::after{content:"";flex:1;height:1px;background:var(--color-border)}
+h2{font-size:1.5rem;font-weight:700;line-height:1.5;letter-spacing:.05em;
+  margin-bottom:var(--space-m);text-wrap:balance}
+h3{font-size:1.25rem;font-weight:500;line-height:1.5;margin-bottom:var(--space-xs)}
+p{margin-bottom:var(--space-s)}
+p:last-child{margin-bottom:0}
+.lead{color:var(--color-text-medium);margin-bottom:var(--space-m)}
+.marker{font-weight:700;
+  background-image:linear-gradient(to bottom,transparent 56%,var(--color-primary-light) 56%,
+    var(--color-primary-light) 94%,transparent 94%);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* pains */
+.pains{list-style:none;display:flex;flex-direction:column;gap:var(--space-s)}
+.pains li{display:flex;gap:var(--space-s);align-items:flex-start;
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-s) var(--space-m);
+  box-shadow:var(--shadow-card);line-height:1.7}
+.pains li .icon{color:var(--color-primary-base);margin-top:.35em;width:18px;height:18px}
+.pain-after{margin-top:var(--space-m);color:var(--color-text-medium)}
+.pain-after b{color:var(--color-text-high)}
+
+/* gains */
+.gains{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-s)}
+.gain{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-m);box-shadow:var(--shadow-card)}
+.gain .n{display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:var(--radius-pill);
+  background:var(--color-primary-light);color:var(--color-primary-base);
+  font-weight:700;font-size:.875rem;margin-bottom:var(--space-xs)}
+.gain h3{font-size:1rem;font-weight:700;margin-bottom:var(--space-xxs)}
+.gain p{font-size:.875rem;color:var(--color-text-medium);line-height:1.7}
+
+/* table */
+.tablewrap{overflow-x:auto;background:var(--color-surface);
+  border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-card)}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.9375rem}
+th,td{padding:var(--space-s);text-align:left;border-bottom:1px solid var(--color-border);
+  line-height:1.6;vertical-align:top}
+thead th{background:var(--color-background);font-size:.8125rem;color:var(--color-text-medium)}
+thead th.us{color:var(--color-primary-base);background:var(--color-primary-light)}
+tbody th{width:7.5em;font-weight:700;color:var(--color-text-medium);white-space:nowrap;
+  background:var(--color-background);font-size:.875rem}
+td.us{font-weight:500}
+tr:last-child th,tr:last-child td{border-bottom:none}
+.note{font-size:.75rem;color:var(--color-text-medium);margin-top:var(--space-xs)}
+
+/* courses */
+.courses{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-s)}
+.course{position:relative;display:flex;flex-direction:column;background:var(--color-surface);
+  border:1px solid var(--color-border);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-card);overflow:hidden}
+.course.main{border-color:var(--color-primary-base)}
+.course .head{padding:var(--space-m);border-bottom:1px solid var(--color-border)}
+.course .badge{display:inline-block;font-size:.75rem;font-weight:700;
+  color:var(--color-primary-base);background:var(--color-primary-light);
+  padding:var(--space-xxs) var(--space-s);border-radius:var(--radius-pill);margin-bottom:var(--space-xs)}
+.course .badge.gray{color:var(--color-text-medium);background:var(--color-background);
+  border:1px solid var(--color-border)}
+.course h3{font-weight:700;margin-bottom:var(--space-xxs)}
+.course .for{font-size:.8125rem;color:var(--color-text-medium);line-height:1.6}
+.price{margin-top:var(--space-s)}
+.price .yen{font-size:2rem;font-weight:700;letter-spacing:.02em;line-height:1.2}
+.price .tax{font-size:.75rem;color:var(--color-text-medium);margin-left:var(--space-xxs)}
+.price .sub{display:block;font-size:.8125rem;color:var(--color-text-medium)}
+.price .mon{display:block;margin-top:var(--space-xs);font-size:.8125rem;font-weight:700;
+  color:var(--color-primary-base)}
+.course .body{padding:var(--space-m);flex:1}
+.course ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-xs)}
+.course li{padding-left:var(--space-m);position:relative;font-size:.875rem;line-height:1.7;
+  color:var(--color-text-medium)}
+.course li::before{content:"";position:absolute;left:var(--space-xs);top:.7em;
+  width:6px;height:6px;border-radius:var(--radius-pill);background:var(--color-primary-base)}
+.course li.minus::before{background:var(--color-border)}
+.course li b{color:var(--color-text-high)}
+
+/* program */
+.tabs{display:flex;gap:var(--space-xs);margin-bottom:var(--space-m)}
+.tabs button{font:inherit;font-size:.875rem;font-weight:700;cursor:pointer;
+  padding:var(--space-xs) var(--space-s);border-radius:var(--radius-pill);
+  border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text-medium)}
+.tabs button[aria-selected="true"]{border-color:var(--color-primary-base);
+  color:var(--color-primary-base);background:var(--color-primary-light)}
+.tabs button:focus-visible{outline:2px solid var(--color-primary-base);outline-offset:2px}
+.program{position:relative;padding-left:var(--space-l);
+  display:flex;flex-direction:column;gap:var(--space-s)}
+.program::before{content:"";position:absolute;left:11px;top:12px;bottom:12px;
+  width:2px;background:var(--color-border)}
+.session{position:relative;background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-m)}
+.session::before{content:"";position:absolute;left:calc(var(--space-l) * -1 + 4px);top:var(--space-m);
+  width:16px;height:16px;border-radius:var(--radius-pill);
+  background:var(--color-surface);border:3px solid var(--color-primary-base)}
+.session .no{font-size:.75rem;font-weight:700;color:var(--color-primary-base);letter-spacing:.05em}
+.session h3{font-size:1.0625rem;font-weight:700;margin-bottom:var(--space-xs)}
+.session p{font-size:.9375rem;color:var(--color-text-medium);line-height:1.7}
+.session .goal{margin-top:var(--space-s);padding-top:var(--space-s);
+  border-top:1px dashed var(--color-border);font-size:.875rem;line-height:1.7}
+.session .goal b{color:var(--color-primary-base)}
+.session .home{display:block;margin-top:var(--space-xxs);color:var(--color-text-medium)}
+[hidden]{display:none !important}
+
+/* options */
+.opts{display:flex;flex-direction:column;gap:var(--space-xs)}
+.opt{display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-s);
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-s) var(--space-m)}
+.opt .t{font-weight:500}
+.opt .t small{display:block;font-size:.8125rem;font-weight:400;color:var(--color-text-medium);line-height:1.6}
+.opt .p{font-weight:700;white-space:nowrap}
+.opt .p.free{color:var(--color-primary-base)}
+
+/* rules */
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-s)}
+.rule{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-m);box-shadow:var(--shadow-card)}
+.rule h3{font-size:1rem;font-weight:700;margin-bottom:var(--space-s)}
+.rule ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-xs)}
+.rule li{padding-left:var(--space-m);position:relative;font-size:.875rem;line-height:1.7;
+  color:var(--color-text-medium)}
+.rule li::before{content:"→";position:absolute;left:0;color:var(--color-primary-base);font-weight:700}
+.rule.out li::before{content:"×";color:var(--color-text-medium)}
+
+/* monitor */
+.monitor{background:var(--color-surface);border:1px solid var(--color-primary-base);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-card);overflow:hidden}
+.monitor .top{background:var(--color-primary-light);padding:var(--space-m)}
+.monitor .top .yen{font-size:1.75rem;font-weight:700;color:var(--color-primary-base)}
+.monitor .top s{color:var(--color-text-medium);margin-right:var(--space-xs);font-size:1rem}
+.monitor .bottom{padding:var(--space-m)}
+.monitor ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-xs);margin-top:var(--space-xs)}
+.monitor li{padding-left:var(--space-m);position:relative;font-size:.9375rem;line-height:1.7}
+.monitor li::before{content:"";position:absolute;left:var(--space-xs);top:.7em;
+  width:6px;height:6px;border-radius:var(--radius-pill);background:var(--color-primary-base)}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-s)}
+.flow .step{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-m) var(--space-s);text-align:center;box-shadow:var(--shadow-card)}
+.flow .n{display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:var(--radius-pill);
+  background:var(--color-primary-base);color:#fff;font-weight:700;font-size:.875rem;margin-bottom:var(--space-xs)}
+.flow h3{font-size:.9375rem;font-weight:700;margin-bottom:var(--space-xxs)}
+.flow p{font-size:.8125rem;color:var(--color-text-medium);line-height:1.6}
+
+/* speaker */
+.speaker{display:flex;gap:var(--space-m);background:var(--color-surface);
+  border:1px solid var(--color-border);border-radius:var(--radius-md);
+  padding:var(--space-m);box-shadow:var(--shadow-card)}
+.speaker .ph{flex:none;width:96px;height:96px;border-radius:var(--radius-pill);
+  object-fit:cover;border:1px solid var(--color-border);background:var(--color-primary-light)}
+.speaker .name{font-size:1.25rem;font-weight:700;margin-bottom:var(--space-xxs);color:var(--color-text-high)}
+.speaker .role{font-size:.875rem;color:var(--color-primary-base);font-weight:500;margin-bottom:var(--space-s)}
+.speaker p{font-size:.9375rem;color:var(--color-text-medium)}
+
+/* faq */
+.faq{display:flex;flex-direction:column;gap:var(--space-s)}
+details{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-card)}
+details[open]{border-color:var(--color-primary-base)}
+summary{position:relative;padding:var(--space-s) calc(var(--space-m) + var(--space-s)) var(--space-s) var(--space-m);
+  font-weight:500;cursor:pointer;list-style:none;display:flex;gap:var(--space-s);
+  align-items:flex-start;line-height:1.7}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"Q";color:var(--color-primary-base);font-weight:700;flex:none}
+summary::after{content:"";position:absolute;top:50%;right:var(--space-m);
+  width:var(--space-xs);height:var(--space-xs);
+  border-right:2px solid var(--color-primary-base);border-bottom:2px solid var(--color-primary-base);
+  transform:translateY(-70%) rotate(45deg);transition:transform .2s ease}
+details[open] summary::after{transform:translateY(-30%) rotate(225deg)}
+summary:focus-visible{outline:2px solid var(--color-primary-base);outline-offset:-2px;border-radius:var(--radius-md)}
+details > p{padding:0 var(--space-m) var(--space-m) calc(var(--space-m) + var(--space-s) + 1ch);
+  font-size:.9375rem;color:var(--color-text-medium)}
+@media (prefers-reduced-motion:reduce){summary::after{transition:none}}
+
+/* final */
+.final{background:var(--color-surface);border-top:1px solid var(--color-border);
+  text-align:center;padding:var(--space-xl) 0}
+.final p{color:var(--color-text-medium);margin-bottom:var(--space-l)}
+.sublink{display:block;margin-top:var(--space-s);font-size:.875rem;color:var(--color-text-medium)}
+.sublink a{color:var(--color-primary-base);font-weight:700}
+footer{padding:var(--space-xl) 0 var(--space-l);text-align:center;
+  font-size:.75rem;color:var(--color-text-medium);
+  border-top:1px solid var(--color-border);background:var(--color-surface)}
+footer .foot-logo{height:40px;width:auto;margin-bottom:var(--space-s);opacity:.9}
+footer p{margin-bottom:var(--space-xxs)}
+footer a{color:var(--color-text-medium);text-decoration:none}
+footer a:hover{color:var(--color-primary-base)}
+
+@media (max-width:640px){
+  .wrap{padding:0 var(--space-s)}
+  h1{font-size:1.625rem}
+  h2{font-size:1.3125rem}
+  .hero{padding:var(--space-l) 0 var(--space-xl)}
+  .statbar{grid-template-columns:1fr}
+  .statbar div{display:flex;justify-content:space-between;align-items:baseline;
+    gap:var(--space-s);padding:var(--space-xs) var(--space-s);text-align:left}
+  .statbar .n{font-size:1.125rem;order:2}
+  .statbar .l{font-size:.8125rem;margin:0;order:1}
+  .gains,.courses,.rules{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr 1fr}
+  .speaker{flex-direction:column}
+  .btn{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="https://yorozusoudansyo.pages.dev/">
+      <img src="assets/webinar_202609_logo_official.png" alt="AI・ITよろず相談所">
+    </a>
+    <a class="head-cta" href="#apply">無料相談を予約</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <span class="kicker">LP制作支援｜AIで、自分で作る</span>
+    <h1>自分のLPを、<br><span class="em">AIと一緒に、自分で</span>作る。</h1>
+    <p class="sub">外注せず、公開したあとの修正も自分でできる。<br>AIの使い方を隣で教えながら、90分×3〜4回で公開まで伴走します。</p>
+
+    <div class="statbar">
+      <div><span class="n">90<em>分</em>×3〜4<em>回</em></span><span class="l">オンラインで一緒に</span></div>
+      <div><span class="n">6<em>週間</em></span><span class="l">申込みから公開まで</span></div>
+      <div><span class="n">0<em>円</em></span><span class="l">公開サーバーの月額</span></div>
+    </div>
+
+    <a class="btn" href="#apply">まずは無料相談を予約する
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <p class="btn-note">どちらのコースが合うかは、無料相談で一緒に決めましょう。</p>
+
+    <div class="monitor-strip">
+      <span><b>モニター募集中：</b>12月末までのお申込みで、本格コースが <b>60,000円</b>（通常80,000円・税込）。事例掲載へのご協力が条件です。<a href="#monitor">詳しく見る</a></span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">こんなことで止まっていませんか</div>
+    <h2>LPが必要なのは分かっている。<br>でも、そこから先が進まない。</h2>
+    <ul class="pains">
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>外注すると10万円以上。しかも、文章を1行直すたびに追加費用がかかる。</li>
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>AIで作り始めてみたものの、思った通りに直してもらえず、途中で止まった。</li>
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>ページはできたのに、どうやってネットに公開すればいいのか分からない。</li>
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>そもそも誰に何を書けばいいのか、自分のサービスを言葉にできていない。</li>
+    </ul>
+    <p class="pain-after">LPづくりで一番難しいのは、デザインではありません。<b>「誰に・何を・どう伝えるか」を整理すること</b>と、<b>AIへの頼み方</b>です。そこを隣で一緒にやります。</p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-label">終わったときに手元に残るもの</div>
+    <h2>LPそのものより、<span class="marker">自分で直せる力</span>が残ります。</h2>
+    <div class="gains">
+      <div class="gain"><span class="n">1</span><h3>公開されたLP</h3><p>スマホでも見やすく、申込みフォームまでつながった、1ページのLP。</p></div>
+      <div class="gain"><span class="n">2</span><h3>修正指示のテンプレート</h3><p>「どこを・どう・なぜ」をAIに伝える型。公開後の文章や画像の差し替えも、自分でできます。</p></div>
+      <div class="gain"><span class="n">3</span><h3>整理されたサービス内容</h3><p>誰に・何を・いくらで届けるか。LP以外の発信やチラシにもそのまま使えます。</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">外注との違い</div>
+    <h2>作って終わり、ではなく<br>「直し続けられる」LPに。</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th></th><th>外注（フリーランスの例）</th><th class="us">LP制作支援</th></tr></thead>
+        <tbody>
+          <tr><th>費用の目安</th><td>10万〜30万円程度</td><td class="us">5万円 または 8万円</td></tr>
+          <tr><th>作る人</th><td>制作者</td><td class="us">あなた（隣で伴走）</td></tr>
+          <tr><th>公開後の修正</th><td>依頼のたびに費用と日数</td><td class="us">自分でその日のうちに</td></tr>
+          <tr><th>内容の整理</th><td>ヒアリングシートに記入</td><td class="us">対話しながら一緒に言葉にする</td></tr>
+          <tr><th>サーバー代</th><td>契約内容による</td><td class="us">無料枠で運用（独自ドメイン代は別）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">外注費は公開されている料金・相場情報をもとにした一般的な目安です。ページの長さや原稿作成の有無で変わります。</p>
+  </div>
+</section>
+
+<section class="alt" id="courses">
+  <div class="wrap">
+    <div class="sec-label">2つのコース（税込）</div>
+    <h2>まず試すか、最初から本格的にいくか。</h2>
+    <div class="courses">
+      <div class="course">
+        <div class="head">
+          <span class="badge gray">まず反応を見たい方に</span>
+          <h3>お試しコース</h3>
+          <p class="for">Claudeの公開ページ機能で公開。手軽に始めて、反応を見てから育てたい方向け。</p>
+          <div class="price"><span class="yen">50,000円</span><span class="tax">税込・一括</span>
+            <span class="sub">90分×3回／期間中のチャット質問つき</span></div>
+        </div>
+        <div class="body">
+          <ul>
+            <li><b>更新がいちばん手軽</b>（Claudeに頼むだけ）</li>
+            <li>申込みフォーム（Googleフォーム）の接続</li>
+            <li>修正指示テンプレートつき</li>
+            <li class="minus">独自ドメインは使えません</li>
+            <li class="minus">デザインや文章の複製は防げません</li>
+          </ul>
+        </div>
+      </div>
+      <div class="course main">
+        <div class="head">
+          <span class="badge">事業の顔として長く使う方に</span>
+          <h3>本格コース</h3>
+          <p class="for">Cloudflare Pagesで公開。独自ドメインが使え、アクセス解析も無料で入ります。</p>
+          <div class="price"><span class="yen">80,000円</span><span class="tax">税込</span>
+            <span class="sub">90分×4回／期間中のチャット質問つき／2回払い可</span>
+            <span class="mon">12月末までのモニター価格 60,000円</span></div>
+        </div>
+        <div class="body">
+          <ul>
+            <li><b>独自ドメイン</b>の接続（取得済みのもの）</li>
+            <li>サーバーの月額は<b>無料枠で0円</b></li>
+            <li>申込みフォーム（Googleフォーム）の接続</li>
+            <li>更新手順を本人の手で1回通して練習</li>
+            <li>修正指示テンプレートつき</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="note">2回払いは「ご契約時40,000円＋第3回の前に40,000円」です。どちらのコースも、申込みから6週間以内に実施します。</p>
+  </div>
+</section>
+
+<section id="program">
+  <div class="wrap">
+    <div class="sec-label">進め方</div>
+    <h2>週1回・90分。<br>回と回の間に、素材をそろえていただきます。</h2>
+    <div class="tabs" role="tablist" aria-label="コースの選択">
+      <button type="button" role="tab" aria-selected="true" aria-controls="prog-full" id="tab-full">本格コース（4回）</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="prog-trial" id="tab-trial">お試しコース（3回）</button>
+    </div>
+
+    <div class="program" id="prog-full" role="tabpanel" aria-labelledby="tab-full">
+      <div class="session"><span class="no">第1回｜1週目</span><h3>誰に何を届けるかを整理する</h3>
+        <p>お客様像、申込みの目的、サービス内容と料金を言葉にし、LPの構成を決めます。必要なアカウントも確認します。</p>
+        <div class="goal"><b>到達点：</b>構成案と必要な素材のリスト<span class="home">次回まで：プロフィール・写真・実績・サービス説明をそろえる</span></div></div>
+      <div class="session"><span class="no">第2回｜2週目</span><h3>AIで文章とデザインの初稿を作る</h3>
+        <p>そろえた素材をもとに、AIで見出し・本文・デザインを作ります。修正指示の出し方もここで練習します。</p>
+        <div class="goal"><b>到達点：</b>全体を見渡せる初稿<span class="home">次回まで：文章の事実確認、写真の使用許可の確認、直したい点のメモ</span></div></div>
+      <div class="session"><span class="no">第3回｜3週目</span><h3>直して、つないで、仕上げる</h3>
+        <p>文章と見た目を修正し、スマホでの見え方・ボタン・リンクを確認。申込みフォームを接続します。</p>
+        <div class="goal"><b>到達点：</b>公開直前の確認版<span class="home">次回まで：料金・連絡先の最終確認、ドメインの準備</span></div></div>
+      <div class="session"><span class="no">第4回｜4週目</span><h3>公開して、自分で更新してみる</h3>
+        <p>Cloudflare Pagesで公開し、独自ドメインを接続。最後に、ご自身の手で1回修正・更新まで通して行います。</p>
+        <div class="goal"><b>到達点：</b>LPの公開と、自分で直せる状態</div></div>
+    </div>
+
+    <div class="program" id="prog-trial" role="tabpanel" aria-labelledby="tab-trial" hidden>
+      <div class="session"><span class="no">第1回｜1週目</span><h3>整理して、Claudeに覚えさせる</h3>
+        <p>お客様像・目的・サービス内容と料金を言葉にし、Claudeにプロジェクトを作って事業の情報を登録します。</p>
+        <div class="goal"><b>到達点：</b>構成案と必要な素材のリスト<span class="home">次回まで：プロフィール・写真・実績・サービス説明をそろえる</span></div></div>
+      <div class="session"><span class="no">第2回｜2週目</span><h3>AIで初稿を作り、頼み方を覚える</h3>
+        <p>素材をもとに、Claudeで文章とデザインの初稿を作ります。修正指示の出し方を練習します。</p>
+        <div class="goal"><b>到達点：</b>LP全体の初稿<span class="home">次回まで：文章の事実確認、直したい点のメモ</span></div></div>
+      <div class="session"><span class="no">第3回｜3週目</span><h3>仕上げて、公開して、自分で直す</h3>
+        <p>修正を反映し、スマホで確認。申込みフォームを接続して公開します。最後に、ご自身の手で1回修正します。</p>
+        <div class="goal"><b>到達点：</b>LPの公開と、自分で直せる状態</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-label">オプション・その後（税込）</div>
+    <h2>必要になったら、あとから足せます。</h2>
+    <div class="opts">
+      <div class="opt"><span class="t">お試し → 本格コースへの乗り換え<small>合計が本格コースと同じ。差額だけで移れます。</small></span><span class="p">30,000円</span></div>
+      <div class="opt"><span class="t">独自ドメインの取得代行<small>画面共有で取得・設定・接続・https確認まで。メールアドレスの設定は含みません。</small></span><span class="p">10,000円</span></div>
+      <div class="opt"><span class="t">予約・決済・自動返信のしくみづくり<small>内容に合わせて、お見積もりします。</small></span><span class="p">別途お見積もり</span></div>
+      <div class="opt"><span class="t">公開後の継続サポート「よろず相談ライト」<small>チャットでの質問し放題・月1回の面談。コース修了の方は初月無料。以降 11,000円／月。</small></span><span class="p free">初月 無料</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">お申込みの前に</div>
+    <h2>あらかじめ、ご確認ください。</h2>
+    <div class="rules">
+      <div class="rule">
+        <h3>ご自身でご用意いただくもの</h3>
+        <ul>
+          <li>Claudeの有料プラン（ご自身で契約）</li>
+          <li>プロフィール・写真・実績などの素材と、その事実確認</li>
+          <li>本格コース：Cloudflareのアカウントと独自ドメイン（ご本人名義・ドメイン代はご負担）</li>
+          <li>動画を載せる場合は、YouTubeなどにアップロードしたもの</li>
+        </ul>
+      </div>
+      <div class="rule out">
+        <h3>料金に含まれないもの</h3>
+        <ul>
+          <li>写真撮影・有料素材の購入</li>
+          <li>予約・決済システムの新規構築</li>
+          <li>公開後の保守・広告運用</li>
+          <li>集客や売上の保証</li>
+          <li>6週間を超える場合の延長（スポット料金 3,500円／時間で対応）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="monitor">
+  <div class="wrap">
+    <div class="sec-label">モニター募集</div>
+    <h2>最初のお客様として、<br>一緒に事例を作ってください。</h2>
+    <div class="monitor">
+      <div class="top">
+        <div><s>80,000円</s><span class="yen">60,000円</span>（税込）</div>
+        <p style="margin:0;font-size:.875rem">本格コースのみ／12月末までのお申込み・翌1月中の開始が対象</p>
+      </div>
+      <div class="bottom">
+        <p style="margin-bottom:0;font-weight:500">モニターの条件</p>
+        <ul>
+          <li>完成したLPのURLとご感想を、事例として掲載させていただくこと</li>
+          <li>終了後の30分のインタビュー</li>
+          <li>終了後のアンケートへのご回答</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">お申込みの流れ</div>
+    <h2>まずは30分、話してみてください。</h2>
+    <div class="flow">
+      <div class="step"><span class="n">1</span><h3>無料相談</h3><p>今の状況と、作りたいLPをお聞きします。</p></div>
+      <div class="step"><span class="n">2</span><h3>コース決定</h3><p>お試しか本格か、一緒に決めます。</p></div>
+      <div class="step"><span class="n">3</span><h3>お申込み</h3><p>お支払い方法をご案内します。</p></div>
+      <div class="step"><span class="n">4</span><h3>第1回</h3><p>日程を決めてスタート。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-label">伴走するのは</div>
+    <div class="speaker">
+      <img class="ph" src="assets/profile-yukisa.jpg" width="96" height="96" alt="清水 幸久の写真" loading="lazy">
+      <div>
+        <p class="name">清水 幸久（ユッキー）</p>
+        <p class="role">AI・ITよろず相談所 代表</p>
+        <p>CADソフト会社のアプリケーションエンジニアとして約25年、お客様の隣でソフトを「使いこなしてもらう」仕事をしてきました。2025年に独立し、生成AIの導入と活用を伴走型で支援しています。このページも、Claudeと一緒に作りました。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">よくある質問</div>
+    <h2>気になるところ</h2>
+    <div class="faq">
+      <details><summary>プログラミングやWebの知識がなくても大丈夫ですか？</summary>
+        <p>大丈夫です。マウスとキーボードの基本操作ができれば進められます。AIへの頼み方から、一緒に練習します。</p></details>
+      <details><summary>お試しと本格、どちらを選べばいいですか？</summary>
+        <p>独自ドメインを使いたい、広告やSNSから本格的に集客したい場合は本格コースを。まずは反応を見たい場合はお試しコースがおすすめです。お試しから本格へは、差額の30,000円で乗り換えられます。迷ったら無料相談で一緒に決めましょう。</p></details>
+      <details><summary>途中で素材の準備が間に合わなくなったら？</summary>
+        <p>日程は調整できます。ただし実施期間は申込みから6週間以内です。それを超える場合は、スポット料金（3,500円／時間）で延長対応します。</p></details>
+      <details><summary>代わりに全部作ってもらうことはできますか？</summary>
+        <p>このサービスは「ご自身で作って、ご自身で直せるようになる」ための支援です。操作はご本人に行っていただき、私が説明と確認をします。</p></details>
+      <details><summary>LPを作れば、お客様が増えますか？</summary>
+        <p>LPは申込みを受け取るための入口です。集客や売上の保証はできません。ただ、公開後に文章を自分で直せるので、反応を見ながら改善を続けられます。</p></details>
+      <details><summary>Claudeの有料プランはいくらですか？</summary>
+        <p>料金やプラン内容は変わることがあるため、無料相談のときに最新の情報を一緒に確認します。</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final" id="apply">
+  <div class="wrap">
+    <h2>あなたのLP、どこで止まっていますか。</h2>
+    <p>無料相談（30分・オンライン）で、今の状況を聞かせてください。<br>無理な勧誘はしません。</p>
+    <a class="btn" href="https://meetbook-booking.web.app/">無料相談を予約する
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <span class="sublink">ほかのサービスも見る → <a href="https://yorozusoudansyo.pages.dev/">AI・ITよろず相談所 トップ</a></span>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img class="foot-logo" src="assets/webinar_202609_logo_official.png" alt="AI・ITよろず相談所">
+    <p><a href="https://yorozusoudansyo.pages.dev/">AI・ITよろず相談所</a></p>
+    <p>表示価格はすべて税込です。</p>
+    <p>© 2026 AI・ITよろず相談所</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs=document.querySelectorAll('[role="tab"]');
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){
+      tabs.forEach(function(o){
+        var on=(o===t);
+        o.setAttribute('aria-selected',on?'true':'false');
+        document.getElementById(o.getAttribute('aria-controls')).hidden=!on;
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
