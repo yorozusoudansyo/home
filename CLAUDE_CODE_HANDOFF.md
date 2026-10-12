@@ -1,4 +1,7 @@
 # Claude Code 引き継ぎドキュメント
+
+> **2026-10-12 更新:** 現在の公式サイトは <https://yorozusoudansyo.pages.dev/>。旧 <https://yorozusoudansyo.github.io/home/> はGitHub Pagesで公開を続け、Cloudflareへ転送する。公開元は `github-pages-redirect` ブランチの `/docs`。作業内容と確認結果は `D:\MyBusiness\SNS_Yorozu\SESSION_HANDOFF_2026-10-12_WEBSITE_REDIRECT.md` を優先する。以下は2026年4月作成の資料。
+
 **作成日：2026年4月20日**
 
 ---
@@ -18,12 +21,14 @@
 
 | 項目 | 内容 |
 |------|------|
-| **作業フォルダ** | `D:\MyBusiness\LP_Home` |
-| **メインファイル** | `D:\MyBusiness\LP_Home\index.html` |
-| **本番URL** | `https://yorozusoudansyo.github.io/home/` |
+| **サイト本体の作業フォルダ** | `D:\MyBusiness\LP_Home_cloudflare_20261002`（作業前にGit状態を確認） |
+| **転送ページの作業フォルダ** | `D:\MyBusiness\LP_Home_redirect_20261012` |
+| **メインファイル** | `index.html` |
+| **現在の公式URL** | `https://yorozusoudansyo.pages.dev/` |
+| **旧URL（転送中）** | `https://yorozusoudansyo.github.io/home/` |
 | **GitHubリポジトリ** | `github.com/yorozusoudansyo/home` |
 | **ブランチ** | `main` |
-| **デプロイ方法** | GitHub Pages（Deploy from a branch / main / root） |
+| **デプロイ方法** | Cloudflare Pagesは `main` 連携。GitHub Pagesは `github-pages-redirect` / `docs` |
 
 ---
 
@@ -126,7 +131,8 @@ AI・ITよろず相談所（個別相談サービス）
 
 | 用途 | URL |
 |------|-----|
-| GitHub Pages（本番） | https://yorozusoudansyo.github.io/home/ |
+| 現在の公式サイト（Cloudflare Pages） | https://yorozusoudansyo.pages.dev/ |
+| 旧URL（Cloudflareへ転送） | https://yorozusoudansyo.github.io/home/ |
 | GitHubリポジトリ | https://github.com/yorozusoudansyo/home |
 | Noteアカウント | https://note.com/yukisa0814 |
 | asobiji公式サイト | https://asobiji-web.studio.site/ |
