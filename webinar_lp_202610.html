@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>パワポの解説動画、もう自分で真似しなくていい｜無料Webセミナー｜AI・ITよろず相談所</title>
-<meta name="description" content="YouTubeで見つけた「かっこいいスライドの作り方」。解説動画のURLをAIに渡すだけで、AIが動画を見て手順を読み取り、同じスライドを作ります。10月25日（日）21:00〜21:45、Google Meetで開催する無料Webセミナー（1回完結の実践編）。">
+<meta name="description" content="YouTubeで見つけた「かっこいいスライドの作り方」。解説動画のURLをAIに渡すだけで、AIが動画を見て手順を読み取り、同じスライドを作ります。会社のPowerPointのCopilotでも完成。10月25日（日）21:00〜21:45、Google Meetで開催する無料Webセミナー（1回完結の実践編）。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="パワポの解説動画、もう自分で真似しなくていい。AIだからできるチート級の使い方">
 <meta property="og:description" content="なぜか、ほとんど誰も解説していない方法をお見せします。解説動画のURLを渡すだけで、AIが動画を見て同じスライドを作る。10/25（日）21:00〜 無料Webセミナー。">
@@ -83,6 +83,7 @@ a{color:inherit}
   padding:4px 16px;font-size:14px;font-weight:500;
 }
 .facts li strong{font-weight:700}
+.facts li.hot{background:var(--color-text-high);border-color:var(--color-text-high);color:#fff;font-weight:700}
 .hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
 .hero-cta small{color:var(--color-text-medium);font-size:13px}
 
@@ -128,7 +129,7 @@ p{margin:0 0 16px}
 .turn em{font-style:normal;color:var(--color-primary-base)}
 
 .after{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px}
-.after .card{background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:24px}
+.after .card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:24px}
 .after .card .n{font-family:Inter,sans-serif;font-weight:700;font-size:14px;color:var(--color-primary-base);display:block;margin-bottom:8px}
 .after .card p{margin:0;color:var(--color-text-medium);font-size:15px}
 .after .card h3{font-size:17px;font-weight:700}
@@ -158,6 +159,23 @@ p{margin:0 0 16px}
 .compare ul li{margin-bottom:4px}
 .compare-note{margin-top:24px;font-size:15px}
 
+.points{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px}
+.points .card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:24px}
+.points .card .n{font-family:Inter,sans-serif;font-weight:700;font-size:14px;color:var(--color-primary-base);display:block;margin-bottom:8px}
+.points .card h3{font-size:17px;font-weight:700}
+.points .card p{margin:0;color:var(--color-text-medium);font-size:15px}
+.points .card p.tip{margin-top:16px;background:var(--color-primary-light);color:var(--color-text-high);border-radius:var(--radius-sm);padding:8px 16px;font-size:14px;font-weight:500}
+.lead-em{display:inline-block;margin-top:8px;color:var(--color-text-high);font-weight:700;background:var(--color-primary-light);padding:0 8px;border-radius:var(--radius-sm)}
+section.copilot{background:var(--color-surface);border-top:1px solid var(--color-border);border-bottom:4px solid var(--color-primary-base)}
+.label-accent{color:var(--color-primary-base)}
+.route{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:16px;align-items:stretch;margin:8px 0 24px}
+.route .node{background:var(--color-background);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:24px}
+.route .node.done{background:var(--color-surface);border:2px solid var(--color-text-high);box-shadow:var(--shadow-card)}
+.route .node .k{font-family:Inter,sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--color-primary-base);display:block;margin-bottom:8px}
+.route .node b{display:block;font-size:17px;line-height:1.5;margin-bottom:8px}
+.route .node p{margin:0;font-size:14px;color:var(--color-text-medium);line-height:1.7}
+.route .arrow{display:flex;align-items:center;color:var(--color-text-medium);font-weight:700;font-size:20px}
+.small-note{font-size:13px}
 .note-box{
   background:var(--color-surface);border:1px solid var(--color-border);border-left:4px solid var(--color-text-high);
   border-radius:var(--radius-sm);padding:24px;margin-top:32px;
@@ -204,9 +222,10 @@ footer a{color:var(--color-text-medium)}
   .hero{padding:48px 0}
   .hero h1{font-size:22px}
   .hero h1 .l2{font-size:16px}
-  .flow{grid-template-columns:1fr;gap:8px}
+  .flow,.route{grid-template-columns:1fr;gap:8px}
+  .route .arrow{justify-content:center;transform:rotate(90deg)}
   .flow .arrow{justify-content:center;transform:rotate(90deg)}
-  .after,.compare,.apply-steps{grid-template-columns:1fr}
+  .after,.compare,.points,.apply-steps{grid-template-columns:1fr}
   .steps li{padding:24px 16px 24px 64px}
   .steps li::before{left:16px}
   table.info th,table.info td{display:block;width:100%;padding:8px 16px}
@@ -237,8 +256,9 @@ footer a{color:var(--color-text-medium)}
     <p class="eyebrow">無料Webセミナー　実践編・1回完結</p>
     <h1>パワポの解説動画、<br>もう自分で真似しなくていい。<span class="l2">AIだからできる、チート級の使い方</span></h1>
     <p class="subtitle">なぜか、ほとんど誰も解説していない方法をお見せします</p>
-    <p class="lead">YouTubeで見つけた「かっこいいスライドの作り方」。解説動画のURLをAIに渡して「これと同じものを作って」と頼むだけで、AIが動画を見て手順を読み取り、同じスライドを作ります。その一部始終を、45分でお見せします。</p>
+    <p class="lead">YouTubeで見つけた「かっこいいスライドの作り方」。解説動画のURLをAIに渡して「これと同じものを作って」と頼むだけで、AIが動画を見て手順を読み取り、同じスライドを作ります。その一部始終を、45分でお見せします。<br><strong class="lead-em">会社のPowerPointに入っているCopilotでも、完成しました。</strong></p>
     <ul class="facts">
+      <li class="hot">会社のCopilotでもOK</li>
       <li><strong>10月25日（日）21:00〜21:45</strong></li>
       <li>Google Meet</li>
       <li>参加無料</li>
@@ -268,7 +288,7 @@ footer a{color:var(--color-text-medium)}
         <div class="slide-ico" aria-hidden="true"></div>
         <span class="k">OUTPUT</span>
         <b>同じスライドが完成</b>
-        <p>PowerPointでそのまま開けるファイル</p>
+        <p>ChatGPTでも、会社のPowerPointのCopilotでも</p>
       </div>
     </div>
   </div>
@@ -290,8 +310,29 @@ footer a{color:var(--color-text-medium)}
   </div>
 </section>
 
+<!-- COPILOT -->
+<section class="copilot">
+  <div class="wrap">
+    <div class="narrow">
+      <span class="label label-accent">いつものPowerPointで</span>
+      <h2>会社のCopilotでも、できました</h2>
+      <p class="muted">「ChatGPTは会社で使えない」という方も大丈夫です。動画を読み取るところだけをChatGPTに任せ、仕上げは会社のPowerPointのCopilotで行う方法でも、同じスライドが完成しました。</p>
+    </div>
+    <div class="route">
+      <div class="node"><span class="k">STEP 1</span><b>ChatGPTに動画を読ませる</b><p>解説動画のURLを渡し、「手順のプロンプト」を書いてもらう</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="node"><span class="k">STEP 2</span><b>PowerPointのCopilotに貼る</b><p>できたプロンプトを、いつものPowerPointのCopilotにそのまま渡す</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="node done"><span class="k">DONE</span><b>スライドが完成</b><p>会社のPCの、いつものPowerPointの中で仕上がる</p></div>
+    </div>
+    <div class="narrow">
+      <p class="muted small-note">Copilotで使える機能は、会社の契約や設定によって異なります。当日は、どんな環境で試したかもあわせてお伝えします。</p>
+    </div>
+  </div>
+</section>
+
 <!-- AFTER -->
-<section class="alt">
+<section>
   <div class="wrap">
     <div class="narrow">
       <span class="label">受講後のイメージ</span>
@@ -300,14 +341,14 @@ footer a{color:var(--color-text-medium)}
     <div class="after">
       <div class="card"><span class="n">01</span><h3>見つけた解説動画を「真似する」から「AIに渡す」へ</h3><p>保存しただけで終わっていたテクニックが、自分の資料に入るようになります。</p></div>
       <div class="card"><span class="n">02</span><h3>「AIに作業を任せる」が、1つの実例で腹落ちする</h3><p>見る → 理解する → 作る → 確認する。質問と回答の往復ではない使い方を目の前で見ます。</p></div>
-      <div class="card"><span class="n">03</span><h3>ChatGPTとClaude、どちらで何ができるかが分かる</h3><p>同じお手本を2つのAIに渡した結果を並べるので、自分に合う道具を選べます。</p></div>
-      <div class="card"><span class="n">04</span><h3>パワポ以外にも応用できる考え方が手に入る</h3><p>「お手本を見せて、同じものを作ってもらう」は、資料づくり全般に使える頼み方です。</p></div>
+      <div class="card"><span class="n">03</span><h3>AIの「できました」を確かめるコツが分かる</h3><p>AIが推測で埋めた部分の見分け方と、仕上がりの確かめ方を、実際の失敗例と一緒にお見せします。</p></div>
+      <div class="card"><span class="n">04</span><h3>会社のCopilotで、明日から試せる</h3><p>ChatGPTが使えない職場でも、いつものPowerPointのCopilotで同じことができます。「お手本を見せて、同じものを作ってもらう」は資料づくり全般に使える頼み方です。</p></div>
     </div>
   </div>
 </section>
 
 <!-- WHAT -->
-<section>
+<section class="alt">
   <div class="wrap narrow">
     <span class="label">当日の内容</span>
     <h2>実演でお見せすること</h2>
@@ -321,31 +362,35 @@ footer a{color:var(--color-text-medium)}
 </section>
 
 <!-- COMPARE -->
-<section class="alt">
+<section>
   <div class="wrap">
     <div class="narrow">
       <span class="label">見どころ</span>
-      <h2>同じ動画を、2つのAIに渡してみると</h2>
-      <p class="muted">どちらも同じスライドを作れました。ただ、作り方がまったく違います。</p>
+      <h2>AIは、動画をどうやって「見て」いるのか</h2>
+      <p class="muted">同じ解説動画で、ChatGPT、Claude、そして会社のPowerPointのCopilotまで、実際に試しました。分かったのは、AIの動画の見方には「クセ」があるということです。そのクセを知っていれば、明日からの頼み方が変わります。</p>
     </div>
-    <div class="compare">
+    <div class="points">
       <div class="card">
-        <p class="tool">ChatGPT</p>
-        <span class="tag">人の操作をなぞるタイプ</span>
-        <ul>
-          <li>PowerPointで人がやる操作を、手順どおりに再現</li>
-          <li>「どのメニューで何を選んだか」が手順書として残る</li>
-          <li>明日、自分の手でも同じことができる</li>
-        </ul>
+        <span class="n">01</span>
+        <h3>動画を「コマ送り」で見ている</h3>
+        <p>AIは動画を再生して見ているのではありません。数秒ごとの画面と字幕から、手順を組み立てています。字幕がない動画や操作が速い動画では、手順が抜けやすくなります。</p>
       </div>
       <div class="card">
-        <p class="tool">Claude</p>
-        <span class="tag">丸ごと任せるタイプ</span>
-        <ul>
-          <li>動画をコマ送りで見て、手順を自分で整理</li>
-          <li>フリー素材探しとライセンス確認まで行う</li>
-          <li>最後に仕上がりを自分で確認してから渡してくれる</li>
-        </ul>
+        <span class="n">02</span>
+        <h3>見えないところは、推測で埋める</h3>
+        <p>図形を選ぶ順番やフォント名など、動画で確認できない部分はAIが推測で補います。しかも自然な文章で書くので、言われないと区別がつきません。</p>
+        <p class="tip">頼み方のコツ：「動画で確認できたことと、推測で補ったことを分けて」</p>
+      </div>
+      <div class="card">
+        <span class="n">03</span>
+        <h3>「できました」は、自分で確かめる</h3>
+        <p>仕上がりの確かめ方はAIによって違い、「できた」の意味もそろいません。最後は自分で再生して確認します。うまくいかなかった部分も、直し方を伝えれば直せました。</p>
+      </div>
+      <div class="card">
+        <span class="n">04</span>
+        <h3>Copilotには「手順書」にして渡す</h3>
+        <p>PowerPointのCopilotには、動画ではなく、ChatGPTが動画から書き起こした「手順のプロンプト」を渡します。AIを組み合わせれば、会社のいつもの環境でも同じスライドが完成しました。</p>
+        <p class="tip">ポイント：読み取りはChatGPT、仕上げはCopilot</p>
       </div>
     </div>
     <div class="narrow">
@@ -353,6 +398,7 @@ footer a{color:var(--color-text-medium)}
         <h3>正直にお伝えしておくこと</h3>
         <ul>
           <li>普通のチャット画面にURLを貼るだけでは、AIは動画の中身を見られません。当日は、どの機能を使えば同じことができるかを具体的にお見せします。</li>
+          <li>PCのPowerPointを実際に動かして作る方法と、ファイルを直接作る方法があり、使う環境によって変わります。</li>
           <li>AIの作業には少し時間がかかるため、当日は録画と実演を組み合わせてお見せします。</li>
         </ul>
       </div>
@@ -361,13 +407,14 @@ footer a{color:var(--color-text-medium)}
 </section>
 
 <!-- TARGET -->
-<section>
+<section class="alt">
   <div class="wrap narrow">
     <span class="label">こんな方におすすめ</span>
     <h2>対象</h2>
     <ul class="target">
       <li>仕事で毎週のようにパワポを作っているが、見た目がいつも同じになっている方</li>
       <li>YouTubeでスライドの作り方を見たことはあるが、真似しきれなかった方</li>
+      <li>会社でCopilotを使っている（使い始めた）が、PowerPointでの使い道がまだ見つかっていない方</li>
       <li>ChatGPTやCopilotは使っているが、「質問して答えをもらう」から先に進めていない方</li>
     </ul>
     <p class="muted" style="margin-top:24px">デザインの知識やプログラミングの知識は必要ありません。</p>
@@ -375,7 +422,7 @@ footer a{color:var(--color-text-medium)}
 </section>
 
 <!-- INFO -->
-<section class="alt">
+<section>
   <div class="wrap narrow">
     <span class="label">INFORMATION</span>
     <h2>開催概要</h2>
@@ -391,7 +438,7 @@ footer a{color:var(--color-text-medium)}
 </section>
 
 <!-- PROFILE -->
-<section>
+<section class="alt">
   <div class="wrap narrow">
     <span class="label">SPEAKER</span>
     <h2>講師紹介</h2>
@@ -407,7 +454,7 @@ footer a{color:var(--color-text-medium)}
 </section>
 
 <!-- APPLY STEPS + FAQ -->
-<section class="alt">
+<section>
   <div class="wrap narrow">
     <span class="label">HOW TO JOIN</span>
     <h2>参加までの流れ</h2>
@@ -423,6 +470,8 @@ footer a{color:var(--color-text-medium)}
       <dd>はい。実演を見ていただくだけでも内容は伝わります。完成したファイルはPowerPointで開く形式です。</dd>
       <dt>ChatGPTやClaudeの有料プランが必要ですか？</dt>
       <dd>参加に必要なものはありません。ご自身で試す場合にどの機能・プランが必要かは、当日ご説明します。</dd>
+      <dt>会社のCopilotでもできますか？</dt>
+      <dd>はい、PowerPointのCopilotで完成させる方法もお見せします。ただし使える機能は会社の契約や設定で異なるため、試した環境もあわせてご説明します。</dd>
       <dt>9月までのセミナーに参加していませんが、大丈夫ですか？</dt>
       <dd>大丈夫です。今回は1回で完結する内容です。</dd>
       <dt>途中参加・途中退出はできますか？</dt>
@@ -439,6 +488,7 @@ footer a{color:var(--color-text-medium)}
     <span class="label">お申し込み</span>
     <h2>パワポの解説動画、<br>次はAIに見せてみませんか</h2>
     <p class="date">10月25日（日）21:00〜21:45　Google Meet　参加無料</p>
+    <p class="muted" style="margin:-16px 0 32px">ChatGPTでも、会社のPowerPointのCopilotでも試せる方法をお見せします</p>
     <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdG0fqRn2qQkc1hBS18Wob2ISaBgU1CaiYseq6xVrxuRzz4_g/viewform" target="_blank" rel="noopener">参加を申し込む（30秒）</a>
     <p class="muted" style="margin-top:16px;font-size:13px">Googleフォームが開きます</p>
   </div>
