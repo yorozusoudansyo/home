@@ -2,6 +2,12 @@
   "$schema": "Each article: { source: 'NOTE'|'X'|'YOUTUBE'|'SITE', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
   "articles": [
     {
+      "source": "NOTE",
+      "title": "あいだの人々　第一話「推奨度八十七パーセント」（1）",
+      "url": "https://note.com/yukisa0814/n/nd51605a328de",
+      "date": "2026.10.18"
+    },
+    {
       "source": "YOUTUBE",
       "title": "会社の情報、入れていい？｜第3回ウェビナー #Shorts",
       "url": "https://www.youtube.com/watch?v=nrFfx84ew7c",
@@ -70,13 +76,6 @@
       "url": "https://www.youtube.com/watch?v=KPsn0P35YU8",
       "date": "2026.09.30",
       "thumbnail": "https://i.ytimg.com/vi/KPsn0P35YU8/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "議事録をAIに渡す前に、仕事を4つに分ける【第3回⑤】#Shorts",
-      "url": "https://www.youtube.com/watch?v=0fEqVZZLVAQ",
-      "date": "2026.09.29",
-      "thumbnail": "https://i.ytimg.com/vi/0fEqVZZLVAQ/hqdefault.jpg"
     },
     {
       "source": "SITE",
