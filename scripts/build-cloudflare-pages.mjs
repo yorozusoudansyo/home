@@ -37,7 +37,7 @@ async function publishFile(sourcePath) {
   const destinationPath = join(outputRoot, relative(sourceRoot, sourcePath));
   await mkdir(join(destinationPath, '..'), { recursive: true });
   const extension = extname(sourcePath).toLowerCase();
-  if (['.html', '.css', '.js', '.json'].includes(extension)) {
+  if (['.html', '.css', '.js', '.json', '.txt', '.xml'].includes(extension)) {
     const content = await readFile(sourcePath, 'utf8');
     await writeFile(
       destinationPath,
@@ -61,7 +61,7 @@ async function publishDirectory(directory) {
 }
 
 for (const entry of await readdir(sourceRoot, { withFileTypes: true })) {
-  if (entry.isFile() && ['.html', '.png'].includes(extname(entry.name).toLowerCase())) {
+  if (entry.isFile() && ['.html', '.png', '.txt', '.xml'].includes(extname(entry.name).toLowerCase())) {
     await publishFile(join(sourceRoot, entry.name));
   }
 }

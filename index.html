@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AI・ITよろず相談所 — あなたの"最初の一歩"に、隣で寄り添う</title>
-<meta name="description" content="AI・ITの「最初の一歩」を、25年のアプリケーションエンジニア経験で隣で寄り添ってサポート。個人事業主の方も、明日からAIを使いこなしたい方も、まずは無料相談から。" />
+<title>AI初心者の無料オンライン相談・仕事へのAI導入支援｜AI・ITよろず相談所</title>
+<meta name="description" content="AI初心者、個人事業主、小規模事業者の仕事へのAI活用を清水幸久が伴走支援。30分のオンライン無料相談から、個別相談、LP制作支援、AI勉強会・研修まで。料金と相談方法を掲載しています。" />
+<link rel="canonical" href="https://yorozusoudansyo.pages.dev/" />
 
 <!-- Favicon -->
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -22,6 +23,22 @@
 <meta property="og:image" content="https://yorozusoudansyo.pages.dev/assets/logo.png" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@Yorozu0519" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://yorozusoudansyo.pages.dev/#organization",
+  "name": "AI・ITよろず相談所",
+  "url": "https://yorozusoudansyo.pages.dev/",
+  "logo": "https://yorozusoudansyo.pages.dev/assets/logo.png",
+  "founder": {"@type": "Person", "name": "清水 幸久", "sameAs": ["https://www.facebook.com/profile.php?id=61592919445694", "https://note.com/yukisa0814"]},
+  "sameAs": [
+    "https://www.facebook.com/profile.php?id=61592837639364",
+    "https://x.com/Yorozu0519",
+    "https://www.youtube.com/@SoudansyoYorozu"
+  ]
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -199,6 +216,7 @@
     font-weight: 400;
   }
   .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .hero-facts { margin: 14px 0 0; font-size: 13px; color: var(--color-text-medium); }
 
   /* --- BUTTONS ------------------------------------------ */
   .btn {
@@ -246,6 +264,7 @@
   .hero-visual canvas { width: 100% !important; height: 100% !important; display: block; }
   @media (max-width: 900px) {
     .hero-visual { position: static; transform: none; width: min(70vw, 360px); margin: 0 auto 32px; }
+    .hero .scroll-indicator { display: none; }
   }
   .hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; width: 100%; }
 
@@ -339,6 +358,26 @@
     margin: 0 0 48px;
   }
   .section-intro a { color: var(--color-primary-base); }
+
+  .service-guide { padding: 72px 32px; background: var(--color-surface); }
+  .service-guide-inner { max-width: 1200px; margin: 0 auto; }
+  .service-guide h2 { font-size: clamp(28px, 3.6vw, 44px); line-height: 1.4; margin: 0 0 16px; }
+  .service-guide-lead { color: var(--color-text-medium); max-width: 72ch; line-height: 1.8; margin: 0 0 30px; }
+  .service-guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .service-guide-card { display: flex; flex-direction: column; padding: 28px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-background); }
+  .service-guide-card h3 { font-size: 20px; line-height: 1.5; margin: 0 0 12px; }
+  .service-guide-card p { color: var(--color-text-medium); line-height: 1.8; margin: 0 0 14px; }
+  .service-guide-card .facts { font-size: 14px; }
+  .service-guide-card a { color: var(--color-primary-base); font-weight: 700; margin-top: auto; text-underline-offset: 4px; }
+  @media (max-width: 860px) { .service-guide-grid { grid-template-columns: 1fr; } }
+
+  .faq-section { padding: 72px 32px; background: var(--color-surface); }
+  .faq-inner { max-width: 900px; margin: 0 auto; }
+  .faq-section h2 { font-size: clamp(28px, 3.6vw, 44px); margin: 0 0 28px; }
+  .faq-section details { border-top: 1px solid var(--color-border); padding: 18px 0; }
+  .faq-section details:last-child { border-bottom: 1px solid var(--color-border); }
+  .faq-section summary { cursor: pointer; font-weight: 700; font-size: 18px; }
+  .faq-section details p { color: var(--color-text-medium); line-height: 1.85; margin: 12px 0 0; }
 
   /* Neutralize former dark "veil" backgrounds */
   .veil       { background: var(--color-background); color: var(--color-text-high); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); backdrop-filter: none; }
@@ -1119,6 +1158,7 @@
   </div>
   <div class="nav-links">
     <a href="#problem">悩み</a>
+    <a href="#services">サービス</a>
     <a href="#features">特徴</a>
     <a href="#process">流れ</a>
     <a href="#seminars">セミナー</a>
@@ -1149,7 +1189,7 @@
     <p class="hero-sub reveal">
       「画面が違う」「プロンプトが通じない」「エラーが怖い」——<br/>
       その小さなつまずきを、25年のAE経験で<em>一緒に</em>ほどいていきます。<br/>
-      個人事業主の方も、明日からAIを使いこなしたい方も。
+      AIが初めての方、仕事に取り入れたい個人事業主・小規模事業者の方へ。
     </p>
     <div class="hero-ctas reveal">
       <a href="https://meetbook-booking.web.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
@@ -1160,11 +1200,41 @@
         <span>できること</span>
       </a>
     </div>
+    <p class="hero-facts reveal">30分のオンライン無料相談から。個人・個人事業主・小規模事業者の方へ。</p>
   </div>
 
   <div class="scroll-indicator" id="scroll-ind">
     <span>SCROLL</span>
     <div class="line"></div>
+  </div>
+</section>
+
+<!-- SERVICE GUIDE -->
+<section class="service-guide" id="services">
+  <div class="service-guide-inner">
+    <div class="section-label">相談内容から選ぶ</div>
+    <h2>今の課題に合う支援を。</h2>
+    <p class="service-guide-lead">AI・ITよろず相談所は、清水幸久がAIの使い始めから仕事での活用まで一緒に考える相談サービスです。まずは30分のオンライン無料相談で、困っていることと次に試すことを整理します。</p>
+    <div class="service-guide-grid">
+      <article class="service-guide-card">
+        <h3>AIの使い方・仕事への導入相談</h3>
+        <p>ChatGPTなどを使い始めたい方や、日々の仕事で使う方法を一緒に考えたい方へ。画面共有をしながら、つまずいているところを切り分けます。</p>
+        <p class="facts">対象：個人・個人事業主・小規模事業者<br>入口：30分のオンライン無料相談<br>継続支援：スポット3,500円／1時間から</p>
+        <a href="/ai-consultation">AI活用相談の内容と料金を見る →</a>
+      </article>
+      <article class="service-guide-card">
+        <h3>AIと進めるLP制作支援</h3>
+        <p>自分のサービスを整理し、AIを使ってLPを作り、公開後も自分で更新したい方へ。操作はご本人に行っていただき、隣で説明と確認をします。</p>
+        <p class="facts">対象：自分でLPを作り、更新したい方<br>形式：オンラインで90分×3～4回<br>通常料金：お試し50,000円／本格80,000円（税込）。本格コースには条件付きのモニター価格あり</p>
+        <a href="/lp-support">LP制作支援の内容と料金を見る →</a>
+      </article>
+      <article class="service-guide-card">
+        <h3>AI・Copilot勉強会・研修</h3>
+        <p>企業・コミュニティ向けの勉強会や研修について相談を受け付けています。過去に開催したAI・Copilotウェビナーの内容も確認できます。</p>
+        <p class="facts">対象：企業・コミュニティ<br>内容・形式・費用：ご依頼内容を伺って確認</p>
+        <a href="/ai-training">勉強会・研修の案内を見る →</a>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -1529,6 +1599,18 @@
       <a href="#cta" class="btn btn-ghost">相談してみる</a>
     </div>
 
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="faq-inner">
+    <div class="section-label">よくある質問</div>
+    <h2>相談前に確認したいこと</h2>
+    <details><summary>AIを使ったことがなくても相談できますか？</summary><p>はい。ChatGPTなどの使い始めや、操作画面で止まっているところから相談できます。今の状況を一緒に確認します。</p></details>
+    <details><summary>無料相談は何分で、何を話せますか？</summary><p>30分のオンライン面談です。困っていることや試したいことを伺い、どの支援が合うかを一緒に整理します。継続支援の料金は各サービスページに掲載しています。</p></details>
+    <details><summary>LP制作をすべて代行してもらえますか？</summary><p>掲載中のLP制作支援は、ご本人がAIを使って作り、公開後も自分で直せるようになるためのコースです。操作はご本人に行っていただき、説明と確認をします。</p></details>
+    <details><summary>企業やコミュニティ向けの勉強会も相談できますか？</summary><p>はい。AI・Copilotの勉強会・研修のご相談を受け付けています。対象者や扱いたい内容を無料相談でお聞かせください。</p></details>
   </div>
 </section>
 
