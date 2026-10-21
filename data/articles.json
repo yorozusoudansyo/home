@@ -2,6 +2,13 @@
   "$schema": "Each article: { source: 'NOTE'|'X'|'YOUTUBE'|'SITE', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
   "articles": [
     {
+      "source": "YOUTUBE",
+      "title": "LPづくり、一緒に進めると「できた」が増える｜伴走相談",
+      "url": "https://www.youtube.com/watch?v=xVLexZyxGoM",
+      "date": "2026.10.21",
+      "thumbnail": "https://i.ytimg.com/vi/xVLexZyxGoM/hqdefault.jpg"
+    },
+    {
       "source": "NOTE",
       "title": "AIに相談して選ぶ時代へ。「BtoA」をやさしく考える",
       "url": "https://note.com/yukisa0814/n/n9a0f5b791f9a",
@@ -68,13 +75,6 @@
       "url": "https://www.youtube.com/watch?v=4J0I8St8GTE",
       "date": "2026.10.07",
       "thumbnail": "https://i.ytimg.com/vi/4J0I8St8GTE/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "指示文、何を書く？｜第1回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=ONdze8LXmE0",
-      "date": "2026.10.06",
-      "thumbnail": "https://i.ytimg.com/vi/ONdze8LXmE0/hqdefault.jpg"
     },
     {
       "source": "SITE",
