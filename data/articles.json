@@ -2,6 +2,19 @@
   "$schema": "Each article: { source: 'NOTE'|'X'|'YOUTUBE'|'SITE', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
   "articles": [
     {
+      "source": "NOTE",
+      "title": "あいだの人々　第一話「推奨度八十七パーセント」（2）",
+      "url": "https://note.com/yukisa0814/n/nd9300a6c9e4f",
+      "date": "2026.10.25"
+    },
+    {
+      "source": "YOUTUBE",
+      "title": "LPの修正、どこから手を付ける？ 画面を見ながら一緒に編集",
+      "url": "https://www.youtube.com/watch?v=gEUBaiz8e4c",
+      "date": "2026.10.25",
+      "thumbnail": "https://i.ytimg.com/vi/gEUBaiz8e4c/hqdefault.jpg"
+    },
+    {
       "source": "YOUTUBE",
       "title": "AIが作ったLP、そのまま使う？ 伴走相談で見つけた判断のポイント",
       "url": "https://www.youtube.com/watch?v=XRDfQb9IG0o",
@@ -61,20 +74,6 @@
       "url": "https://www.youtube.com/watch?v=EysHTopLOuw",
       "date": "2026.10.11",
       "thumbnail": "https://i.ytimg.com/vi/EysHTopLOuw/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "指示文の型、どう作る？｜第2回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=YGx1-_2AwMw",
-      "date": "2026.10.10",
-      "thumbnail": "https://i.ytimg.com/vi/YGx1-_2AwMw/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "長いチャット、どう引き継ぐ？｜第1回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=-vTWbTdRli8",
-      "date": "2026.10.09",
-      "thumbnail": "https://i.ytimg.com/vi/-vTWbTdRli8/hqdefault.jpg"
     },
     {
       "source": "SITE",
