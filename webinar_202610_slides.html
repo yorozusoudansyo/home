@@ -27,8 +27,8 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; width: 100%; overflow: hidden; background: #1F2937; }
   body { font-family: "Inter", "Noto Sans JP", sans-serif; color: var(--color-text-high); -webkit-font-smoothing: antialiased; }
-  .stage { position: fixed; inset: 0; display: grid; place-items: center; background: #1F2937; }
-  .deck { position: relative; width: 1280px; height: 720px; overflow: hidden; transform-origin: center center; }
+  .stage { position: fixed; inset: 0; background: #1F2937; }
+  .deck { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; overflow: hidden; transform-origin: top left; }
   .slide { position: absolute; inset: 0; padding: 52px 68px 72px; background: var(--color-background); display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 260ms ease; }
   .slide.active { opacity: 1; pointer-events: auto; }
   .nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 44px; height: 72px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; transition: background 180ms ease; z-index: 200; user-select: none; }
@@ -854,6 +854,8 @@
   const deck = document.querySelector('.deck');
   function fitDeck() {
     const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    deck.style.left = `${(window.innerWidth - 1280 * scale) / 2}px`;
+    deck.style.top = `${(window.innerHeight - 720 * scale) / 2}px`;
     deck.style.transform = `scale(${scale})`;
   }
   window.addEventListener('resize', fitDeck);
