@@ -8,34 +8,6 @@
       "date": "2026.10.25"
     },
     {
-      "source": "YOUTUBE",
-      "title": "LPの修正、どこから手を付ける？ 画面を見ながら一緒に編集",
-      "url": "https://www.youtube.com/watch?v=gEUBaiz8e4c",
-      "date": "2026.10.25",
-      "thumbnail": "https://i.ytimg.com/vi/gEUBaiz8e4c/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIが作ったLP、そのまま使う？ 伴走相談で見つけた判断のポイント",
-      "url": "https://www.youtube.com/watch?v=XRDfQb9IG0o",
-      "date": "2026.10.23",
-      "thumbnail": "https://i.ytimg.com/vi/XRDfQb9IG0o/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIで仕事が速くなったのに、評価されないのはなぜか｜第4回",
-      "url": "https://www.youtube.com/watch?v=mEp57OOcl7M",
-      "date": "2026.10.23",
-      "thumbnail": "https://i.ytimg.com/vi/mEp57OOcl7M/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "LPづくり、一緒に進めると「できた」が増える｜伴走相談",
-      "url": "https://www.youtube.com/watch?v=xVLexZyxGoM",
-      "date": "2026.10.21",
-      "thumbnail": "https://i.ytimg.com/vi/xVLexZyxGoM/hqdefault.jpg"
-    },
-    {
       "source": "NOTE",
       "title": "AIに相談して選ぶ時代へ。「BtoA」をやさしく考える",
       "url": "https://note.com/yukisa0814/n/n9a0f5b791f9a",
@@ -48,32 +20,17 @@
       "date": "2026.10.18"
     },
     {
-      "source": "YOUTUBE",
-      "title": "会社の情報、入れていい？｜第3回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=nrFfx84ew7c",
-      "date": "2026.10.14",
-      "thumbnail": "https://i.ytimg.com/vi/nrFfx84ew7c/hqdefault.jpg"
+      "source": "NOTE",
+      "title": "去年「使えない」と感じたCopilotは、もう\"別物\"になっています。",
+      "url": "https://note.com/yukisa0814/n/n655b81ad2ba3",
+      "date": "2026.06.27",
+      "thumbnail": "https://assets.st-note.com/img/1782555942-izFgOpJX5SWIkZjn04LCq1Yy.png"
     },
     {
-      "source": "YOUTUBE",
-      "title": "共通の指示、どこに置く？｜第2回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=LRG9s36powA",
-      "date": "2026.10.13",
-      "thumbnail": "https://i.ytimg.com/vi/LRG9s36powA/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "有料版、いつ払う？｜第1回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=qw0E_gPe9Bs",
-      "date": "2026.10.12",
-      "thumbnail": "https://i.ytimg.com/vi/qw0E_gPe9Bs/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIに任せる、どこまで？｜第3回ウェビナー #Shorts",
-      "url": "https://www.youtube.com/watch?v=EysHTopLOuw",
-      "date": "2026.10.11",
-      "thumbnail": "https://i.ytimg.com/vi/EysHTopLOuw/hqdefault.jpg"
+      "source": "NOTE",
+      "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(後編)",
+      "url": "https://note.com/yukisa0814/n/nbf3c9fe886d7",
+      "date": "2026.05.09"
     },
     {
       "source": "SITE",
@@ -81,6 +38,42 @@
       "url": "saisho-ni-shitte-hoshii-AI-no-tsukiaikata.html",
       "date": "2026.04.30",
       "thumbnail": "assets/card-tsukiaikata.png"
+    },
+    {
+      "source": "NOTE",
+      "title": "【完全解説】Microsoft Copilotの基礎から神活用術まで！ビジネスパーソンのための最新AIガイド",
+      "url": "https://note.com/yukisa0814/n/n5d67dd54884a",
+      "date": "2026.04.28"
+    },
+    {
+      "source": "NOTE",
+      "title": "デザインを習わなかった私が、なぜブランドイメージを定義できたのか(前編)",
+      "url": "https://note.com/yukisa0814/n/ncf59d2678127",
+      "date": "2026.04.28"
+    },
+    {
+      "source": "NOTE",
+      "title": "「画像をきれいにして」——4つのAIに同じお願いをしたら、全員が違う答えを返してきた",
+      "url": "https://note.com/yukisa0814/n/na86e3c5d042d",
+      "date": "2026.04.23"
+    },
+    {
+      "source": "NOTE",
+      "title": "究極のビジネスプロンプト大全〜階層別・部署別 120選〜 ここからダウンロード！！",
+      "url": "https://note.com/yukisa0814/n/n24c9907e18cf",
+      "date": "2026.04.14"
+    },
+    {
+      "source": "NOTE",
+      "title": "昭和の「紙の単価表」2000項目を、AIで一瞬にしてExcel化する最強の仕事術",
+      "url": "https://note.com/yukisa0814/n/n2bbf5322d43b",
+      "date": "2026.04.11"
+    },
+    {
+      "source": "NOTE",
+      "title": "3大AIのカスタム設定完全ガイド——Claude・ChatGPT・Geminiを「自分専用AI」に育てる",
+      "url": "https://note.com/yukisa0814/n/n7e4242f37059",
+      "date": "2026.04.09"
     }
   ]
 }
