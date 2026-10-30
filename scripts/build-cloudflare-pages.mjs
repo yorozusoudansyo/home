@@ -27,7 +27,7 @@ const newDisplayBase = `${siteUrl.host}/`;
 
 const allowedExtensions = new Set([
   '.css', '.gif', '.html', '.ico', '.jpeg', '.jpg', '.js', '.json',
-  '.png', '.svg', '.webp',
+  '.mp4', '.png', '.svg', '.webp',
 ]);
 
 await rm(outputRoot, { recursive: true, force: true });
