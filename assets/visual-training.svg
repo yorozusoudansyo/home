@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-labelledby="title">
+  <title id="title">画面上の資料を見ながら学ぶオンライン勉強会の模式図</title>
+  <rect width="960" height="560" fill="#f9fafb"/>
+  <g fill="#fff" stroke="#25313e" stroke-width="5" stroke-linejoin="round">
+    <rect x="96" y="72" width="768" height="340" rx="13"/>
+    <path d="M96 124h768" fill="none"/>
+  </g>
+  <g fill="#d7dde3"><circle cx="127" cy="98" r="6"/><circle cx="149" cy="98" r="6"/><circle cx="171" cy="98" r="6"/></g>
+  <g fill="none" stroke="#25313e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M165 190h245M165 225h199M165 267h246"/>
+    <rect x="165" y="317" width="142" height="46" rx="5" stroke="#d32f2f"/>
+    <path d="M506 336h260M536 302l42-51 52 28 45-81 58 29"/>
+    <circle cx="578" cy="251" r="7" fill="#d32f2f" stroke="none"/>
+    <circle cx="675" cy="198" r="7" fill="#d32f2f" stroke="none"/>
+    <circle cx="458" cy="460" r="24"/>
+    <path d="M419 519c1-33 17-51 39-51s38 18 39 51M635 460a24 24 0 1 0 0-1m-39 60c1-33 17-51 39-51s38 18 39 51"/>
+    <path d="M527 447h36m-9-9 9 9-9 9" stroke="#d32f2f"/>
+    <path d="M229 464h120m-96 22h71" stroke="#d7dde3"/>
+  </g>
+  <path d="M800 255h45m-13-13 13 13-13 13" fill="none" stroke="#d32f2f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

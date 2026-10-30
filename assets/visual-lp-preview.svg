@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-labelledby="title">
+  <title id="title">パソコンとスマートフォンで表示する編集可能なLPの模式図</title>
+  <rect width="960" height="560" fill="#f9fafb"/>
+  <g stroke="#25313e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="58" y="67" width="700" height="394" rx="13" fill="#fff"/>
+    <path d="M58 104h700" fill="none"/>
+    <circle cx="82" cy="86" r="5" fill="#d32f2f" stroke="none"/>
+    <circle cx="101" cy="86" r="5" fill="#d7dde3" stroke="none"/>
+    <circle cx="120" cy="86" r="5" fill="#d7dde3" stroke="none"/>
+    <path d="M100 166h265M100 194h218M100 238h330M100 264h286" fill="none"/>
+    <rect x="100" y="310" width="177" height="53" rx="6" fill="#d32f2f" stroke="#d32f2f"/>
+    <rect x="501" y="148" width="204" height="198" rx="7" fill="#f9fafb" stroke="#d7dde3"/>
+    <path d="M527 323c18-57 43-34 65-75 18-33 39-26 67-69" fill="none" stroke="#d32f2f"/>
+    <circle cx="659" cy="179" r="8" fill="#d32f2f" stroke="none"/>
+    <path d="M294 490h234m-181-29-12 29m144-29 12 29" fill="none"/>
+    <rect x="694" y="205" width="205" height="317" rx="25" fill="#fff"/>
+    <path d="M744 225h105" fill="none"/>
+    <path d="M719 268h113M719 292h90M719 333h148M719 351h124" fill="none"/>
+    <rect x="719" y="400" width="155" height="49" rx="6" fill="#d32f2f" stroke="#d32f2f"/>
+    <path d="M775 488h43" fill="none"/>
+  </g>
+  <g fill="#d7dde3"><rect x="100" y="165" width="265" height="5" rx="2"/><rect x="100" y="193" width="218" height="5" rx="2"/><rect x="100" y="237" width="330" height="5" rx="2"/><rect x="100" y="263" width="286" height="5" rx="2"/><rect x="719" y="267" width="113" height="4" rx="2"/><rect x="719" y="291" width="90" height="4" rx="2"/><rect x="719" y="332" width="148" height="4" rx="2"/><rect x="719" y="350" width="124" height="4" rx="2"/></g>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 280" role="img" aria-labelledby="title">
+  <title id="title">整理、初稿、修正、公開の4段階を示す図</title>
+  <rect width="960" height="280" fill="#fff"/>
+  <path d="M140 136h680" fill="none" stroke="#d7dde3" stroke-width="4" stroke-linecap="round"/>
+  <g fill="#fff" stroke="#25313e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="140" cy="136" r="62"/><circle cx="365" cy="136" r="62"/><circle cx="590" cy="136" r="62"/><circle cx="815" cy="136" r="62"/>
+    <rect x="111" y="104" width="58" height="67" rx="5"/><path d="M121 122h38m-38 13h30m-30 13h34"/>
+    <path d="M330 115h70v46h-32l-16 13v-13h-22zM343 132h42m-42 14h26"/>
+    <rect x="558" y="103" width="64" height="70" rx="5"/><path d="M570 123h39m-39 14h32m-32 14h26"/>
+    <path d="m599 150 22 21" stroke="#d32f2f"/>
+    <rect x="780" y="105" width="70" height="65" rx="5"/><path d="M780 123h70m-46 24 11 11 15-20" stroke="#d32f2f"/>
+  </g>
+  <g fill="#d32f2f"><circle cx="140" cy="214" r="5"/><circle cx="365" cy="214" r="5"/><circle cx="590" cy="214" r="5"/><circle cx="815" cy="214" r="5"/></g>
+</svg>

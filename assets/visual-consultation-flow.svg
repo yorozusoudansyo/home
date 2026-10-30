@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title">
+  <title id="title">画面のつまずきを確認し、原因を切り分け、次の操作を決める流れ</title>
+  <rect width="960" height="420" fill="#f9fafb"/>
+  <g fill="#fff" stroke="#d7dde3" stroke-width="2">
+    <rect x="42" y="72" width="250" height="270" rx="12"/>
+    <rect x="355" y="72" width="250" height="270" rx="12"/>
+    <rect x="668" y="72" width="250" height="270" rx="12"/>
+  </g>
+  <g fill="none" stroke="#24303d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="89" y="130" width="156" height="115" rx="7"/>
+    <path d="M71 255h192l-18 18H89zM108 155h73M108 179h105M108 203h68"/>
+    <circle cx="210" cy="205" r="21" stroke="#d32f2f"/>
+    <path d="M210 198v10m0 9v1" stroke="#d32f2f"/>
+    <path d="M414 138h129v48H414zM430 153h51M430 170h79"/>
+    <circle cx="478" cy="236" r="44"/>
+    <path d="m510 268 40 40M470 217l12 12-12 12" stroke="#d32f2f"/>
+    <rect x="730" y="132" width="130" height="156" rx="7"/>
+    <path d="M752 169l8 8 14-17m14 9h47M752 209l8 8 14-17m14 9h47M752 249l8 8 14-17m14 9h47"/>
+  </g>
+  <g fill="none" stroke="#d32f2f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M305 207h35m-10-10 10 10-10 10M618 207h35m-10-10 10 10-10 10"/>
+  </g>
+  <g fill="#d32f2f"><circle cx="167" cy="316" r="5"/><circle cx="480" cy="316" r="5"/><circle cx="793" cy="316" r="5"/></g>
+</svg>

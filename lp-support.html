@@ -83,6 +83,12 @@ img{max-width:100%}
   background:radial-gradient(circle,var(--color-primary-light) 0%,rgba(255,235,238,0) 70%);
   pointer-events:none}
 .hero .wrap{position:relative;z-index:1}
+.lp-hero-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.8fr);gap:var(--space-l);align-items:center;margin-bottom:var(--space-l)}
+.lp-hero-intro .sub{margin-bottom:0}
+.lp-hero-art,.lp-process-art{margin:0}
+.lp-hero-art img,.lp-process-art img{display:block;width:100%;height:auto;background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-md)}
+.lp-hero-art figcaption,.lp-process-art figcaption{font-size:.75rem;line-height:1.6;color:var(--color-text-medium);margin-top:var(--space-xs)}
+.lp-process-art{max-width:900px;margin:var(--space-l) 0}
 .kicker{display:inline-flex;align-items:center;gap:var(--space-xs);
   font-size:.75rem;font-weight:700;letter-spacing:.05em;
   color:var(--color-primary-base);background:var(--color-primary-light);
@@ -310,6 +316,7 @@ footer a{color:var(--color-text-medium);text-decoration:none}
 footer a:hover{color:var(--color-primary-base)}
 
 @media (max-width:640px){
+  .lp-hero-intro{grid-template-columns:1fr;gap:var(--space-m)}
   .wrap{padding:0 var(--space-s)}
   h1{font-size:1.625rem}
   h2{font-size:1.3125rem}
@@ -340,9 +347,11 @@ footer a:hover{color:var(--color-primary-base)}
 <main>
 <section class="hero">
   <div class="wrap">
+    <div class="lp-hero-intro"><div>
     <span class="kicker">LP制作支援｜AIで、自分で作る</span>
     <h1>自分のLPを、<br><span class="em">AIと一緒に、自分で</span>作る。</h1>
     <p class="sub">外注せず、公開したあとの修正も自分でできる。<br>AIの使い方を隣で教えながら、90分×3〜4回で公開まで伴走します。</p>
+    </div><figure class="lp-hero-art"><img src="assets/visual-lp-preview.svg" width="960" height="560" alt="パソコンとスマートフォンで見られるLPの模式図"><figcaption>公開後に自分で更新できるLPを目指します。</figcaption></figure></div>
 
     <div class="statbar">
       <div><span class="n">90<em>分</em>×3〜4<em>回</em></span><span class="l">オンラインで一緒に</span></div>
@@ -457,6 +466,7 @@ footer a:hover{color:var(--color-primary-base)}
   <div class="wrap">
     <div class="sec-label">進め方</div>
     <h2>週1回・90分。<br>回と回の間に、素材をそろえていただきます。</h2>
+    <figure class="lp-process-art"><img src="assets/visual-lp-steps.svg" width="960" height="280" alt="内容整理、初稿制作、確認と接続、公開と更新の4段階を示す図" loading="lazy"><figcaption>本格コースの4回の進め方。お試しコースは3回で進めます。</figcaption></figure>
     <div class="tabs" role="tablist" aria-label="コースの選択">
       <button type="button" role="tab" aria-selected="true" aria-controls="prog-full" id="tab-full">本格コース（4回）</button>
       <button type="button" role="tab" aria-selected="false" aria-controls="prog-trial" id="tab-trial">お試しコース（3回）</button>
