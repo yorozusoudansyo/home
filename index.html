@@ -245,9 +245,9 @@
   /* Hero visual: brand logo lockup */
   .hero-visual {
     position: absolute;
-    right: 4%; top: 50%;
+    right: 5%; top: 50%;
     transform: translateY(-50%);
-    width: min(42vw, 520px);
+    width: min(36vw, 460px);
     aspect-ratio: 1;
     pointer-events: none;
     z-index: 0;
@@ -264,6 +264,11 @@
     display: block;
   }
   .hero-visual .hero-static { transition: opacity .2s ease; }
+  .hero-visual .hero-static,
+  .hero-visual .hero-motion {
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at center, #000 55%, transparent 85%);
+    mask-image: radial-gradient(ellipse 70% 70% at center, #000 55%, transparent 85%);
+  }
   .hero-visual .hero-static img {
     width: 100%;
     height: 100%;
@@ -274,8 +279,9 @@
   .hero-visual.is-playing .hero-motion { opacity: 1; }
   .hero-visual.is-playing .hero-static { opacity: 0; }
   .hero-visual canvas { width: 100% !important; height: 100% !important; display: block; }
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
     .hero-visual { position: static; transform: none; width: min(70vw, 360px); aspect-ratio: 2752 / 1536; margin: 0 auto 32px; }
+    .hero-visual .hero-static { -webkit-mask-image: none; mask-image: none; }
     .hero-visual .hero-motion { display: none; }
     .hero .scroll-indicator { display: none; }
   }
@@ -1193,7 +1199,7 @@
   <div class="hero-bg-overlay"></div>
   <div class="hero-visual" id="hero-visual" aria-hidden="true">
     <picture class="hero-static">
-      <source media="(max-width: 900px)" srcset="assets/logo.png">
+      <source media="(max-width: 1100px)" srcset="assets/logo.png">
       <img src="assets/logo-3d-morph-poster.webp" alt="" width="720" height="720">
     </picture>
     <video class="hero-motion" id="hero-motion" src="assets/logo-3d-morph.mp4" poster="assets/logo-3d-morph-poster.webp" width="720" height="720" muted playsinline preload="none" aria-hidden="true"></video>
@@ -1902,7 +1908,7 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(e
 const heroVisual = document.getElementById('hero-visual');
 const heroSection = document.querySelector('.hero');
 const heroMotion = document.getElementById('hero-motion');
-const heroMotionAllowed = window.matchMedia('(min-width: 901px) and (prefers-reduced-motion: no-preference)');
+const heroMotionAllowed = window.matchMedia('(min-width: 1101px) and (prefers-reduced-motion: no-preference)');
 if (heroVisual && heroMotion && heroMotionAllowed.matches) {
   heroMotion.defaultMuted = true;
   heroMotion.muted = true;
