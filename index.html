@@ -281,7 +281,7 @@
   .hero-visual canvas { width: 100% !important; height: 100% !important; display: block; }
   @media (max-width: 1100px) {
     .hero-visual { position: static; transform: none; width: min(70vw, 360px); aspect-ratio: 2752 / 1536; margin: 0 auto 32px; }
-    .hero-visual .hero-static { -webkit-mask-image: none; mask-image: none; }
+    .hero-visual .hero-static { position: relative; inset: auto; -webkit-mask-image: none; mask-image: none; }
     .hero-visual .hero-motion { display: none; }
     .hero .scroll-indicator { display: none; }
   }
