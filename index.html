@@ -249,7 +249,7 @@
     transform: translateY(-50%);
     width: min(36vw, 460px);
     aspect-ratio: 1;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 0;
     display: flex;
     align-items: center;
@@ -278,15 +278,35 @@
   .hero-visual .hero-motion { object-fit: contain; opacity: 0; transition: opacity .2s ease; }
   .hero-visual.is-playing .hero-motion { opacity: 1; }
   .hero-visual.is-playing .hero-static { opacity: 0; }
+  .hero-replay {
+    position: absolute; left: 50%; bottom: 8px; z-index: 3;
+    transform: translateX(-50%);
+    padding: 8px 14px;
+    border: 1px solid var(--color-border); border-radius: 999px;
+    background: rgba(255,255,255,.96); color: var(--color-text-high);
+    font: 600 13px var(--font-sans); white-space: nowrap; cursor: pointer;
+  }
+  .hero-replay:hover,.hero-replay:focus-visible { border-color: var(--color-primary-base); color: var(--color-primary-base); }
   .hero-visual canvas { width: 100% !important; height: 100% !important; display: block; }
-  @media (max-width: 1100px) {
-    .hero-visual { position: static; transform: none; width: min(70vw, 360px); aspect-ratio: 2752 / 1536; margin: 0 auto 32px; }
+  @media (min-width: 761px) and (max-width: 1100px) {
+    .hero { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(250px, 1fr); gap: 24px; align-items: center; }
+    .hero-content { grid-column: 1; grid-row: 1; }
+    .hero-visual { position: relative; right: auto; top: auto; transform: none; grid-column: 2; grid-row: 1; width: 100%; max-width: 360px; aspect-ratio: 1; margin: 0; }
+    .hero .scroll-indicator { display: none; }
+  }
+  @media (max-width: 760px) {
+    .hero-visual { position: relative; right: auto; top: auto; transform: none; width: min(70vw, 360px); aspect-ratio: 2752 / 1536; margin: 0 auto 64px; }
     .hero-visual .hero-static { position: relative; inset: auto; -webkit-mask-image: none; mask-image: none; }
     .hero-visual .hero-motion { display: none; }
+    .hero-visual.is-playing { aspect-ratio: 1; }
+    .hero-visual.is-playing .hero-motion { display: block; }
+    .hero-replay { bottom: -43px; }
+    .hero-visual.is-playing .hero-replay { bottom: 8px; }
     .hero .scroll-indicator { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     .hero-visual .hero-motion { display: none; }
+    .hero-visual.is-playing .hero-motion { display: block; }
     .hero-visual .hero-static { transition: none; }
   }
   .hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; width: 100%; }
@@ -1197,12 +1217,13 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg-overlay"></div>
-  <div class="hero-visual" id="hero-visual" aria-hidden="true">
+  <div class="hero-visual" id="hero-visual">
     <picture class="hero-static">
-      <source media="(max-width: 1100px)" srcset="assets/logo.png">
+      <source media="(max-width: 760px)" srcset="assets/logo.png">
       <img src="assets/logo-3d-morph-poster.webp" alt="" width="720" height="720">
     </picture>
     <video class="hero-motion" id="hero-motion" src="assets/logo-3d-morph.mp4" poster="assets/logo-3d-morph-poster.webp" width="720" height="720" muted playsinline preload="none" aria-hidden="true"></video>
+    <button class="hero-replay" id="hero-replay" type="button">▶ ロゴ動画を見る</button>
   </div>
 
   <div class="hero-content">
@@ -1908,29 +1929,53 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(e
 const heroVisual = document.getElementById('hero-visual');
 const heroSection = document.querySelector('.hero');
 const heroMotion = document.getElementById('hero-motion');
-const heroMotionAllowed = window.matchMedia('(min-width: 1101px) and (prefers-reduced-motion: no-preference)');
-if (heroVisual && heroMotion && heroMotionAllowed.matches) {
+const heroReplay = document.getElementById('hero-replay');
+const heroMotionAllowed = window.matchMedia('(min-width: 761px) and (prefers-reduced-motion: no-preference)');
+const heroParallaxAllowed = window.matchMedia('(min-width: 1101px) and (prefers-reduced-motion: no-preference)');
+function showHeroStill(label) {
+  heroVisual.classList.remove('is-playing');
+  heroReplay.textContent = label;
+}
+function playHeroMotion() {
   heroMotion.defaultMuted = true;
   heroMotion.muted = true;
   heroMotion.playbackRate = 2.5;
-  heroMotion.addEventListener('playing', () => heroVisual.classList.add('is-playing'), { once: true });
-  heroMotion.addEventListener('ended', () => heroVisual.classList.remove('is-playing'), { once: true });
-  heroMotion.addEventListener('error', () => heroVisual.classList.remove('is-playing'));
-  heroMotion.play().catch(() => heroVisual.classList.remove('is-playing'));
+  if (heroMotion.readyState > 0) heroMotion.currentTime = 0;
+  heroMotion.play().catch(() => showHeroStill('▶ ロゴ動画を見る'));
+}
+if (heroVisual && heroMotion && heroReplay) {
+  heroMotion.addEventListener('playing', () => {
+    heroVisual.classList.add('is-playing');
+    heroReplay.textContent = '■ 停止';
+  });
+  heroMotion.addEventListener('ended', () => showHeroStill('▶ もう一度見る'));
+  heroMotion.addEventListener('error', () => showHeroStill('▶ ロゴ動画を見る'));
+  heroReplay.addEventListener('click', () => {
+    if (!heroMotion.paused && !heroMotion.ended) {
+      heroMotion.pause();
+      showHeroStill('▶ もう一度見る');
+    } else {
+      playHeroMotion();
+    }
+  });
+  if (heroMotionAllowed.matches) playHeroMotion();
 }
 heroMotionAllowed.addEventListener('change', () => {
   if (!heroMotionAllowed.matches && heroMotion && heroVisual) {
     heroMotion.pause();
-    heroVisual.classList.remove('is-playing');
+    showHeroStill('▶ もう一度見る');
     heroVisual.style.transform = '';
   }
+});
+heroParallaxAllowed.addEventListener('change', () => {
+  if (!heroParallaxAllowed.matches && heroVisual) heroVisual.style.transform = '';
 });
 let ticking = false;
 window.addEventListener('scroll', () => {
   if (!ticking) {
     requestAnimationFrame(() => {
       const y = window.scrollY;
-      if (heroVisual && heroMotionAllowed.matches && y < window.innerHeight * 1.2) {
+      if (heroVisual && heroParallaxAllowed.matches && y < window.innerHeight * 1.2) {
         heroVisual.style.transform = `translateY(calc(-50% + ${y * 0.2}px)) rotate(${y * 0.02}deg)`;
       }
       ticking = false;
