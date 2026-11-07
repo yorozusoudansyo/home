@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AI初心者の無料オンライン相談・仕事へのAI導入支援｜AI・ITよろず相談所</title>
-<meta name="description" content="AI初心者、個人事業主、小規模事業者の仕事へのAI活用を清水幸久が伴走支援。30分のオンライン無料相談から、個別相談、LP制作支援、AI勉強会・研修まで。料金と相談方法を掲載しています。" />
+<title>AI初心者の無料オンライン相談・中小企業向け生成AI研修｜AI・ITよろず相談所</title>
+<meta name="description" content="AI初心者、個人事業主、小規模事業者の仕事へのAI活用を清水幸久が伴走支援。30分のオンライン無料相談から、個別相談、LP制作支援、中小企業向けの生成AI研修まで。料金と相談方法を掲載しています。" />
 <link rel="canonical" href="https://yorozusoudansyo.pages.dev/" />
 
 <!-- Favicon -->
@@ -17,7 +17,7 @@
 
 <!-- Open Graph / Twitter -->
 <meta property="og:title" content="AI・ITよろず相談所" />
-<meta property="og:description" content="AI・ITの「最初の一歩」に、隣で寄り添う。" />
+<meta property="og:description" content="AI・ITの「最初の一歩」に、隣で寄り添う。個人の方の相談から、中小企業向けの生成AI研修まで。" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yorozusoudansyo.pages.dev/" />
 <meta property="og:image" content="https://yorozusoudansyo.pages.dev/assets/logo.png" />
@@ -1190,6 +1190,31 @@
     background: var(--color-primary-light);
   }
   .social-icons svg { width: 14px; height: 14px; }
+
+  /* --- BUSINESS (中小企業向け) ------------------------------ */
+  .business { scroll-margin-top: 80px; padding: 80px 32px; background: var(--color-primary-light); color: var(--color-text-high); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); }
+  .business-inner { max-width: 1200px; margin: 0 auto; }
+  .business .section-label { color: var(--color-text-medium); }
+  .business .section-label::before { background: var(--color-primary-base); }
+  .business h2 { font-size: clamp(28px, 3.6vw, 44px); line-height: 1.4; margin: 0 0 16px; color: var(--color-text-high); }
+  .business-lead { color: var(--color-text-medium); max-width: 72ch; line-height: 1.85; margin: 0 0 32px; }
+  .business-points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0 0 32px; }
+  .business-point { background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 20px 22px; }
+  .business-point h3 { font-size: 17px; line-height: 1.5; margin: 0 0 8px; color: var(--color-text-high); }
+  .business-point p { font-size: 14px; line-height: 1.8; color: var(--color-text-medium); margin: 0; }
+  .business-menu { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .business-menu-card { background: #fff; border: 1px solid var(--color-primary-base); color: var(--color-text-high); border-radius: var(--radius-md); padding: 22px; display: flex; flex-direction: column; }
+  .business-menu-card .tag { align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--color-primary-base); border: 1px solid var(--color-primary-base); border-radius: 999px; padding: 2px 10px; margin-bottom: 10px; }
+  .business-menu-card h4 { font-size: 17px; line-height: 1.5; margin: 0 0 6px; }
+  .business-menu-card .meta { font-size: 13px; color: var(--color-text-medium); margin: 0 0 14px; }
+  .business-menu-card .price { margin-top: auto; font-size: 24px; font-weight: 700; }
+  .business-menu-card .price small { font-size: 13px; font-weight: 400; color: var(--color-text-medium); }
+  .business-notes { color: var(--color-text-medium); font-size: 14px; line-height: 1.9; margin: 22px 0 28px; }
+  .business-notes strong { color: var(--color-text-high); }
+  .business-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+  .business .btn-ghost { background: #fff; }
+  @media (max-width: 960px) { .business-menu { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 700px) { .business { padding: 56px 20px; } .business-points, .business-menu { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -1203,6 +1228,7 @@
   <div class="nav-links">
     <a href="#problem">悩み</a>
     <a href="#services">サービス</a>
+    <a href="#business">法人研修</a>
     <a href="#features">特徴</a>
     <a href="#process">流れ</a>
     <a href="#seminars">セミナー</a>
@@ -1238,18 +1264,18 @@
     <p class="hero-sub reveal">
       「画面が違う」「プロンプトが通じない」「エラーが怖い」——<br/>
       その小さなつまずきを、25年のAE経験で<em>一緒に</em>ほどいていきます。<br/>
-      AIが初めての方、仕事に取り入れたい個人事業主・小規模事業者の方へ。
+      AIが初めての方、仕事に取り入れたい個人事業主の方、<br/>社内でAI活用を進めたい中小企業の方へ。
     </p>
     <div class="hero-ctas reveal">
       <a href="https://meetbook-booking.web.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
         <span>まずは無料で相談</span>
         <span class="arrow">→</span>
       </a>
-      <a href="#features" class="btn btn-ghost">
-        <span>できること</span>
+      <a href="#business" class="btn btn-ghost">
+        <span>企業向けの研修を見る</span>
       </a>
     </div>
-    <p class="hero-facts reveal">30分のオンライン無料相談から。個人・個人事業主・小規模事業者の方へ。</p>
+    <p class="hero-facts reveal">30分のオンライン無料相談から。個人・個人事業主の方から、中小企業の社内研修まで。</p>
   </div>
 
   <div class="scroll-indicator" id="scroll-ind">
@@ -1281,11 +1307,36 @@
       </article>
       <article class="service-guide-card">
         <img src="assets/visual-training.svg" width="960" height="560" alt="オンライン勉強会でAIを学ぶ様子の模式図" loading="lazy">
-        <h3>AI・Copilot勉強会・研修</h3>
-        <p>企業・コミュニティ向けの勉強会や研修について相談を受け付けています。過去に開催したAI・Copilotウェビナーの内容も確認できます。</p>
-        <p class="facts">対象：企業・コミュニティ<br>内容・形式・費用：ご依頼内容を伺って確認</p>
-        <a href="/ai-training">勉強会・研修の案内を見る →</a>
+        <h3>中小企業向け 生成AI研修</h3>
+        <p>社内でAIを使える人を増やしたい企業さまへ。2時間の入門研修から、自社の業務で演習するハンズオン、研修後の定着サポートまで対応します。</p>
+        <p class="facts">対象：中小企業（業種不問）<br>形式：オンライン・対面<br>料金：80,000円（税別）から。先着2社のモニター価格あり</p>
+        <a href="/ai-training">研修のメニューと料金を見る →</a>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- BUSINESS -->
+<section class="business" id="business">
+  <div class="business-inner">
+    <div class="section-label">FOR BUSINESS — 中小企業の方へ</div>
+    <h2>社内のAI活用も、<br/>研修からお任せください。</h2>
+    <p class="business-lead">AI・ITよろず相談所は、個人の方の相談だけでなく、中小企業向けの生成AI研修も行っています。業種は問いません。ツールの機能紹介で終わらせず、社員の方が自分の仕事でAIを使えるようになるところまで支援します。</p>
+    <div class="business-points">
+      <div class="business-point"><h3>導入したのに、使われていない</h3><p>入れたAIを試したきりの社員が多い。使い方の型を研修で揃えます。</p></div>
+      <div class="business-point"><h3>何を入力していいか分からない</h3><p>情報漏えいを防ぐ線引きを、最初の研修で明確にします。</p></div>
+      <div class="business-point"><h3>社内に教えられる人がいない</h3><p>貴社の実際の業務を題材に、外部講師として教え、研修後も伴走します。</p></div>
+    </div>
+    <div class="business-menu">
+      <div class="business-menu-card"><span class="tag">入門</span><h4>生成AI入門研修</h4><p class="meta">2時間 ／ 30名程度まで</p><p class="price">80,000円<small>（税別）</small></p></div>
+      <div class="business-menu-card"><span class="tag">主力</span><h4>業務活用ハンズオン</h4><p class="meta">3時間 ／ 15名程度まで</p><p class="price">150,000円<small>（税別）</small></p></div>
+      <div class="business-menu-card"><span class="tag">1日</span><h4>1日実践研修</h4><p class="meta">6時間 ／ 15名程度まで</p><p class="price">250,000円<small>（税別）</small></p></div>
+      <div class="business-menu-card"><span class="tag">継続</span><h4>研修後の定着サポート</h4><p class="meta">月額 ／ 質問対応＋月1回の振り返り</p><p class="price">55,000円<small>（税別）／月</small></p></div>
+    </div>
+    <p class="business-notes"><strong>オンライン・対面のどちらにも対応します（料金は同じ）。</strong>対面の場合は交通費を、宿泊が必要な場合は宿泊費を、実費で別途いただきます。<br/><strong>先着2社のモニター企業さまは通常料金の半額</strong>でお受けします（事例掲載とアンケートへのご協力が条件です）。</p>
+    <div class="business-ctas">
+      <a href="/ai-training" class="btn btn-primary"><span>研修の詳細と料金を見る</span><span class="arrow">→</span></a>
+      <a href="https://meetbook-booking.web.app/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost"><span>研修について無料で相談する</span></a>
     </div>
   </div>
 </section>
@@ -1525,7 +1576,7 @@
   </div>
 
   <p class="seminars-note reveal">
-    企業・コミュニティ向けのAI/Copilot勉強会・研修のご依頼も承っています。まずは<a href="#cta">無料相談</a>から。
+    中小企業向けの生成AI研修も承っています。メニューと料金は<a href="/ai-training">研修のご案内</a>をご覧ください。
   </p>
   </div>
 </section>
@@ -1541,7 +1592,7 @@
 
   <div class="works-timeline reveal-stagger">
     <div class="step">
-      <div class="step-num">2024.09</div>
+      <div class="step-num">2025.09</div>
       <h4>25年のAEキャリアを経て独立</h4>
     </div>
     <div class="step">
@@ -1555,6 +1606,10 @@
     <div class="step">
       <div class="step-num">2026.07</div>
       <h4>Copilot活用ウェビナー 全3回開催・アーカイブをYouTubeで公開</h4>
+    </div>
+    <div class="step">
+      <div class="step-num">2026.11</div>
+      <h4>中小企業向け 生成AI研修の提供を開始</h4>
     </div>
   </div>
 
@@ -1652,6 +1707,11 @@
     </div>
 
   </div>
+
+  <p class="seminars-note reveal">
+    ※ 上記は個人・個人事業主の方向けの料金です。中小企業向けの研修は<a href="/ai-training">研修のご案内</a>に料金を掲載しています。
+  </p>
+  </div>
 </section>
 
 <!-- FAQ -->
@@ -1662,7 +1722,7 @@
     <details><summary>AIを使ったことがなくても相談できますか？</summary><p>はい。ChatGPTなどの使い始めや、操作画面で止まっているところから相談できます。今の状況を一緒に確認します。</p></details>
     <details><summary>無料相談は何分で、何を話せますか？</summary><p>30分のオンライン面談です。困っていることや試したいことを伺い、どの支援が合うかを一緒に整理します。継続支援の料金は各サービスページに掲載しています。</p></details>
     <details><summary>LP制作をすべて代行してもらえますか？</summary><p>掲載中のLP制作支援は、ご本人がAIを使って作り、公開後も自分で直せるようになるためのコースです。操作はご本人に行っていただき、説明と確認をします。</p></details>
-    <details><summary>企業やコミュニティ向けの勉強会も相談できますか？</summary><p>はい。AI・Copilotの勉強会・研修のご相談を受け付けています。対象者や扱いたい内容を無料相談でお聞かせください。</p></details>
+    <details><summary>会社の研修として依頼できますか？</summary><p>はい。中小企業向けの生成AI研修を、オンライン・対面のどちらでもお受けしています。メニューと料金は<a href="/ai-training">研修のご案内</a>に掲載しています。</p></details>
   </div>
 </section>
 
@@ -1678,7 +1738,7 @@
       </p>
       <div class="story-meta">
         代表 / Application Engineer 経歴 25年<br/>
-        CAD導入支援 → AI活用支援へ<br/>
+        CAD導入支援 → AI活用支援・企業研修へ<br/>
         AIウェビナー主催（2026年〜）
       </div>
     </div>
@@ -1699,7 +1759,7 @@
       <div class="profile-block span-12">
         <div class="profile-idx">01 — CAREER</div>
         <h4>キャリアの流れ</h4>
-        <p>住宅総合メーカーでアルミサッシの設計からキャリアをスタートし、その後はCADメーカーに転職。アプリケーションエンジニア（AE）として約25年間勤務し、昨年9月に退職。現在は独立・起業の道を歩んでいます。</p>
+        <p>住宅総合メーカーでアルミサッシの設計からキャリアをスタートし、その後はCADメーカーに転職。アプリケーションエンジニア（AE）として約25年間勤務し、2025年9月に退職。現在は独立・起業の道を歩んでいます。</p>
       </div>
 
       <div class="profile-block span-7">
@@ -1732,6 +1792,7 @@
           <span class="skill-tag">ビジネスパーソン向けDX支援</span>
           <span class="skill-tag">ワークフロー設計</span>
           <span class="skill-tag">導入・定着支援</span>
+          <span class="skill-tag">企業向けAI研修</span>
           <span class="skill-tag">Copilot</span>
           <span class="skill-tag">Microsoft 365</span>
         </div>
@@ -1800,7 +1861,8 @@
     無料から。
   </h2>
   <p class="reveal">
-    まずはひと言、つまずいている状況を送ってみてください。<br/>
+    まずはひと言、つまずいている状況や、社内で進めたいことを送ってみてください。<br/>
+    個人の方も、企業の研修担当の方も、30分の無料相談から始められます。<br/>
     24時間以内に返信します。
   </p>
   <div class="hero-ctas reveal">
