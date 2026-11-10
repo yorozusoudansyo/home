@@ -29,3 +29,8 @@ secrets.json
 
 # Cloudflare Pages build output
 /dist/
+
+# Local distribution imports and database state. Never publish files or answers here.
+/.local/
+/.wrangler/
+/node_modules/
