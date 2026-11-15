@@ -1215,9 +1215,16 @@
   .business .btn-ghost { background: #fff; }
   @media (max-width: 960px) { .business-menu { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 700px) { .business { padding: 56px 20px; } .business-points, .business-menu { grid-template-columns: 1fr; } }
+  .notice-webinar-202611 { background: #1F2937; color: #FFFFFF; text-align: center; font-size: 14px; line-height: 1.5; padding: 8px 16px; }
+  .notice-webinar-202611 a { color: #FFFFFF; text-decoration: underline; display: inline-block; }
+  body:has(.notice-webinar-202611) nav.top { position: sticky; }
 </style>
 </head>
 <body>
+
+<!-- webinar-202611 notice: START（11/30以降に削除） -->
+<div class="notice-webinar-202611">11/29（日）21:00〜 無料Webセミナー「AIに頼んだら、それっぽいページができた。で、それ使えますか？」受付中 <a href="https://yorozusoudansyo.pages.dev/webinar_lp_202611.html">詳細・お申し込み →</a></div>
+<!-- webinar-202611 notice: END -->
 
 <!-- NAV -->
 <nav class="top" id="nav">
@@ -1541,6 +1548,14 @@
   </p>
 
   <div class="seminars-grid reveal-stagger">
+
+    <div class="seminar-card">
+      <span class="seminar-badge">受付中（2026年11月29日（日）21:00〜21:45、Google Meet）</span>
+      <h4>AIに頼んだら、それっぽいページができた。で、それ使えますか？</h4>
+      <p class="seminar-sub">自分のビジネス・副業のページを、申込みを受け付けられるところまで作る45分／無料Webセミナー</p>
+      <p class="seminar-detail"></p>
+      <a href="https://yorozusoudansyo.pages.dev/webinar_lp_202611.html" class="btn btn-ghost">詳細・お申し込み</a>
+    </div>
 
     <div class="seminar-card">
       <span class="seminar-badge done">開催終了</span>
