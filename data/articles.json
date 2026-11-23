@@ -2,6 +2,12 @@
   "$schema": "Each article: { source: 'NOTE'|'X'|'YOUTUBE'|'SITE', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
   "articles": [
     {
+      "source": "NOTE",
+      "title": "「対応可」の裏で、協力工場は限界を迎えていた｜あいだの人々 第二話「決めた顔」（3）",
+      "url": "https://note.com/yukisa0814/n/n44401d694fd2",
+      "date": "2026.11.22"
+    },
+    {
       "source": "YOUTUBE",
       "title": "AIに書かせる前に聞く、一つの質問 #Shorts",
       "url": "https://www.youtube.com/watch?v=Ga_LOQUp8qM",
@@ -68,13 +74,6 @@
       "url": "https://www.youtube.com/watch?v=HrFU1cCFFKI",
       "date": "2026.11.08",
       "thumbnail": "https://i.ytimg.com/vi/HrFU1cCFFKI/hqdefault.jpg"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "AIの説明で操作が抜けたら、場面を絞って確認する",
-      "url": "https://www.youtube.com/watch?v=3ZOlTuD6j8k",
-      "date": "2026.11.07",
-      "thumbnail": "https://i.ytimg.com/vi/3ZOlTuD6j8k/hqdefault.jpg"
     },
     {
       "source": "SITE",
