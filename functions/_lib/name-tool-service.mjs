@@ -63,7 +63,19 @@ async function statistics(request,env){
   const total=await env.NAME_TOOL_DB.prepare('SELECT COUNT(*) AS downloads,COUNT(DISTINCT s.email) AS emails FROM name_tool_download_events d JOIN name_tool_surveys s ON s.id = d.response_id').first();
   const grouped=await env.NAME_TOOL_DB.prepare('SELECT d.file_id,d.file_name,COUNT(*) AS downloads,COUNT(DISTINCT s.email) AS emails,MAX(d.downloaded_at) AS latest FROM name_tool_download_events d JOIN name_tool_surveys s ON s.id = d.response_id GROUP BY d.file_id,d.file_name ORDER BY downloads DESC,d.file_id').all();
   const known=new Set((grouped.results||[]).map(r=>r.file_id));
-  return json({answers:Number(surveys.answers),answerEmails:Number(surveys.emails),downloads:Number(total.downloads),downloadEmails:Number(total.emails),files:[...(grouped.results||[]),...release.files.filter(f=>!known.has(f.id)).map(f=>({file_id:f.id,file_name:f.name,downloads:0,emails:0,latest:null}))],measuredAt:new Date().toISOString(),definition:'ファイルの配信開始回数。PCへの保存完了を保証しません。重複除外はメールアドレス単位で、本人確認はしていません。'});
+  const today=new Date(Date.now()+9*3600000).toISOString().slice(0,10);
+  const views=await env.NAME_TOOL_DB.prepare('SELECT COUNT(*) AS total,COALESCE(SUM(CASE WHEN day_jst = ? THEN 1 ELSE 0 END),0) AS today,MIN(viewed_at) AS first,MAX(viewed_at) AS latest FROM name_tool_page_views WHERE is_test = 0').bind(today).first();
+  const daily=await env.NAME_TOOL_DB.prepare('SELECT day_jst,COUNT(*) AS views FROM name_tool_page_views WHERE is_test = 0 GROUP BY day_jst ORDER BY day_jst DESC LIMIT 30').all();
+  const tests=await env.NAME_TOOL_DB.prepare('SELECT COUNT(*) AS total FROM name_tool_page_views WHERE is_test = 1').first();
+  return json({pageViews:{total:Number(views.total),today:Number(views.today),first:views.first,latest:views.latest,daily:daily.results||[],tests:Number(tests.total),definition:'2026年11月25日からの配布ページ表示回数。再読込は別回、同じ表示の再送は除外。実人数ではありません。テスト表示と判別できるボットは除外。'},answers:Number(surveys.answers),answerEmails:Number(surveys.emails),downloads:Number(total.downloads),downloadEmails:Number(total.emails),files:[...(grouped.results||[]),...release.files.filter(f=>!known.has(f.id)).map(f=>({file_id:f.id,file_name:f.name,downloads:0,emails:0,latest:null}))],measuredAt:new Date().toISOString(),definition:'ファイルの配信開始回数。PCへの保存完了を保証しません。重複除外はメールアドレス単位で、本人確認はしていません。'});
+}
+async function recordView(request,db){
+  if(/bot|crawler|spider|preview|facebookexternalhit/i.test(request.headers.get('user-agent')||'')||/prefetch/i.test(request.headers.get('purpose')||request.headers.get('sec-purpose')||''))return json({recorded:false});
+  const data=await readJson(request);
+  if(!data||typeof data.id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(data.id)||typeof data.test!=='boolean')return json({error:'計測形式を確認してください。'},400);
+  const now=new Date();
+  await db.prepare('INSERT OR IGNORE INTO name_tool_page_views (id,viewed_at,day_jst,is_test) VALUES (?,?,?,?)').bind(data.id,now.toISOString(),new Date(now.getTime()+9*3600000).toISOString().slice(0,10),data.test?1:0).run();
+  return json({recorded:true,test:data.test});
 }
 async function exportCsv(request,env) {
   const denied=await adminDenied(request,env);if(denied)return denied;
@@ -81,6 +93,7 @@ export async function handleNameTool(request,env) {
   if(request.headers.get('sec-fetch-site')==='cross-site')return json({error:'このページから操作してください。'},403);
   if(!env.NAME_TOOL_DB)return json({error:'ダウンロードの準備中です。しばらくしてからお試しください。'},503);
   try {
+    if(route==='view'&&request.method==='POST')return await recordView(request,env.NAME_TOOL_DB);
     if(route==='status'||route==='survey'){
       const ready=await env.NAME_TOOL_DB.prepare('SELECT COUNT(*) AS count FROM name_tool_release_chunks WHERE release_key = ?').bind(release.key).first();
       if(Number(ready?.count)!==release.files.reduce((sum,file)=>sum+file.chunks,0))return json({error:'配布ファイルの準備中です。時間を置いてお試しください。'},503);

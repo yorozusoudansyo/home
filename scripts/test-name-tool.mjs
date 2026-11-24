@@ -7,6 +7,7 @@ import {release} from '../functions/_lib/name-tool-release.mjs';
 const sqlite=new DatabaseSync(':memory:');
 sqlite.exec(await readFile('migrations/name-tool/0001_surveys.sql','utf8'));
 sqlite.exec(await readFile('migrations/name-tool/0002_download_counts.sql','utf8'));
+sqlite.exec(await readFile('migrations/name-tool/0003_page_views.sql','utf8'));
 sqlite.exec(await readFile('.local/name-tool-release.sql','utf8'));
 const db={prepare(sql){const statement=sqlite.prepare(sql);let values=[];return {bind(...args){values=args;return this;},async first(){return statement.get(...values)||null;},async all(){return {results:statement.all(...values)};},async run(){const result=statement.run(...values);return {success:true,meta:{changes:result.changes}};}};}};
 const env={NAME_TOOL_DB:db,NAME_TOOL_ADMIN_TOKEN:'test-only-'+randomUUID()},base='https://distribution-test.invalid/api/name-tool/';
@@ -14,6 +15,16 @@ const request=(route,{body,cookie,authorization,origin=new URL(base).origin,meth
 const answer={id:randomUUID(),email:'sample@example.invalid',purpose:'Excelの資料作成',challenges:['まず試してみたい'],note:'=SUM(1,2)',marketing:false,privacy:true,website:''};
 const checks=[];
 async function status(label,route,options,expected,targetEnv=env){const response=await handleNameTool(request(route,options),targetEnv);assert.equal(response.status,expected,label);checks.push(label);return response;}
+const viewId=randomUUID();
+await status('閲覧の別サイト送信を拒否','view',{body:{id:viewId,test:false},origin:'https://other.invalid'},403);
+await status('不正な閲覧IDを拒否','view',{body:{id:'invalid',test:false}},400);
+await status('閲覧を記録','view',{body:{id:viewId,test:false}},200);
+await status('同じ表示を再送','view',{body:{id:viewId,test:false}},200);
+await status('テスト閲覧を分けて記録','view',{body:{id:randomUUID(),test:true}},200);
+const viewStats=await(await handleNameTool(request('admin/stats',{authorization:env.NAME_TOOL_ADMIN_TOKEN}),env)).json();
+assert.equal(viewStats.pageViews.total,1);assert.equal(viewStats.pageViews.today,1);assert.equal(viewStats.pageViews.tests,1);assert.equal(viewStats.pageViews.daily.length,1);checks.push('再送の二重計上とテストの混入を防止');
+const botRequest=new Request(base+'view',{method:'POST',headers:{'Content-Type':'application/json',Origin:new URL(base).origin,'User-Agent':'Googlebot'},body:JSON.stringify({id:randomUUID(),test:false})});
+assert.equal((await(await handleNameTool(botRequest,env)).json()).recorded,false);checks.push('判別できるボットを除外');
 await status('回答前の直接ダウンロードを拒否','download?file=app',{},403);
 await status('保存先未接続では停止','status',{},503,{});
 await status('別サイトからの回答送信を拒否','survey',{body:answer,origin:'https://other.invalid'},403);
