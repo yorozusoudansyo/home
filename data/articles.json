@@ -2,6 +2,13 @@
   "$schema": "Each article: { source: 'NOTE'|'X'|'YOUTUBE'|'SITE', title, url, date 'YYYY.MM.DD', thumbnail (optional URL) }",
   "articles": [
     {
+      "source": "YOUTUBE",
+      "title": "社内資料、AIに貼っていい？ ChatGPT・Copilotに顧客名を入れる前の3つの確認【第7回】",
+      "url": "https://www.youtube.com/watch?v=kIS_9qWe0Rw",
+      "date": "2026.11.26",
+      "thumbnail": "https://i.ytimg.com/vi/kIS_9qWe0Rw/hqdefault.jpg"
+    },
+    {
       "source": "NOTE",
       "title": "「対応可」の裏で、協力工場は限界を迎えていた｜あいだの人々 第二話「決めた顔」（3）",
       "url": "https://note.com/yukisa0814/n/n44401d694fd2",
@@ -67,13 +74,6 @@
       "url": "https://note.com/yukisa0814/n/n65e89be2ea2f",
       "date": "2026.11.08",
       "thumbnail": "https://assets.st-note.com/img/1793540415-QXKoAk5BIwtamGcN36CiZsqg.png"
-    },
-    {
-      "source": "YOUTUBE",
-      "title": "画像のずれをAIに直してもらう、スクショで伝えるコツ",
-      "url": "https://www.youtube.com/watch?v=HrFU1cCFFKI",
-      "date": "2026.11.08",
-      "thumbnail": "https://i.ytimg.com/vi/HrFU1cCFFKI/hqdefault.jpg"
     },
     {
       "source": "SITE",
